@@ -1,21 +1,20 @@
-import React from 'react';
-import OnBoardingScreen from './src/screens/onBoarding/onBoardingScreen';
-import { View, StyleSheet } from 'react-native';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import OnBoadingScreens from "./src/screens/onBoarding/onBoardingScreenSwiper";
 
-function App() {
+const Stack = createStackNavigator();
+
+export default function App() {
   return (
-    <View style={styles.container}>
-      <OnBoardingScreen />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="OnBoardingScreens"
+          component={OnBoadingScreens}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
-export default App;
