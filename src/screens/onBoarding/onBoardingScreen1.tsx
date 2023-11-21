@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, Image, View, Animated } from 'react-native';
+import {Text, StyleSheet, Image, View} from 'react-native';
 import * as onBoardingConstants from './onBoardingConstantData';
 
 const OnBoardingScreen1 = () => {
@@ -8,8 +8,8 @@ const OnBoardingScreen1 = () => {
   const onBoarding1P = onBoardingConstants.onBoarding1P;
 
   return (
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
+    <View style={styles.container}>
+      <View style={styles.headerContainer}>
         <Text style={styles.h1}>{onBoarding1H1}</Text>
         <Text style={styles.h2}>{onBoarding1H2}</Text>
       </View>

@@ -1,109 +1,65 @@
-import React, {Component} from 'react';
-import {View, Text, ViewStyle, TextStyle, StyleProp} from 'react-native';
+import React from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper';
 import OnBoardingScreen1 from './onBoardingScreen1';
 import OnBoardingScreen2 from './onBoardingScreen2';
 import OnBoardingScreen3 from './onBoardingScreen3';
 import OnBoardingScreen4 from './onBoardingScreen4';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
-interface Props {}
-
-interface State {}
-
-const renderPagination = (
-  index: number,
-  total: number,
-): React.ReactElement => {
-  let dots: React.ReactElement[] = [];
-  const ActiveDot = (
-    <View
-      style={{
-        backgroundColor: '#222831',
-        width: 8,
-        height: 8,
-        borderRadius: 4,
-        marginLeft: 2,
-        marginRight: 2,
-        marginTop: 3,
-        marginBottom: 3,
-      }}
-    />
-  );
-  const Dot = (
-    <View
-      style={{
-        backgroundColor: '#FFFFFF',
-        width: 8,
-        height: 8,
-        borderRadius: 4,
-        marginLeft: 2,
-        marginRight: 2,
-        marginTop: 3,
-        marginBottom: 3,
-      }}
-    />
-  );
-  for (let i = 0; i < total; i++) {
-    dots.push(
-      i === index
-        ? React.cloneElement(ActiveDot, {key: i})
-        : React.cloneElement(Dot, {key: i}),
+const OnBoardingSwiper = ({navigation}: {navigation: any}) => {
+  const renderPagination = (index: number, total: number) => {
+    const dots = [];
+    const ActiveDot = (
+      <View style={styles.activeDot} key={`activeDot-${index}`} />
     );
-  }
-  const btnHanlder = () => {
-    if (index === 3) {
-      console.log('Next');
-    } else {
-      console.log('Skip');
+
+    for (let i = 0; i < total; i++) {
+      dots.push(
+        i === index ? (
+          React.cloneElement(ActiveDot)
+        ) : (
+          <View style={styles.dot} key={`dot-${i}`} />
+        ),
+      );
     }
+
+    const btnHandler = () => {
+      navigation.navigate('LoginScreen');
+    };
+
+    return (
+      <View style={styles.dotsContainer}>
+        <View style={styles.dotRow}>{dots}</View>
+        <TouchableOpacity style={styles.btn} onPress={btnHandler}>
+          <Text style={styles.btnText}>{index === 3 ? 'Next' : 'Skip'}</Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   return (
-    <View style={styles.dotsContainer}>
-      <View style={{ flexDirection: 'row' }}>{dots}</View>
-      <TouchableOpacity style={styles.btn}
-      onPress={btnHanlder}>
-                {index === 3 ? (
-                  <Text style={styles.btntxt}>Next</Text>
-                ) : (
-                  <Text style={styles.btntxt}>Skip</Text>
-                )}
-              </TouchableOpacity>
-            </View>
-          );
-        };
+    <View style={styles.container}>
+      <Swiper
+        loop={false}
+        renderPagination={(index, total) => renderPagination(index, total)}>
+        <View style={styles.slide}>
+          <OnBoardingScreen1 />
+        </View>
+        <View style={styles.slide}>
+          <OnBoardingScreen2 />
+        </View>
+        <View style={styles.slide}>
+          <OnBoardingScreen3 />
+        </View>
+        <View style={styles.slide}>
+          <OnBoardingScreen4 />
+        </View>
+      </Swiper>
+    </View>
+  );
+};
 
-        export default class App extends Component<Props, State> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Swiper loop={false} renderPagination={renderPagination}>
-          <View style={styles.slide}>
-            <OnBoardingScreen1 />
-          </View>
-          <View style={styles.slide}>
-            <OnBoardingScreen2 />
-          </View>
-          <View style={styles.slide}>
-            <OnBoardingScreen3 />
-          </View>
-          <View style={styles.slide}>
-            <OnBoardingScreen4 />
-          </View>
-        </Swiper>
-      </View>
-    );
-  }
-}
-
-const styles: {
-  container: ViewStyle;
-  slide: ViewStyle;
-  dotsContainer: ViewStyle;
-  btn: ViewStyle;
-  btntxt: TextStyle;
-} = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -117,14 +73,35 @@ const styles: {
     bottom: '5%',
     alignSelf: 'center',
   },
+  dotRow: {
+    flexDirection: 'row',
+  },
+  dot: {
+    backgroundColor: '#FFFFFF',
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 2,
+    marginVertical: 3,
+  },
+  activeDot: {
+    backgroundColor: '#222831',
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 2,
+    marginVertical: 3,
+  },
   btn: {
     top: '30%',
   },
-  btntxt: {
+  btnText: {
     fontSize: 12,
     color: 'black',
     fontFamily: 'Poppins-Regular',
     alignSelf: 'center',
     marginTop: '1%',
   },
-};
+});
+
+export default OnBoardingSwiper;
