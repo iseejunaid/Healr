@@ -6,10 +6,11 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import InputField from '../components/InputField';
-import PressableBtn from '../components/PressableBtn';
+import InputField from '../../components/InputField';
+import PressableBtn from '../../components/PressableBtn';
+import Colors from '../../../assets/colors/colors';
 
-const LoginScreen = ({navigation}: {navigation: any}) => {
+const CreateNewPassScreen = ({navigation}: {navigation: any}) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -26,7 +27,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
   const backbtnHandler = () => {
     setPassword('');
     setConfirmPassword('');
-    navigation.pop(2);
+    navigation.pop(3);
   };
 
   return (
@@ -67,7 +68,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#222831',
+    backgroundColor: Colors.tertiaryColor,
   },
   top: {
     height: 330,
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   toptxt: {
-    color: '#00ADB5',
+    color: Colors.primaryColor,
     lineHeight: 50,
     fontSize: 40,
     fontFamily: 'Poppins-SemiBold',
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   middletxt: {
-    color: '#FFFFFF',
+    color: Colors.secondaryColor,
     letterSpacing: 0.8,
     fontSize: 13,
     fontFamily: 'Poppins-regular',
@@ -109,15 +110,15 @@ const styles = StyleSheet.create({
   },
   bottomtxt: {
     fontSize: 12,
-    color: '#FFFFFF',
+    color: Colors.secondaryColor,
     fontFamily: 'Poppins-regular',
   },
   bottombtntxt: {
     fontFamily: 'Poppins-SemiBold',
-    color: '#00ADB5',
+    color: Colors.primaryColor,
     fontSize: 12,
     marginTop: '10%',
   },
 });
 
-export default LoginScreen;
+export default CreateNewPassScreen;
