@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import InputField from '../components/InputField';
 import PressableBtn from '../components/PressableBtn';
+import Colors from '../../assets/colors/colors';
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
   const [email, setEmail] = useState('');
@@ -84,7 +85,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#222831',
+    backgroundColor: Colors.tertiaryColor,
   },
   top: {
     height: 270,
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   toptxt: {
-    color: '#00ADB5',
+    color: Colors.primaryColor,
     fontSize: 56,
     fontFamily: 'Poppins-SemiBold',
   },
@@ -119,18 +120,18 @@ const styles = StyleSheet.create({
     marginTop: '-2%',
   },
   forgotbtntxt: {
-    color: '#818181',
+    color: Colors.quadraryColor,
     fontFamily: 'Poppins-SemiBold',
   },
 
   bottomtxt: {
     fontSize: 12,
-    color: '#FFFFFF',
+    color: Colors.secondaryColor,
     fontFamily: 'Poppins-regular',
   },
   bottombtntxt: {
     fontFamily: 'Poppins-SemiBold',
-    color: '#00ADB5',
+    color: Colors.primaryColor,
     fontSize: 12,
     marginTop: '2%',
   },

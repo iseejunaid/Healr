@@ -5,11 +5,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
-import InputField from '../components/InputField';
-import PressableBtn from '../components/PressableBtn';
+import InputField from '../../components/InputField';
+import PressableBtn from '../../components/PressableBtn';
+import Colors from '../../../assets/colors/colors';
 
-const LoginScreen = ({navigation}: {navigation: any}) => {
+const ForgotPassOTPScreen = ({navigation}: {navigation: any}) => {
   const [email, setEmail] = useState('');
 
   const handleEmailChange = (text: string) => {
@@ -19,26 +21,22 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
     setEmail('');
     navigation.navigate('CreateNewPassScreen');
   };
-  const backbtnHandler = () => {
-    setEmail('');
-    navigation.pop();
+  const ResendbtnHandler = () => {
+    Alert.alert('Resend Code', 'Code has been sent to your email address!');
   };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.top}>
-        <Text style={styles.toptxt}>Password</Text>
-        <Text style={styles.toptxt}>slip-up?</Text>
-        <Text style={styles.toptxt}>We'll sort it!</Text>
+        <Text style={styles.toptxt}>Verify</Text>
+        <Text style={styles.toptxt}>password</Text>
+        <Text style={styles.toptxt}>reset code!</Text>
       </View>
       <View style={styles.middle}>
         <View style={styles.middletxtView}>
-          <Text style={styles.middletxt}>
-            Please enter your phone number or
-          </Text>
-          <Text style={styles.middletxt}>email address to receive the</Text>
-          <Text style={[styles.middletxt, {color: '#00ADB5'}]}>
-            verification code.
+          <Text style={styles.middletxt}>Please enter the code we sent to</Text>
+          <Text style={[styles.middletxt, {color: Colors.primaryColor}]}>
+            junaid@example.com
           </Text>
         </View>
         <InputField
@@ -53,9 +51,9 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
       </View>
       <View style={styles.bottom}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={styles.bottomtxt}>Back to </Text>
-          <TouchableOpacity onPress={backbtnHandler}>
-            <Text style={styles.bottombtntxt}>Login</Text>
+          <Text style={styles.bottomtxt}>Didn't get code? </Text>
+          <TouchableOpacity onPress={ResendbtnHandler}>
+            <Text style={[styles.bottombtntxt,{marginBottom:'3.5%'}]}>Resend!</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -64,7 +62,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#222831',
+    backgroundColor: Colors.tertiaryColor,
   },
   top: {
     height: 330,
@@ -74,7 +72,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   toptxt: {
-    color: '#00ADB5',
+    color: Colors.primaryColor,
     lineHeight: 50,
     fontSize: 40,
     fontFamily: 'Poppins-SemiBold',
@@ -88,7 +86,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   middletxt: {
-    color: '#FFFFFF',
+    color: Colors.secondaryColor,
     letterSpacing: 0.8,
     fontSize: 13,
     fontFamily: 'Poppins-regular',
@@ -106,15 +104,15 @@ const styles = StyleSheet.create({
   },
   bottomtxt: {
     fontSize: 12,
-    color: '#FFFFFF',
+    color: Colors.secondaryColor,
     fontFamily: 'Poppins-regular',
   },
   bottombtntxt: {
     fontFamily: 'Poppins-SemiBold',
-    color: '#00ADB5',
+    color: Colors.primaryColor,
     fontSize: 12,
     marginTop: '10%',
   },
 });
 
-export default LoginScreen;
+export default ForgotPassOTPScreen;
