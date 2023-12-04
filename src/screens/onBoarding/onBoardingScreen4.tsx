@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, StyleSheet, Image, View} from 'react-native';
 import * as onBoardingConstants from './onBoardingConstantData';
+import Fonts from '../../../assets/fonts/fonts';
 
 const OnBoardingScreen4 = () => {
   const onBoarding4H1 = onBoardingConstants.onBoarding4H1;
@@ -43,13 +44,13 @@ const styles = StyleSheet.create({
     color: '#222831',
     width: '80%',
     textAlign: 'center',
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: Fonts.semiBold,
     lineHeight: 37,
   },
   h2: {
     fontSize: 16,
     color: '#222831',
-    fontFamily: 'Poppins-Regular',
+    fontFamily: Fonts.regular,
   },
   pictureContainer: {
     flex: 0.5,
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   p: {
     fontSize: 12,
     color: '#222831',
-    fontFamily: 'Poppins-Regular',
+    fontFamily: Fonts.regular,
     paddingHorizontal: '11.2%',
     textAlign: 'center',
   },

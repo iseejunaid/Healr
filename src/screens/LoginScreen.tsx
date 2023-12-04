@@ -9,6 +9,7 @@ import {
 import InputField from '../components/InputField';
 import PressableBtn from '../components/PressableBtn';
 import Colors from '../../assets/colors/colors';
+import Fonts from '../../assets/fonts/fonts';
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
   const [email, setEmail] = useState('');
@@ -33,6 +34,11 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
 
   const forgotbtnHandler = () => {
     navigation.navigate('ForgotPassScreen');
+    setEmail('');
+    setPassword('');
+  };
+  const signupHandler = () => {
+    navigation.navigate('SignupScreen');
     setEmail('');
     setPassword('');
   };
@@ -75,7 +81,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
       <View style={styles.bottom}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Text style={styles.bottomtxt}>New to Healr? </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress = {signupHandler}>
             <Text style={styles.bottombtntxt}>Let's Begin!</Text>
           </TouchableOpacity>
         </View>
@@ -95,7 +101,7 @@ const styles = StyleSheet.create({
   toptxt: {
     color: Colors.primaryColor,
     fontSize: 56,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: Fonts.semiBold,
   },
   middle: {
     height: 320,
@@ -121,16 +127,16 @@ const styles = StyleSheet.create({
   },
   forgotbtntxt: {
     color: Colors.quadraryColor,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: Fonts.semiBold,
   },
 
   bottomtxt: {
     fontSize: 12,
     color: Colors.secondaryColor,
-    fontFamily: 'Poppins-regular',
+    fontFamily: Fonts.regular,
   },
   bottombtntxt: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: Fonts.semiBold,
     color: Colors.primaryColor,
     fontSize: 12,
     marginTop: '2%',
