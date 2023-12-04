@@ -11,42 +11,47 @@ import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 
-const ForgotPassScreen = ({navigation}: {navigation: any}) => {
-  const [email, setEmail] = useState('');
+const SignupScreen2of5 = ({navigation}: {navigation: any}) => {
+  const [fName, setFName] = useState('');
+  const [lName, setLName] = useState('');
 
-  const handleEmailChange = (text: string) => {
-    setEmail(text);
+  const handlefNameChange = (text: string) => {
+    setFName(text);
   };
+
+  const handlelNameChange = (text: string) => {
+    setLName(text);
+  };
+
   const handleSubmit = () => {
-    setEmail('');
-    navigation.navigate('ForgotPassOTPScreen');
+    // TODO: Implement login logic
   };
-  const backbtnHandler = () => {
-    setEmail('');
+  const backBtnHandler = () => {
     navigation.pop();
-  };
+    setFName('');
+    setLName('');
+  }
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.top}>
-        <Text style={styles.toptxt}>Password</Text>
-        <Text style={styles.toptxt}>slip-up?</Text>
-        <Text style={styles.toptxt}>We'll sort it!</Text>
+        <View style={styles.stepsCountView}>
+          <Text style={[styles.stepsCountTxt,{color:Colors.primaryColor}]}>Step </Text>
+          <Text style={styles.stepsCountTxt}>1 of 5</Text>
+        </View>
+        <Text style={styles.toptxt}>We'd love to know your full name!</Text>
       </View>
       <View style={styles.middle}>
-        <View style={styles.middletxtView}>
-          <Text style={styles.middletxt}>
-            Please enter your phone number or
-          </Text>
-          <Text style={styles.middletxt}>email address to receive the</Text>
-          <Text style={[styles.middletxt, {color: Colors.primaryColor}]}>
-            verification code.
-          </Text>
-        </View>
         <InputField
-          handleChange={handleEmailChange}
-          value={email}
-          placeholder="Phone Number or Email Address"
+          handleChange={handlefNameChange}
+          value={fName}
+          placeholder="First Name"
+          width={95}
+        />
+        <InputField
+          handleChange={handlelNameChange}
+          value={lName}
+          placeholder="Last Name"
           width={95}
         />
         <View style={styles.submitbtn}>
@@ -55,9 +60,9 @@ const ForgotPassScreen = ({navigation}: {navigation: any}) => {
       </View>
       <View style={styles.bottom}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={styles.bottomtxt}>Back to </Text>
-          <TouchableOpacity onPress={backbtnHandler}>
-            <Text style={styles.bottombtntxt}>Login</Text>
+          <Text style={styles.bottomtxt}>Go </Text>
+          <TouchableOpacity onPress={backBtnHandler}>
+            <Text style={styles.bottombtntxt}>Back</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -69,36 +74,38 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.tertiaryColor,
   },
   top: {
-    height: 330,
-    width: '80%',
-    justifyContent: 'center',
+    // backgroundColor:'red',
     alignSelf: 'center',
+    height: 270,
+    width: '83%',
+    justifyContent: 'center',
     alignItems: 'center',
+  },
+  stepsCountView: {
+    height: 70,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  stepsCountTxt: {
+    color: Colors.secondaryColor,
+    fontSize: 16,
+    fontFamily: Fonts.regular,
   },
   toptxt: {
     color: Colors.primaryColor,
-    lineHeight: 50,
     fontSize: 40,
+    textAlign: 'center',
     fontFamily: Fonts.semiBold,
   },
   middle: {
-    height: 250,
+    height: 338,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  middletxtView: {
-    alignItems: 'center',
-  },
-  middletxt: {
-    color: Colors.secondaryColor,
-    letterSpacing: 0.8,
-    fontSize: 13,
-    fontFamily: Fonts.regular,
   },
   bottom: {
     alignItems: 'center',
     justifyContent: 'flex-end',
-    height: 170,
+    height: 143,
   },
   submitbtn: {
     width: '100%',
@@ -115,8 +122,8 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semiBold,
     color: Colors.primaryColor,
     fontSize: 12,
-    marginTop: '10%',
+    marginTop: '2%',
   },
 });
 
-export default ForgotPassScreen;
+export default SignupScreen2of5;

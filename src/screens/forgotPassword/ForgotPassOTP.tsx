@@ -10,6 +10,7 @@ import {
 import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
+import Fonts from '../../../assets/fonts/fonts';
 
 const ForgotPassOTPScreen = ({navigation}: {navigation: any}) => {
   const [email, setEmail] = useState('');
@@ -53,7 +54,9 @@ const ForgotPassOTPScreen = ({navigation}: {navigation: any}) => {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Text style={styles.bottomtxt}>Didn't get code? </Text>
           <TouchableOpacity onPress={ResendbtnHandler}>
-            <Text style={[styles.bottombtntxt,{marginBottom:'3.5%'}]}>Resend!</Text>
+            <Text style={[styles.bottombtntxt, {marginBottom: '3.5%'}]}>
+              Resend!
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -75,7 +78,7 @@ const styles = StyleSheet.create({
     color: Colors.primaryColor,
     lineHeight: 50,
     fontSize: 40,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: Fonts.semiBold,
   },
   middle: {
     height: 250,
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
     color: Colors.secondaryColor,
     letterSpacing: 0.8,
     fontSize: 13,
-    fontFamily: 'Poppins-regular',
+    fontFamily: Fonts.regular,
   },
   bottom: {
     alignItems: 'center',
@@ -105,10 +108,10 @@ const styles = StyleSheet.create({
   bottomtxt: {
     fontSize: 12,
     color: Colors.secondaryColor,
-    fontFamily: 'Poppins-regular',
+    fontFamily: Fonts.regular,
   },
   bottombtntxt: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: Fonts.semiBold,
     color: Colors.primaryColor,
     fontSize: 12,
     marginTop: '10%',

@@ -4,8 +4,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import OnBoadingScreens from './src/screens/onBoarding/onBoardingScreenSwiper';
 import LoginScreen from './src/screens/LoginScreen';
 import ForgotPassScreen from './src/screens/forgotPassword/index';
-import ForgotPassOTPScreen from './src/screens/forgotPassword/ForgotPassOTP';
-import CreateNewPassScreen from './src/screens/forgotPassword/CreateNewPass';
+import SignupScreen from './src/screens/Signup/SignupScreen1of5';
+import SignupScreen2of5 from './src/screens/Signup/SignupScreen2of5';
 
 const Stack = createStackNavigator();
 
@@ -29,13 +29,13 @@ export default function App() {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="CreateNewPassScreen"
-          component={CreateNewPassScreen}
+          name="SignupScreen"
+          component={SignupScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="ForgotPassOTPScreen"
-          component={ForgotPassOTPScreen}
+          name="SignupScreen2of5"
+          component={SignupScreen2of5}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
