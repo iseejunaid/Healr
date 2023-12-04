@@ -3,26 +3,25 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
 import InputField from '../components/InputField';
 import PressableBtn from '../components/PressableBtn';
+import Colors from '../../assets/colors/colors';
+import Fonts from '../../assets/fonts/fonts';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}: {navigation: any}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
 
   const handleEmailChange = (text: string) => {
     setEmail(text);
-    console.log('email changed');
   };
 
   const handlePasswordChange = (text: string) => {
     setPassword(text);
-    console.log('password changed');
   };
 
   const handleSubmit = () => {
@@ -31,6 +30,17 @@ const LoginScreen = () => {
 
   const passwordIconHandler = () => {
     setShowPassword(!showPassword);
+  };
+
+  const forgotbtnHandler = () => {
+    navigation.navigate('ForgotPassScreen');
+    setEmail('');
+    setPassword('');
+  };
+  const signupHandler = () => {
+    navigation.navigate('SignupScreen');
+    setEmail('');
+    setPassword('');
   };
 
   return (
@@ -60,7 +70,7 @@ const LoginScreen = () => {
         />
 
         <View style={styles.forgotbtn}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={forgotbtnHandler}>
             <Text style={styles.forgotbtntxt}>Forgot Password?</Text>
           </TouchableOpacity>
         </View>
@@ -71,7 +81,7 @@ const LoginScreen = () => {
       <View style={styles.bottom}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Text style={styles.bottomtxt}>New to Healr? </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress = {signupHandler}>
             <Text style={styles.bottombtntxt}>Let's Begin!</Text>
           </TouchableOpacity>
         </View>
@@ -81,7 +91,7 @@ const LoginScreen = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#222831',
+    backgroundColor: Colors.tertiaryColor,
   },
   top: {
     height: 270,
@@ -89,9 +99,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   toptxt: {
-    color: '#00ADB5',
+    color: Colors.primaryColor,
     fontSize: 56,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: Fonts.semiBold,
   },
   middle: {
     height: 320,
@@ -102,10 +112,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     height: 160,
-  },
-  img: {
-    height: '45%',
-    width: '7%',
   },
   submitbtn: {
     width: '100%',
@@ -120,18 +126,18 @@ const styles = StyleSheet.create({
     marginTop: '-2%',
   },
   forgotbtntxt: {
-    color: '#818181',
-    fontFamily: 'Poppins-SemiBold',
+    color: Colors.quadraryColor,
+    fontFamily: Fonts.semiBold,
   },
 
   bottomtxt: {
     fontSize: 12,
-    color: '#FFFFFF',
-    fontFamily: 'Poppins-regular',
+    color: Colors.secondaryColor,
+    fontFamily: Fonts.regular,
   },
   bottombtntxt: {
-    fontFamily: 'Poppins-SemiBold',
-    color: '#00ADB5',
+    fontFamily: Fonts.semiBold,
+    color: Colors.primaryColor,
     fontSize: 12,
     marginTop: '2%',
   },

@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper';
+import Fonts from '../../../assets/fonts/fonts';
 import OnBoardingScreen1 from './onBoardingScreen1';
 import OnBoardingScreen2 from './onBoardingScreen2';
 import OnBoardingScreen3 from './onBoardingScreen3';
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 12,
     color: 'black',
-    fontFamily: 'Poppins-Regular',
+    fontFamily: Fonts.regular,
     alignSelf: 'center',
     marginTop: '1%',
   },
