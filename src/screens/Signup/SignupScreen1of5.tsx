@@ -23,20 +23,22 @@ const SignupScreen = ({navigation}: {navigation: any}) => {
     setLName(text);
   };
 
-  const handleSubmit = () => {
-    // TODO: Implement login logic
+  const handleNext = () => {
+    navigation.navigate('SignupScreen2of5');
   };
   const backBtnHandler = () => {
     navigation.pop();
     setFName('');
     setLName('');
-  }
+  };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.top}>
         <View style={styles.stepsCountView}>
-          <Text style={[styles.stepsCountTxt,{color:Colors.primaryColor}]}>Step </Text>
+          <Text style={[styles.stepsCountTxt, {color: Colors.primaryColor}]}>
+            Step{' '}
+          </Text>
           <Text style={styles.stepsCountTxt}>1 of 5</Text>
         </View>
         <Text style={styles.toptxt}>We'd love to know your full name!</Text>
@@ -55,7 +57,7 @@ const SignupScreen = ({navigation}: {navigation: any}) => {
           width={95}
         />
         <View style={styles.submitbtn}>
-          <PressableBtn text="Next" onPress={handleSubmit} />
+          <PressableBtn text="Next" onPress={handleNext} />
         </View>
       </View>
       <View style={styles.bottom}>
@@ -74,7 +76,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.tertiaryColor,
   },
   top: {
-    // backgroundColor:'red',
     alignSelf: 'center',
     height: 270,
     width: '83%',
