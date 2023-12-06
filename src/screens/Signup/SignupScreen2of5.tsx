@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,15 +8,21 @@ import {
 } from 'react-native';
 import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
-import {Dropdown} from 'react-native-element-dropdown';
 import {Categorydata, Expertisedata} from './signupConstantData';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
+import SelectDropdown from '../../components/SelectDropdown';
+import CheckBox from '@react-native-community/checkbox';
 
 const SignupScreen2of5 = ({navigation}: {navigation: any}) => {
   const [value, setValue] = useState<string | null>(null);
   const [value2, setValue2] = useState<string | null>(null);
+  const [isChecked, setIsChecked] = useState(false);
   const [inputData, setInputData] = useState('');
+
+  useEffect(() => {
+    setValue2(null);
+  }, [value]);
 
   const handleInputData = (text: string) => {
     setInputData(text);
@@ -24,6 +30,7 @@ const SignupScreen2of5 = ({navigation}: {navigation: any}) => {
 
   const handleSubmit = () => {
     // TODO: Implement login logic
+    navigation.navigate('SignupScreen3of5');
   };
   const backBtnHandler = () => {
     navigation.pop();
@@ -45,34 +52,33 @@ const SignupScreen2of5 = ({navigation}: {navigation: any}) => {
         </Text>
       </View>
       <View style={styles.middle}>
-        <Dropdown
-          style={styles.dropdown}
-          containerStyle={{borderRadius: 6}}
-          itemTextStyle={{fontSize: 13, color: Colors.tertiaryColor}}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          fontFamily={Fonts.regular}
+        <SelectDropdown
           data={Categorydata}
-          labelField="label"
-          valueField="value"
-          placeholder={'Profession Category'}
+          placeholder={'Select Category'}
           value={value}
           onChange={item => {
             setValue(item.value);
           }}
         />
+        {value == null ? (
+          <View style={styles.middleChkbox}>
+            <CheckBox
+              disabled={false}
+              tintColors={{
+                true: Colors.primaryColor,
+                false: Colors.secondaryColor,
+              }}
+              value={isChecked}
+              onValueChange={newValue => setIsChecked(newValue)}
+            />
+            <Text style={styles.middleChkboxtxt}>Medical Trainee</Text>
+          </View>
+        ) : null}
+
         {value != null ? (
-          <Dropdown
-            style={styles.dropdown}
-            containerStyle={{borderRadius: 6}}
-            itemTextStyle={{fontSize: 13, color: Colors.tertiaryColor}}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            fontFamily={Fonts.regular}
+          <SelectDropdown
             data={Expertisedata(value)}
-            labelField="label"
-            valueField="value"
-            placeholder={'Area of Expertise'}
+            placeholder={'Select Expertise'}
             value={value2}
             onChange={item => {
               setValue2(item.value);
@@ -130,14 +136,25 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semiBold,
   },
   middle: {
-    height: 330,
-    justifyContent: 'space-evenly',
+    height: 350,
+    justifyContent: 'center',
     alignItems: 'center',
+  },
+  middleChkbox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: '83%',
+  },
+  middleChkboxtxt: {
+    color: Colors.secondaryColor,
+    fontSize: 13,
+    fontFamily: Fonts.regular,
   },
   bottom: {
     alignItems: 'center',
     justifyContent: 'flex-end',
-    height: 143,
+    height: 129,
   },
   submitbtn: {
     width: '100%',
@@ -147,32 +164,14 @@ const styles = StyleSheet.create({
   },
   bottomtxt: {
     fontSize: 12,
+    fontFamily: Fonts.regular,
     color: Colors.secondaryColor,
   },
   bottombtntxt: {
     color: Colors.primaryColor,
     fontSize: 12,
+    fontFamily: Fonts.semiBold,
     marginTop: '2%',
-  },
-  dropdown: {
-    height: 50,
-    marginTop: '3%',
-    width: '83%',
-    borderRadius: 6,
-    backgroundColor: Colors.secondaryColor,
-    paddingHorizontal: 8,
-  },
-  placeholderStyle: {
-    fontSize: 13,
-    marginTop: '2%',
-    fontFamily: Fonts.regular,
-    color: Colors.tertiaryColor,
-  },
-  selectedTextStyle: {
-    marginTop: '2%',
-    fontSize: 13,
-    fontFamily: Fonts.regular,
-    color: Colors.tertiaryColor,
   },
 });
 

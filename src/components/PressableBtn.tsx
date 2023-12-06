@@ -1,5 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
+import Colors from '../../assets/colors/colors';
+import Fonts from '../../assets/fonts/fonts';
 
 interface PressableBtnProps {
   onPress: () => void;
@@ -18,7 +20,7 @@ const styles = StyleSheet.create({
   submitbtn: {
     width: '83%',
     height: 45,
-    backgroundColor: '#00ADB5',
+    backgroundColor: Colors.primaryColor,
     borderRadius: 6,
     justifyContent: 'center',
     alignItems: 'center',
@@ -26,7 +28,8 @@ const styles = StyleSheet.create({
   submitbtntxt: {
     color: '#222831',
     fontSize: 18,
-    fontFamily: 'Poppins-regular',
+    marginTop:5,
+    fontFamily: Fonts.regular,
   },
 });
 
