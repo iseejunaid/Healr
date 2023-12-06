@@ -6,6 +6,7 @@ import LoginScreen from './src/screens/LoginScreen';
 import ForgotPassScreen from './src/screens/forgotPassword/index';
 import SignupScreen from './src/screens/Signup/SignupScreen1of5';
 import SignupScreen2of5 from './src/screens/Signup/SignupScreen2of5';
+import SignupScreen3of5 from './src/screens/Signup/SignupScreen3of5';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,11 @@ export default function App() {
         <Stack.Screen
           name="SignupScreen2of5"
           component={SignupScreen2of5}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SignupScreen3of5"
+          component={SignupScreen3of5}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
