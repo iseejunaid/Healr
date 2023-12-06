@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     marginTop: '-2%',
   },
   forgotbtntxt: {
-    color: Colors.quadraryColor,
+    color: Colors.primaryColor,
     fontFamily: Fonts.semiBold,
   },
 

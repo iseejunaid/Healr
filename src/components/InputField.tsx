@@ -7,6 +7,8 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
+import Colors from '../../assets/colors/colors';
+import Fonts from '../../assets/fonts/fonts';
 
 interface InputFieldProps {
   handleChange: (text: string) => void;
@@ -30,7 +32,7 @@ const InputField: React.FC<InputFieldProps> = ({
   return (
     <View style={styles.input}>
       <TextInput
-        style={{width: `${width}%`, fontFamily: 'Poppins-regular'}}
+        style={{width: `${width}%`, fontFamily: Fonts.regular, top: 2}}
         onChangeText={handleChange}
         value={value}
         placeholder={placeholder}
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
     height: 45,
     width: '83%',
     margin: '3%',
-    backgroundColor: 'white',
+    backgroundColor: Colors.secondaryColor,
     borderRadius: 6,
     flexDirection: 'row',
     justifyContent: 'center',
