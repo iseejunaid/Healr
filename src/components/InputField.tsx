@@ -15,6 +15,7 @@ interface InputFieldProps {
   value: string;
   placeholder: string;
   width: number;
+  keyboardType?: any;
   source?: ImageSourcePropType;
   secureTextEntry?: boolean;
   iconPressed?: () => void;
@@ -27,6 +28,7 @@ const InputField: React.FC<InputFieldProps> = ({
   width,
   source,
   secureTextEntry,
+  keyboardType,
   iconPressed,
 }) => {
   return (
@@ -37,6 +39,7 @@ const InputField: React.FC<InputFieldProps> = ({
         value={value}
         placeholder={placeholder}
         secureTextEntry={secureTextEntry || false}
+        keyboardType={keyboardType || 'default'}
       />
       {source && (
         <TouchableOpacity style={styles.imgContainer} onPress={iconPressed}>

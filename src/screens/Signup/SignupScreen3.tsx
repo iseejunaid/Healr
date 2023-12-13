@@ -11,25 +11,19 @@ import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 
-const SignupScreen = ({navigation}: {navigation: any}) => {
-  const [fName, setFName] = useState('');
-  const [lName, setLName] = useState('');
+const SignupScreen3 = ({navigation}: {navigation: any}) => {
+  const [email, setEmail] = useState('');
 
-  const handlefNameChange = (text: string) => {
-    setFName(text);
-  };
-
-  const handlelNameChange = (text: string) => {
-    setLName(text);
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
   };
 
   const handleNext = () => {
-    navigation.navigate('SignupScreen2of5');
+    navigation.navigate('SignupScreen4');
   };
   const backBtnHandler = () => {
     navigation.pop();
-    setFName('');
-    setLName('');
+    setEmail('');
   };
 
   return (
@@ -39,21 +33,22 @@ const SignupScreen = ({navigation}: {navigation: any}) => {
           <Text style={[styles.stepsCountTxt, {color: Colors.primaryColor}]}>
             Step{' '}
           </Text>
-          <Text style={styles.stepsCountTxt}>1 of 5</Text>
+          <Text style={styles.stepsCountTxt}>3 of 5</Text>
         </View>
-        <Text style={styles.toptxt}>We'd love to know your full name!</Text>
+        <Text style={styles.toptxt}>Cardiologist! Heart's best friend.</Text>
       </View>
       <View style={styles.middle}>
+        <Text style={styles.middletxt}>
+          Email, please! We're all about speed, so your address (
+          <Text style={{color: Colors.primaryColor}}>
+            institutional preferred
+          </Text>
+          ) will help us verify you faster!
+        </Text>
         <InputField
-          handleChange={handlefNameChange}
-          value={fName}
-          placeholder="First Name"
-          width={95}
-        />
-        <InputField
-          handleChange={handlelNameChange}
-          value={lName}
-          placeholder="Last Name"
+          handleChange={handleEmailChange}
+          value={email}
+          placeholder="Email Address"
           width={95}
         />
         <View style={styles.submitbtn}>
@@ -62,9 +57,9 @@ const SignupScreen = ({navigation}: {navigation: any}) => {
       </View>
       <View style={styles.bottom}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={styles.bottomtxt}>Go </Text>
+          <Text style={styles.bottomtxt}>Change </Text>
           <TouchableOpacity onPress={backBtnHandler}>
-            <Text style={styles.bottombtntxt}>Back</Text>
+            <Text style={styles.bottombtntxt}>Profession</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -103,6 +98,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  middletxt: {
+    color: Colors.secondaryColor,
+    fontSize: 12,
+    letterSpacing: 0.8,
+    fontFamily: Fonts.regular,
+    width: '83%',
+    textAlign: 'center',
+  },
   bottom: {
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -127,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupScreen;
+export default SignupScreen3;

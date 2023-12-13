@@ -14,7 +14,7 @@ import Fonts from '../../../assets/fonts/fonts';
 import SelectDropdown from '../../components/SelectDropdown';
 import CheckBox from '@react-native-community/checkbox';
 
-const SignupScreen2of5 = ({navigation}: {navigation: any}) => {
+const SignupScreen2 = ({navigation}: {navigation: any}) => {
   const [value, setValue] = useState<string | null>(null);
   const [value2, setValue2] = useState<string | null>(null);
   const [isChecked, setIsChecked] = useState(false);
@@ -30,7 +30,7 @@ const SignupScreen2of5 = ({navigation}: {navigation: any}) => {
 
   const handleSubmit = () => {
     // TODO: Implement login logic
-    navigation.navigate('SignupScreen3of5');
+    navigation.navigate('SignupScreen3');
   };
   const backBtnHandler = () => {
     navigation.pop();
@@ -175,4 +175,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupScreen2of5;
+export default SignupScreen2;
