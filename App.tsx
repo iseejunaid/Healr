@@ -4,12 +4,14 @@ import {createStackNavigator} from '@react-navigation/stack';
 import OnBoadingScreens from './src/screens/onBoarding/onBoardingScreenSwiper';
 import LoginScreen from './src/screens/LoginScreen';
 import ForgotPassScreen from './src/screens/forgotPassword/index';
+import CreateNewPassScreen from './src/screens/forgotPassword/CreateNewPass';
 import SignupScreen from './src/screens/Signup/SignupScreen1';
 import SignupScreen2 from './src/screens/Signup/SignupScreen2';
 import SignupScreen3 from './src/screens/Signup/SignupScreen3';
 import SignupScreen4 from './src/screens/Signup/SignupScreen4';
 import SignupScreen5 from './src/screens/Signup/SignupScreen5';
 import SignupScreen6 from './src/screens/Signup/SignupScreen6';
+import SignupScreen7 from './src/screens/Signup/SignupScreen7';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +32,11 @@ export default function App() {
         <Stack.Screen
           name="ForgotPassScreen"
           component={ForgotPassScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CreateNewPassScreen"
+          component={CreateNewPassScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
@@ -60,6 +67,11 @@ export default function App() {
         <Stack.Screen
           name="SignupScreen6"
           component={SignupScreen6}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SignupScreen7"
+          component={SignupScreen7}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

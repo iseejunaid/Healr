@@ -11,7 +11,8 @@ import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import {TextInput} from 'react-native-gesture-handler';
 
-const SignupScreen5 = ({navigation}: {navigation: any}) => {
+const SignupScreen6 = ({navigation, route}: {navigation: any; route: any}) => {
+  const {phnNumber, heading, email} = route.params;
   const [val1, setVal1] = useState(0);
   const [val2, setVal2] = useState(0);
   const [val3, setVal3] = useState(0);
@@ -21,33 +22,36 @@ const SignupScreen5 = ({navigation}: {navigation: any}) => {
   const inputRef3 = useRef<TextInput>(null);
   const inputRef4 = useRef<TextInput>(null);
 
-  // const handleEmailChange = (text: string) => {
-  //   setPhoneNumber(text);
-  // };
-
   const handleNext = () => {
-    navigation.navigate('SignupScreen6');
+    if (email) {
+      navigation.navigate('CreateNewPassScreen');
+    } else {
+      navigation.navigate('SignupScreen7');
+    }
   };
-  const backBtnHandler = () => {
-    navigation.pop();
-    // setPhoneNumber('');
+  const ResendBtnHandler = () => {
+    console.log('ResendBtnHandler');
   };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.stepsCountView}>
-        <Text style={[styles.stepsCountTxt, {color: Colors.primaryColor}]}>
-          Step{' '}
-        </Text>
-        <Text style={styles.stepsCountTxt}>4 of 5</Text>
+        {phnNumber ? (
+          <Text style={[styles.stepsCountTxt, {color: Colors.primaryColor}]}>
+            Step{' '}
+          </Text>
+        ) : null}
+        {phnNumber ? <Text style={styles.stepsCountTxt}>4 of 5</Text> : null}
       </View>
       <View style={styles.top}>
-        <Text style={styles.toptxt}>One-time code verification!</Text>
+        <Text style={styles.toptxt}>{heading}</Text>
       </View>
       <View style={styles.middle}>
         <Text style={styles.middletxt}>
           Please enter the code we sent to{'\n'}
-          <Text style={{color: Colors.primaryColor}}>//props.phnNumber//</Text>
+          <Text style={{color: Colors.primaryColor}}>
+            {phnNumber ? phnNumber : email}
+          </Text>
         </Text>
         <View style={styles.PinInputView}>
           <TextInput
@@ -124,13 +128,13 @@ const SignupScreen5 = ({navigation}: {navigation: any}) => {
           />
         </View>
         <View style={styles.submitbtn}>
-          <PressableBtn text="Next" onPress={handleNext} />
+          <PressableBtn text="Submit" onPress={handleNext} />
         </View>
       </View>
       <View style={styles.bottom}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Text style={styles.bottomtxt}>Didn't get code? </Text>
-          <TouchableOpacity onPress={backBtnHandler}>
+          <TouchableOpacity onPress={ResendBtnHandler}>
             <Text style={styles.bottombtntxt}>Resend</Text>
           </TouchableOpacity>
         </View>
@@ -221,4 +225,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupScreen5;
+export default SignupScreen6;
