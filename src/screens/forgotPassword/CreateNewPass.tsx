@@ -24,6 +24,7 @@ const CreateNewPassScreen = ({navigation}: {navigation: any}) => {
   const handleSubmit = () => {
     setPassword('');
     setConfirmPassword('');
+    navigation.navigate('LoginScreen');
   };
   const backbtnHandler = () => {
     setPassword('');
