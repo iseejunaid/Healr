@@ -19,7 +19,10 @@ const ForgotPassScreen = ({navigation}: {navigation: any}) => {
   };
   const handleSubmit = () => {
     setEmail('');
-    navigation.navigate('ForgotPassOTPScreen');
+    navigation.navigate('SignupScreen6', {
+      email: '//props.email//',
+      heading: 'Verify password reset code!',
+    });
   };
   const backbtnHandler = () => {
     setEmail('');

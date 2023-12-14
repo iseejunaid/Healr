@@ -11,24 +11,25 @@ import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 
-const SignupScreen5 = ({navigation}: {navigation: any}) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+const SignupScreen7 = ({navigation}: {navigation: any}) => {
+  const [pass, setPass] = useState('');
+  const [confirmPass, setConfirmPass] = useState('');
 
-  const handleEmailChange = (text: string) => {
-    setPhoneNumber(text);
+  const handlePassChange = (text: string) => {
+    setPass(text);
+  };
+
+  const handleConfirmPassChange = (text: string) => {
+    setConfirmPass(text);
   };
 
   const handleNext = () => {
-    setPhoneNumber('');
-    navigation.navigate('SignupScreen6', {
-      phnNumber: '//props.phnNumber//',
-      heading: 'One-time code verification!',
-    });
+    console.log('next');
   };
-
   const backBtnHandler = () => {
     navigation.pop();
-    setPhoneNumber('');
+    setPass('');
+    setConfirmPass('');
   };
 
   return (
@@ -37,26 +38,26 @@ const SignupScreen5 = ({navigation}: {navigation: any}) => {
         <Text style={[styles.stepsCountTxt, {color: Colors.primaryColor}]}>
           Step{' '}
         </Text>
-        <Text style={styles.stepsCountTxt}>4 of 5</Text>
+        <Text style={styles.stepsCountTxt}>5 of 5</Text>
       </View>
       <View style={styles.top}>
-        <Text style={styles.toptxt}>Ring in the verification!</Text>
+        <Text style={styles.toptxt}>Last step! Lets finish strong.</Text>
       </View>
       <View style={styles.middle}>
-        <Text style={styles.middletxt}>
-          We're almost done!{' '}
-          <Text style={{color: Colors.primaryColor}}>Verify</Text> your phone
-          number to jump into the last step.
-        </Text>
         <InputField
-          handleChange={handleEmailChange}
-          value={phoneNumber}
-          placeholder="Phone Number"
-          keyboardType={'numeric'}
+          handleChange={handlePassChange}
+          value={pass}
+          placeholder="Password"
+          width={95}
+        />
+        <InputField
+          handleChange={handleConfirmPassChange}
+          value={confirmPass}
+          placeholder="Confirm Password"
           width={95}
         />
         <View style={styles.submitbtn}>
-          <PressableBtn text="Next" onPress={handleNext} />
+          <PressableBtn text="Done" onPress={handleNext} />
         </View>
       </View>
       <View style={styles.bottom}>
@@ -96,10 +97,11 @@ const styles = StyleSheet.create({
     color: Colors.primaryColor,
     fontSize: 40,
     textAlign: 'center',
+    maxWidth: 250,
     fontFamily: Fonts.semiBold,
   },
   middle: {
-    height: 338,
+    height: 310,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -116,7 +118,7 @@ const styles = StyleSheet.create({
   bottom: {
     alignItems: 'center',
     justifyContent: 'flex-end',
-    height: 135,
+    height: 165,
   },
   submitbtn: {
     width: '100%',
@@ -137,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupScreen5;
+export default SignupScreen7;
