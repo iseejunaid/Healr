@@ -25,7 +25,11 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
   };
 
   const handleSubmit = () => {
-    // TODO: Implement login logic
+    navigation.navigate('SignupScreen6', {
+      phnNumber: '//db.phnNumber//',
+      login: true,
+      heading: 'One-time code verification!',
+    });
   };
 
   const passwordIconHandler = () => {

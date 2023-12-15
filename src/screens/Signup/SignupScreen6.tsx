@@ -12,7 +12,7 @@ import Fonts from '../../../assets/fonts/fonts';
 import {TextInput} from 'react-native-gesture-handler';
 
 const SignupScreen6 = ({navigation, route}: {navigation: any; route: any}) => {
-  const {phnNumber, heading, email} = route.params;
+  const {phnNumber, heading, email, login} = route.params;
   const [val1, setVal1] = useState(0);
   const [val2, setVal2] = useState(0);
   const [val3, setVal3] = useState(0);
@@ -36,12 +36,16 @@ const SignupScreen6 = ({navigation, route}: {navigation: any; route: any}) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.stepsCountView}>
-        {phnNumber ? (
+        {!login ? (
           <Text style={[styles.stepsCountTxt, {color: Colors.primaryColor}]}>
-            Step{' '}
+            {phnNumber ? 'Step ' : null}
           </Text>
         ) : null}
-        {phnNumber ? <Text style={styles.stepsCountTxt}>4 of 5</Text> : null}
+        {!login ? (
+          <Text style={styles.stepsCountTxt}>
+            {phnNumber ? '4 of 5' : null}
+          </Text>
+        ) : null}
       </View>
       <View style={styles.top}>
         <Text style={styles.toptxt}>{heading}</Text>
