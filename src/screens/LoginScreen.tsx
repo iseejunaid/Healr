@@ -29,6 +29,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
       phnNumber: '//db.phnNumber//',
       login: true,
       heading: 'One-time code verification!',
+      
     });
   };
 
