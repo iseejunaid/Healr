@@ -24,7 +24,9 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
   };
 
   const handleNext = () => {
-    console.log('next');
+    setPass('');
+    setConfirmPass('');
+    navigation.navigate('HomeScreen');
   };
   const backBtnHandler = () => {
     navigation.pop();
