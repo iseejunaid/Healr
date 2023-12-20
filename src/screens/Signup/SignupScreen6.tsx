@@ -23,7 +23,10 @@ const SignupScreen6 = ({navigation, route}: {navigation: any; route: any}) => {
   const inputRef4 = useRef<TextInput>(null);
 
   const handleNext = () => {
-    if (email) {
+    if(login){
+      navigation.navigate('HomeScreen');
+    }
+    else if (email) {
       navigation.navigate('CreateNewPassScreen');
     } else {
       navigation.navigate('SignupScreen7');
