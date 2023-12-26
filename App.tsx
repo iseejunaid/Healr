@@ -19,7 +19,6 @@ import { StatusBar } from 'react-native';
 import Colors from './assets/colors/colors';
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
