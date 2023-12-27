@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Image, StyleSheet} from 'react-native';
-import Colors from '../../../assets/colors/colors';
+import Colors from '../../assets/colors/colors';
 
 interface CircleComponentProps {
   focused: boolean;
@@ -16,13 +16,13 @@ const CircleComponent: React.FC<CircleComponentProps> = ({
   const renderImage = () => {
     switch (iconName) {
       case 'messageIcon':
-        return require('../../../assets/images/messageIcon.png');
+        return require('../../assets/images/messageIcon.png');
       case 'healrFilesIcon':
-        return require('../../../assets/images/healrFilesIcon.png');
+        return require('../../assets/images/healrFilesIcon.png');
       case 'profileIcon':
-        return require('../../../assets/images/profileIcon.png');
+        return require('../../assets/images/profileIcon.png');
       default:
-        return require('../../../assets/images/messageIcon.png');
+        return require('../../assets/images/messageIcon.png');
     }
   };
 
@@ -31,7 +31,7 @@ const CircleComponent: React.FC<CircleComponentProps> = ({
       {focused ? (
         <>
           <Image
-            source={require('../../../assets/images/BottomTabEllipse.png')}
+            source={require('../../assets/images/BottomTabEllipse.png')}
             style={styles.ellipse}
           />
           <View style={styles.ImgContainer}>
