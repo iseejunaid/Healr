@@ -7,6 +7,7 @@ import ProfileScreen from './ProfileScreen';
 import Colors from '../../../assets/colors/colors';
 import CircleComponent from '../../components/CircleComponent';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Tab = createBottomTabNavigator();
 

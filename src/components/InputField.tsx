@@ -11,6 +11,7 @@ import Colors from '../../assets/colors/colors';
 import Fonts from '../../assets/fonts/fonts';
 
 interface InputFieldProps {
+  style?: any;
   handleChange: (text: string) => void;
   value: string;
   placeholder: string;
@@ -24,6 +25,7 @@ interface InputFieldProps {
 const InputField: React.FC<InputFieldProps> = ({
   handleChange,
   value,
+  style,
   placeholder,
   width,
   source,
@@ -32,7 +34,7 @@ const InputField: React.FC<InputFieldProps> = ({
   iconPressed,
 }) => {
   return (
-    <View style={styles.input}>
+    <View style={[styles.input,{ ...style }]}>
       <TextInput
         style={{width: `${width}%`, fontFamily: Fonts.regular, top: 2}}
         onChangeText={handleChange}
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
     height: 45,
     width: '83%',
     margin: '3%',
-    backgroundColor: Colors.secondaryColor,
+    backgroundColor: Colors.secondaryWhite,
     borderRadius: 6,
     flexDirection: 'row',
     justifyContent: 'center',
