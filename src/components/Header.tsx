@@ -20,9 +20,9 @@ const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName}) => {
       case 'settingsIcon':
         return require('../../assets/images/settingsIcon.png');
       case 'undefined':
-        return null;
+        break;
       default:
-        return null;
+        break;
     }
   };
   const getIconStyles = () => {

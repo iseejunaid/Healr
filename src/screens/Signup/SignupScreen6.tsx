@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     color: 'black',
     borderRadius: 12,
-    backgroundColor: Colors.secondaryColor,
+    backgroundColor: Colors.secondaryWhite,
   },
   middletxt: {
     color: Colors.secondaryColor,
