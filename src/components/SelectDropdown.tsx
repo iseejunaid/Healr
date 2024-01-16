@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     marginTop: '3%',
     width: '83%',
     borderRadius: 6,
-    backgroundColor: Colors.secondaryColor,
+    backgroundColor: Colors.secondaryWhite,
     paddingHorizontal: 8,
   },
   placeholderStyle: {
