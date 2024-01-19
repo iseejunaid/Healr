@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {BackHandler, StatusBar} from 'react-native';
+import React, {useEffect,useState} from 'react';
+import {BackHandler, StatusBar, Keyboard} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import ChatScreen from './ChatScreen';
 import HealrFilesScreen from './HealrFilesScreen';
@@ -7,11 +7,12 @@ import ProfileScreen from './ProfileScreen';
 import Colors from '../../../assets/colors/colors';
 import CircleComponent from '../../components/CircleComponent';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler';
+import { useKeyboard } from '@react-native-community/hooks'
 
 const Tab = createBottomTabNavigator();
 
 const HomeScreen = ({navigation}: any) => {
+  const keyboard = useKeyboard();
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
@@ -37,6 +38,7 @@ const HomeScreen = ({navigation}: any) => {
         screenOptions={{
           headerShown: false,
           tabBarShowLabel: false,
+          tabBarHideOnKeyboard: true,
           tabBarStyle: {
             backgroundColor: Colors.tertiaryColor,
             height: 60,
@@ -49,7 +51,7 @@ const HomeScreen = ({navigation}: any) => {
           component={ChatScreen}
           options={{
             tabBarIcon: ({focused}) => (
-              <CircleComponent focused={focused} iconName="messageIcon" />
+              !keyboard.keyboardShown ? <CircleComponent focused={focused} iconName="messageIcon" /> : null    
             ),
           }}
         />
@@ -58,7 +60,7 @@ const HomeScreen = ({navigation}: any) => {
           component={HealrFilesScreen}
           options={{
             tabBarIcon: ({focused}) => (
-              <CircleComponent focused={focused} iconName="healrFilesIcon" />
+              !keyboard.keyboardShown ? <CircleComponent focused={focused} iconName="healrFilesIcon" /> : null    
             ),
           }}
         />
@@ -67,7 +69,7 @@ const HomeScreen = ({navigation}: any) => {
           component={ProfileScreen}
           options={{
             tabBarIcon: ({focused}) => (
-              <CircleComponent focused={focused} iconName="profileIcon" />
+              !keyboard.keyboardShown ? <CircleComponent focused={focused} iconName="profileIcon" /> : null    
             ),
           }}
         />
