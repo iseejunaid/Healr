@@ -6,12 +6,13 @@ import Fonts from '../../assets/fonts/fonts';
 interface PressableBtnProps {
   onPress: () => void;
   text: string;
+  fontColor?: string;
 }
 
-const PressableBtn: React.FC<PressableBtnProps> = ({text, onPress}) => {
+const PressableBtn: React.FC<PressableBtnProps> = ({text, onPress,fontColor}) => {
   return (
     <TouchableOpacity style={styles.submitbtn} onPress={onPress}>
-      <Text style={styles.submitbtntxt}>{text}</Text>
+      <Text style={[styles.submitbtntxt, { color: fontColor || '#222831' }]}>{text}</Text>
     </TouchableOpacity>
   );
 };
@@ -26,7 +27,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   submitbtntxt: {
-    color: '#222831',
     fontSize: 18,
     marginTop:5,
     fontFamily: Fonts.regular,
