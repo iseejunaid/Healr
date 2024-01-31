@@ -1,15 +1,24 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, ScrollView, Image, Text, TouchableOpacity} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import Header from '../../components/Header';
 import Colors from '../../../assets/colors/colors';
 import InputField from '../../components/InputField';
-import Fonts from '../../../assets/fonts/fonts';
 import ChatItem from '../../components/ChatItem';
 const ChatScreen: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
 
   const handleSearchValueChange = (text: string) => {
     setSearchValue(text);
+  };
+  const onPress = () => {
+    console.log('Chat Item Pressed');
   };
 
   return (
@@ -24,6 +33,7 @@ const ChatScreen: React.FC = () => {
           width={95}
         />
         <ChatItem
+          onPress={onPress}
           profileImageSource={require('../../../assets/images/profile.png')}
           userName="Muhammad Qasim"
           message="This is a sample message sent by Muhammad Qasim"
@@ -31,6 +41,7 @@ const ChatScreen: React.FC = () => {
           notificationCount={2}
         />
         <ChatItem
+          onPress={onPress}
           profileImageSource={require('../../../assets/images/profile.png')}
           userName="Muhammad Qasim"
           message="This is a sample message sent by Muhammad Qasim"
@@ -38,16 +49,15 @@ const ChatScreen: React.FC = () => {
         />
       </ScrollView>
       <TouchableOpacity
-          style={styles.newChatButton}
-          activeOpacity={0.7}
-          onPress={() => {
-            // Handle new chat button press
-          }}>
-          <Image
-            source={require('../../../assets/images/newChat.png')}
-            style={styles.newChatIcon}
-          />
-        </TouchableOpacity>
+        style={styles.newChatButton}
+        activeOpacity={0.7}
+        onPress={() => {
+        }}>
+        <Image
+          source={require('../../../assets/images/newChat.png')}
+          style={styles.newChatIcon}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -80,7 +90,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 30,
     elevation: 4,
-    shadowOffset: { width: 4, height: 4 },
+    shadowOffset: {width: 4, height: 4},
     shadowRadius: 4,
   },
   newChatIcon: {
