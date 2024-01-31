@@ -10,6 +10,7 @@ interface ChatItemProps {
   message: string;
   time: string;
   notificationCount?: number;
+  onPress: () => void;
 }
 
 const ChatItem: React.FC<ChatItemProps> = ({
@@ -18,9 +19,11 @@ const ChatItem: React.FC<ChatItemProps> = ({
   message,
   time,
   notificationCount,
+  onPress
 }) => {
   return (
-    <TouchableOpacity style={styles.chatItemContainer}>
+    <TouchableOpacity style={styles.chatItemContainer}
+    onPress={onPress}>
       <Image source={profileImageSource} style={styles.profileImage} />
       <View style={styles.messageContainer}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
