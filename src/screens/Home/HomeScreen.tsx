@@ -1,12 +1,12 @@
 import React, {useEffect,useState} from 'react';
 import {BackHandler, StatusBar, Keyboard} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import ChatScreen from './ChatScreen';
 import HealrFilesScreen from './HealrFilesScreen';
 import ProfileScreen from './ProfileScreen';
 import Colors from '../../../assets/colors/colors';
 import CircleComponent from '../../components/CircleComponent';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import ChatStackScreen from '../chatScreens/ChatStackScreen';
 import { useKeyboard } from '@react-native-community/hooks'
 
 const Tab = createBottomTabNavigator();
@@ -48,7 +48,7 @@ const HomeScreen = ({navigation}: any) => {
         }}>
         <Tab.Screen
           name="Chat"
-          component={ChatScreen}
+          component={ChatStackScreen}
           options={{
             tabBarIcon: ({focused}) => (
               !keyboard.keyboardShown ? <CircleComponent focused={focused} iconName="messageIcon" /> : null    
