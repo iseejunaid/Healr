@@ -7,6 +7,7 @@ import {
   Text,
   Image,
   Button,
+  StatusBar,
 } from 'react-native';
 import Header from '../../components/Header';
 import Colors from '../../../assets/colors/colors';
@@ -18,7 +19,6 @@ const ProfileScreen = () => {
   const items = [
     {label: 'Status'},
     {label: 'My QR Code'},
-    {label: 'Healr Web'},
     {label: 'Change Password'},
   ];
 
@@ -27,9 +27,8 @@ const ProfileScreen = () => {
   };
   return (
     <View style={styles.container}>
-      <Header text="Profile" RighticonName="settingsIcon" />
-
-      <View style={{flex: 2}}>
+      <StatusBar />
+      <View style={{flex: 2,}}>
         <LinearGradient
           colors={[
             'rgba(255, 255, 255, 0.35)',
@@ -37,6 +36,7 @@ const ProfileScreen = () => {
             'rgba(34, 40, 49, 0.35)',
           ]}
           style={styles.gradientBackground}>
+            <Header text="Profile" RighticonName="settingsIcon" />
           <View
             style={{
               height: 110,
@@ -57,7 +57,7 @@ const ProfileScreen = () => {
         </View>
       </View>
 
-      <View style={{flex: 2, alignItems: 'center'}}>
+      <View style={{flex: 1.2, alignItems: 'center'}}>
         {items.map(({label}, index) => (
           <TouchableOpacity key={index} style={styles.middle}>
             <Text style={styles.middletxt}>{label}</Text>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondaryColor,
   },
   gradientBackground: {
-    height: 110,
+    height: 150,
     width: '100%',
     position: 'absolute',
     top: 0,
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     position: 'absolute',
-    top: 60,
+    top: 100,
     alignSelf: 'center',
   },
   nametxt: {
