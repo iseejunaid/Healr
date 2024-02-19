@@ -32,16 +32,31 @@ const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName}) => {
     return styles.dotsimg;
   };
 
+  const imgPressHandler = (name:any) =>{
+    switch(name){
+      case 'cameraIcon':
+        console.log('cameraicon pressed');
+        break;
+      case 'dotsIcon':
+        console.log('dotsIcon pressed');
+        break;
+      case 'settingsIcon':
+        console.log('settingsIcon pressed');
+        break;
+    }
+  }
+
   return (
     <View style={styles.header}>
-      <TouchableOpacity style={styles.camerabtn}>
+      <TouchableOpacity style={styles.camerabtn} onPress={() => imgPressHandler(LefticonName)}>
+
         <Image source={renderImage(LefticonName)} style={styles.cameraimg} />
       </TouchableOpacity>
 
       <View style={[styles.MainText,{width: RighticonName === 'settingsIcon' ? '80%' : '84%',}]}>
         <Text style={styles.headerTxt}>{text}</Text>
       </View>
-      <TouchableOpacity style={styles.dotsbtn}>
+      <TouchableOpacity style={styles.dotsbtn} onPress={() => imgPressHandler(RighticonName)}>
       <Image source={renderImage(RighticonName)} style={getIconStyles()} />
       </TouchableOpacity>
     </View>
