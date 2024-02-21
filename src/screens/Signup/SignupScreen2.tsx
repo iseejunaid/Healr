@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
@@ -13,9 +14,10 @@ import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import SelectDropdown from '../../components/SelectDropdown';
 import CheckBox from '@react-native-community/checkbox';
+import { signupConfig } from './signupVariables';
 
 const SignupScreen2 = ({navigation}: {navigation: any}) => {
-  const [value, setValue] = useState<string | null>(null);
+  const [value, setValue] = useState<string | null>('other');
   const [value2, setValue2] = useState<string | null>(null);
   const [isChecked, setIsChecked] = useState(false);
   const [inputData, setInputData] = useState('');
@@ -29,13 +31,30 @@ const SignupScreen2 = ({navigation}: {navigation: any}) => {
   };
 
   const handleSubmit = () => {
-    // TODO: Implement login logic
+    if(value == null) {
+      Alert.alert('Missing Category','Please select a category');
+      return;
+    }
+    if(value2 == null){
+      Alert.alert('Missing Expertise','Please select an expertise');
+      return;
+    }
+    if(value2 == 'unlisted' && inputData == ''){
+      Alert.alert('Missing Expertise','Please specify your expertise');
+      return;
+    }
+    signupConfig.category = value;
+    signupConfig.isIntern = isChecked;
+    signupConfig.expertise = value2;
+    signupConfig.expertiseInput = inputData;
     navigation.navigate('SignupScreen3');
   };
   const backBtnHandler = () => {
     navigation.pop();
-    // setFName('');
-    // setLName('');
+    setValue(null);
+    setValue2(null);
+    setIsChecked(false);
+    setInputData('');
   };
 
   return (
@@ -48,7 +67,7 @@ const SignupScreen2 = ({navigation}: {navigation: any}) => {
           <Text style={styles.stepsCountTxt}>2 of 5</Text>
         </View>
         <Text style={styles.toptxt}>
-          Great "LName"! Now, select your profession.
+          Great {signupConfig.lastName}! Now, select your profession.
         </Text>
       </View>
       <View style={styles.middle}>
@@ -85,7 +104,7 @@ const SignupScreen2 = ({navigation}: {navigation: any}) => {
             }}
           />
         ) : null}
-        {value2 == 'Not Listed (Please Specify)' ? (
+        {value2 == 'unlisted' ? (
           <InputField
             handleChange={handleInputData}
             value={inputData}
