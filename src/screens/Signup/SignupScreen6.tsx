@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
@@ -13,23 +14,26 @@ import {TextInput} from 'react-native-gesture-handler';
 
 const SignupScreen6 = ({navigation, route}: {navigation: any; route: any}) => {
   const {phnNumber, heading, email, login} = route.params;
-  const [val1, setVal1] = useState(0);
-  const [val2, setVal2] = useState(0);
-  const [val3, setVal3] = useState(0);
-  const [val4, setVal4] = useState(0);
+  const [val1, setVal1] = useState(null);
+  const [val2, setVal2] = useState(null);
+  const [val3, setVal3] = useState(null);
+  const [val4, setVal4] = useState(null);
   const inputRef1 = useRef<TextInput>(null);
   const inputRef2 = useRef<TextInput>(null);
   const inputRef3 = useRef<TextInput>(null);
   const inputRef4 = useRef<TextInput>(null);
 
   const handleNext = () => {
-    if(login){
-      navigation.navigate('HomeScreen');
-    }
-    else if (email) {
-      navigation.navigate('CreateNewPassScreen');
-    } else {
-      navigation.navigate('SignupScreen7');
+    if (val1 !== null && val2 !== null && val3 !== null && val4 !== null) {
+      if (login) {
+        navigation.navigate('HomeScreen');
+      } else if (email) {
+        navigation.navigate('CreateNewPassScreen');
+      } else {
+        navigation.navigate('SignupScreen7');
+      }
+    }else{
+      Alert.alert('Error!','Please enter a valid code');
     }
   };
   const ResendBtnHandler = () => {

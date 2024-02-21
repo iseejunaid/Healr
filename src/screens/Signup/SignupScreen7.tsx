@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
@@ -24,6 +25,10 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
   };
 
   const handleNext = () => {
+    if(pass.length < 8 || pass !== confirmPass){
+      Alert.alert('Error!','Password must match and at least 8 characters long');
+      return;
+    }
     setPass('');
     setConfirmPass('');
     navigation.navigate('HomeScreen');

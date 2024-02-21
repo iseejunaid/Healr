@@ -5,15 +5,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
+import { signupConfig } from './signupVariables';
 
 const SignupScreen = ({navigation}: {navigation: any}) => {
-  const [fName, setFName] = useState('');
-  const [lName, setLName] = useState('');
+  const [fName, setFName] = useState('test');
+  const [lName, setLName] = useState('test');
 
   const handlefNameChange = (text: string) => {
     setFName(text);
@@ -24,8 +26,15 @@ const SignupScreen = ({navigation}: {navigation: any}) => {
   };
 
   const handleNext = () => {
+    if(fName === '' || lName === '') {
+      Alert.alert('Error!','Please fill in all the fields');
+      return;
+    }
+    signupConfig.firstName = fName;
+    signupConfig.lastName = lName;
     navigation.navigate('SignupScreen2');
   };
+
   const backBtnHandler = () => {
     navigation.pop();
     setFName('');

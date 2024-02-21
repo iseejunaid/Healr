@@ -39,6 +39,7 @@ const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName}) => {
         break;
       case 'dotsIcon':
         console.log('dotsIcon pressed');
+        console.log(text)
         break;
       case 'settingsIcon':
         console.log('settingsIcon pressed');
