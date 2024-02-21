@@ -5,23 +5,29 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
+import { signupConfig } from './signupVariables';
 
 const SignupScreen5 = ({navigation}: {navigation: any}) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('03212322321');
 
   const handleEmailChange = (text: string) => {
     setPhoneNumber(text);
   };
 
   const handleNext = () => {
-    setPhoneNumber('');
+    if (phoneNumber.length < 10) {
+      Alert.alert('Error!','Please enter a valid phone number');
+      return;
+    }
+    signupConfig.phnNumber = phoneNumber;
     navigation.navigate('SignupScreen6', {
-      phnNumber: '//props.phnNumber//',
+      phnNumber: phoneNumber,
       heading: 'One-time code verification!',
     });
   };

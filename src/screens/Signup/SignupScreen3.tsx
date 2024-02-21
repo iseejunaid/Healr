@@ -5,20 +5,30 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
+import { isValidEmail } from './signupConstantData';
+import {signupConfig} from './signupVariables';
 
 const SignupScreen3 = ({navigation}: {navigation: any}) => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('123@123.com');
+  const [isValidEmailInput, setValidEmailInput] = useState(true);
 
-  const handleEmailChange = (text: string) => {
-    setEmail(text);
+  const handleEmailChange = (newEmail:string) => {
+    setEmail(newEmail);
+    setValidEmailInput(isValidEmail(newEmail));
   };
 
   const handleNext = () => {
+    if (email == '' || !isValidEmailInput) {
+      Alert.alert('Error!','Please enter valid email');
+      return;
+    }
+    signupConfig.email = email;
     navigation.navigate('SignupScreen4');
   };
   const backBtnHandler = () => {
@@ -35,7 +45,7 @@ const SignupScreen3 = ({navigation}: {navigation: any}) => {
           </Text>
           <Text style={styles.stepsCountTxt}>3 of 5</Text>
         </View>
-        <Text style={styles.toptxt}>Cardiologist! Heart's best friend.</Text>
+        <Text style={styles.toptxt}>Great Profession!</Text>
       </View>
       <View style={styles.middle}>
         <Text style={styles.middletxt}>
@@ -50,6 +60,7 @@ const SignupScreen3 = ({navigation}: {navigation: any}) => {
           value={email}
           placeholder="Email Address"
           width={95}
+          style={{borderColor: isValidEmailInput ? 'black' : 'red'}}
         />
         <View style={styles.submitbtn}>
           <PressableBtn text="Next" onPress={handleNext} />
@@ -79,7 +90,7 @@ const styles = StyleSheet.create({
   },
   stepsCountView: {
     height: 70,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flexDirection: 'row',
   },
   stepsCountTxt: {
