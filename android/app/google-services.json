@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "706375792099",
+    "project_id": "healr-fyp",
+    "storage_bucket": "healr-fyp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706375792099:android:840bc232f0843689e11cd6",
+        "android_client_info": {
+          "package_name": "com.healr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbKyJJvy6Vh8oVTpGtjatDs5A6IdeEiGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

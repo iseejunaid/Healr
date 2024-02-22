@@ -13,6 +13,10 @@ import java.util.ArrayList;
 
 // @react-native-community/checkbox
 import com.reactnativecommunity.checkbox.ReactCheckBoxPackage;
+// @react-native-firebase/app
+import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
+// @react-native-firebase/auth
+import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 // react-native-linear-gradient
@@ -67,6 +71,8 @@ public class PackageList {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
       new ReactCheckBoxPackage(),
+      new ReactNativeFirebaseAppPackage(),
+      new ReactNativeFirebaseAuthPackage(),
       new RNGestureHandlerPackage(),
       new LinearGradientPackage(),
       new SafeAreaContextPackage(),
