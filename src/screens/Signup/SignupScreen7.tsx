@@ -54,12 +54,14 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
         <InputField
           handleChange={handlePassChange}
           value={pass}
+          secureTextEntry = {true}
           placeholder="Password"
           width={95}
         />
         <InputField
           handleChange={handleConfirmPassChange}
           value={confirmPass}
+          secureTextEntry = {true}
           placeholder="Confirm Password"
           width={95}
         />
