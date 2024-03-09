@@ -7,15 +7,17 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
+import { createUserWithEmailAndPassword,sendEmailVerification } from "firebase/auth";
 import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import { signupConfig } from './signupVariables';
+import { auth } from '../../../configs/firebaseConfig';
 
 const SignupScreen = ({navigation}: {navigation: any}) => {
-  const [fName, setFName] = useState('test');
-  const [lName, setLName] = useState('test');
+  const [fName, setFName] = useState('junaidnadeem266@gmail.com');
+  const [lName, setLName] = useState('test123test');
 
   const handlefNameChange = (text: string) => {
     setFName(text);
@@ -25,14 +27,35 @@ const SignupScreen = ({navigation}: {navigation: any}) => {
     setLName(text);
   };
 
-  const handleNext = () => {
-    if(fName === '' || lName === '') {
-      Alert.alert('Error!','Please fill in all the fields');
+  const handleNext = async () => {
+    if (fName === '' || lName === '') {
+      Alert.alert('Error!', 'Please fill in all the fields');
       return;
     }
-    signupConfig.firstName = fName;
-    signupConfig.lastName = lName;
-    navigation.navigate('SignupScreen2');
+  
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, fName, lName);
+      const user = userCredential.user;
+  
+      // Send email verification
+      await sendEmailVerification(user);
+  
+      // Assuming signupConfig is an object where you store user information
+      signupConfig.firstName = fName;
+      signupConfig.lastName = lName;
+  
+      console.log('User signed up:', user);
+      
+      // You may want to inform the user that an email has been sent for verification
+      Alert.alert('Success!', 'Signup successful. Please check your email for verification.');
+  
+      // Now, you can navigate to the next screen or perform any other actions
+      // navigation.navigate('SignupScreen2');
+    } catch (error) {
+      // Handle signup errors, e.g., display an error message
+      console.log(error);
+      Alert.alert('Error!', `Signup failed: ${error.message}`);
+    }
   };
 
   const backBtnHandler = () => {
