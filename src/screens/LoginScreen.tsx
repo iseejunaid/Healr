@@ -5,11 +5,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import InputField from '../components/InputField';
 import PressableBtn from '../components/PressableBtn';
 import Colors from '../../assets/colors/colors';
 import Fonts from '../../assets/fonts/fonts';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../../configs/firebaseConfig';
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
   const [email, setEmail] = useState('');
@@ -24,13 +27,28 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
     setPassword(text);
   };
 
-  const handleSubmit = () => {
-    navigation.navigate('SignupScreen6', {
-      phnNumber: '//db.phnNumber//',
-      login: true,
-      heading: 'One-time code verification!',
-      
-    });
+  const handleSubmit = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const user = userCredential.user;
+
+      if (user.emailVerified) {
+        navigation.navigate('HomeScreen');
+      } else {
+        Alert.alert('Email not verified', 'Please go to your inbox and verify your email address.');
+      }
+    } catch (error) {
+      Alert.alert('Error', "Login Failed! Please check your credentials and try again.");
+    }
+    // navigation.navigate('SignupScreen6', {
+    //   phnNumber: '//db.phnNumber//',
+    //   login: true,
+    //   heading: 'One-time code verification!',
+    // });
   };
 
   const passwordIconHandler = () => {
@@ -86,7 +104,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
       <View style={styles.bottom}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Text style={styles.bottomtxt}>New to Healr? </Text>
-          <TouchableOpacity onPress = {signupHandler}>
+          <TouchableOpacity onPress={signupHandler}>
             <Text style={styles.bottombtntxt}>Let's Begin!</Text>
           </TouchableOpacity>
         </View>

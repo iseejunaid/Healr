@@ -28,7 +28,7 @@ const SignupScreen3 = ({navigation}: {navigation: any}) => {
       Alert.alert('Error!','Please enter valid email');
       return;
     }
-    signupConfig.email = email;
+    signupConfig.email = email.trim();
     navigation.navigate('SignupScreen4');
   };
   const backBtnHandler = () => {

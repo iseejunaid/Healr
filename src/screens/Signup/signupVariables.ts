@@ -8,7 +8,7 @@ interface SignupConfig {
     expertise: string;
     expertiseInput: string;
     email: string;
-    phnNumber: string;
+    // phnNumber: string;
   }
   
 const signupConfig: SignupConfig = {
@@ -19,7 +19,7 @@ const signupConfig: SignupConfig = {
     expertise: '',
     expertiseInput: '',
     email: '',
-    phnNumber: '',
+    // phnNumber: '',
 };
 
 export { signupConfig };

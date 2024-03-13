@@ -11,10 +11,14 @@ import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
+import {signupConfig} from './signupVariables';
+import { createUserWithEmailAndPassword,sendEmailVerification,updateProfile } from 'firebase/auth';
+import { collection, addDoc } from 'firebase/firestore';
+import { auth, db } from '../../../configs/firebaseConfig';
 
 const SignupScreen7 = ({navigation}: {navigation: any}) => {
-  const [pass, setPass] = useState('');
-  const [confirmPass, setConfirmPass] = useState('');
+  const [pass, setPass] = useState('123123123');
+  const [confirmPass, setConfirmPass] = useState('123123123');
 
   const handlePassChange = (text: string) => {
     setPass(text);
@@ -24,15 +28,63 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
     setConfirmPass(text);
   };
 
-  const handleNext = () => {
-    if(pass.length < 8 || pass !== confirmPass){
-      Alert.alert('Error!','Password must match and at least 8 characters long');
+  const handleNext = async () => {
+    if (pass.length < 8 || pass !== confirmPass) {
+      Alert.alert(
+        'Error!',
+        'Password must match and at least 8 characters long',
+      );
       return;
     }
-    setPass('');
-    setConfirmPass('');
-    navigation.navigate('HomeScreen');
+    try {
+      // Create the user with email and password
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        signupConfig.email,
+        pass,
+      );
+
+      // Get the user from the userCredential
+      const user = userCredential.user;
+
+      await updateProfile(user, {
+        displayName: `${signupConfig.firstName} ${signupConfig.lastName}`,
+        // You can include other properties here
+      });
+
+      // Store additional user information in Firestore
+      const usersCollectionRef = collection(db, 'users');
+      const userDocRef = await addDoc(usersCollectionRef, {
+        uid: user.uid,
+        category: signupConfig.category,
+        isIntern: signupConfig.isIntern,
+        expertise: signupConfig.expertise,
+        expertiseInput: signupConfig.expertiseInput,
+        email: signupConfig.email,
+      });
+      
+
+      // Send email verification
+      await sendEmailVerification(user);
+
+      console.log('User signed up:', user);
+      Alert.alert(
+        'Success!',
+        'Signup successful. Please check your email for verification.',
+      );
+
+      navigation.pop(5);
+
+      setPass('');
+      setConfirmPass('');
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert('Error!', `Signup failed: ${(error as Error).message}`);
+    }
+    
   };
+
+
   const backBtnHandler = () => {
     navigation.pop();
     setPass('');
@@ -54,14 +106,14 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
         <InputField
           handleChange={handlePassChange}
           value={pass}
-          secureTextEntry = {true}
+          secureTextEntry={true}
           placeholder="Password"
           width={95}
         />
         <InputField
           handleChange={handleConfirmPassChange}
           value={confirmPass}
-          secureTextEntry = {true}
+          secureTextEntry={true}
           placeholder="Confirm Password"
           width={95}
         />
