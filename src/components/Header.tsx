@@ -18,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName}) => {
       case 'dotsIcon':
         return require('../../assets/images/dotsIcon.png');
       case 'settingsIcon':
-        return require('../../assets/images/settingsIcon.png');
+        // return require('../../assets/images/settingsIcon.png');
       case 'undefined':
         break;
       default:

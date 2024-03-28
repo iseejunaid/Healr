@@ -17,7 +17,7 @@ import CheckBox from '@react-native-community/checkbox';
 import { signupConfig } from './signupVariables';
 
 const SignupScreen2 = ({navigation}: {navigation: any}) => {
-  const [value, setValue] = useState<string | null>('other');
+  const [value, setValue] = useState<string | null>();
   const [value2, setValue2] = useState<string | null>(null);
   const [isChecked, setIsChecked] = useState(false);
   const [inputData, setInputData] = useState('');

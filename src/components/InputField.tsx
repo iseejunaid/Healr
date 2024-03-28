@@ -14,7 +14,7 @@ interface InputFieldProps {
   style?: any;
   handleChange: (text: string) => void;
   value: string;
-  placeholder: string;
+  placeholder?: string;
   width: number;
   keyboardType?: any;
   source?: ImageSourcePropType;

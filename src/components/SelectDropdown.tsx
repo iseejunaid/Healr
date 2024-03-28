@@ -37,7 +37,7 @@ const SelectDropdown: React.FC<DropdownProps> = ({
 
 const styles = StyleSheet.create({
   dropdown: {
-    height: 50,
+    height: 45,
     marginTop: '3%',
     width: '83%',
     borderRadius: 6,
@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 13,
-    top: 3.5,
     fontFamily: Fonts.regular,
     color: Colors.tertiaryColor,
   },

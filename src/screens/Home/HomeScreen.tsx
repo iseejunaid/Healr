@@ -2,7 +2,7 @@ import React, {useEffect,useState} from 'react';
 import {BackHandler, StatusBar, Keyboard} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HealrFilesScreen from './HealrFilesScreen';
-import ProfileScreen from './ProfileScreen';
+import ProfileStackScreen from '../profileScreens/profileStackScreen';
 import Colors from '../../../assets/colors/colors';
 import CircleComponent from '../../components/CircleComponent';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -50,27 +50,30 @@ const HomeScreen = ({navigation}: any) => {
           name="Chat"
           component={ChatStackScreen}
           options={{
-            tabBarIcon: ({focused}) => (
-              !keyboard.keyboardShown ? <CircleComponent focused={focused} iconName="messageIcon" /> : null    
-            ),
+            tabBarIcon: ({focused}) =>
+              !keyboard.keyboardShown ? (
+                <CircleComponent focused={focused} iconName="messageIcon" />
+              ) : null,
           }}
         />
         <Tab.Screen
           name="Healrfiles"
           component={HealrFilesScreen}
           options={{
-            tabBarIcon: ({focused}) => (
-              !keyboard.keyboardShown ? <CircleComponent focused={focused} iconName="healrFilesIcon" /> : null    
-            ),
+            tabBarIcon: ({focused}) =>
+              !keyboard.keyboardShown ? (
+                <CircleComponent focused={focused} iconName="healrFilesIcon" />
+              ) : null,
           }}
         />
         <Tab.Screen
           name="Profile"
-          component={ProfileScreen}
+          component={ProfileStackScreen}
           options={{
-            tabBarIcon: ({focused}) => (
-              !keyboard.keyboardShown ? <CircleComponent focused={focused} iconName="profileIcon" /> : null    
-            ),
+            tabBarIcon: ({focused}) =>
+              !keyboard.keyboardShown ? (
+                <CircleComponent focused={focused} iconName="profileIcon" />
+              ) : null,
           }}
         />
       </Tab.Navigator>

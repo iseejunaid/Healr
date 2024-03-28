@@ -56,16 +56,17 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
       const usersCollectionRef = collection(db, 'users');
       const userDocRef = await addDoc(usersCollectionRef, {
         uid: user.uid,
+        catergory: signupConfig.category,
         isIntern: signupConfig.isIntern,
         expertise: signupConfig.expertise,
         expertiseInput: signupConfig.expertiseInput,
+        about: 'Healing the World!',
       });
       
 
       // Send email verification
       await sendEmailVerification(user);
-
-      console.log('User signed up:', user);
+      
       Alert.alert(
         'Success!',
         'Signup successful. Please check your email for verification.',
