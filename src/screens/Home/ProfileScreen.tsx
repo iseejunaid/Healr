@@ -1,12 +1,10 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
-  Alert,
   TouchableOpacity,
   Text,
   Image,
-  Button,
   StatusBar,
 } from 'react-native';
 import Header from '../../components/Header';
@@ -14,21 +12,60 @@ import Colors from '../../../assets/colors/colors';
 import PressableBtn from '../../components/PressableBtn';
 import Fonts from '../../../assets/fonts/fonts';
 import LinearGradient from 'react-native-linear-gradient';
+import {auth} from '../../../configs/firebaseConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}: any) => {
+  const [name, setName] = useState('');
+  const [expertise, setExpertise] = useState('');
+
+  const capitalizeFirstLetter = (str: string) => {
+    return str.replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const isInternValue = await AsyncStorage.getItem('isIntern');
+        const expertiseValue = await AsyncStorage.getItem('expertise');
+        const name = await AsyncStorage.getItem('name');
+
+        if(name){
+          setName(name);
+        }
+
+        if (isInternValue !== 'true' && expertiseValue !== null) {
+          setExpertise(capitalizeFirstLetter(expertiseValue));
+        }else{
+          setExpertise('Medical Intern');
+        }
+      } catch (error) {
+        console.error('Error fetching data from AsyncStorage:', error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const items = [
     {label: 'Status'},
     {label: 'My QR Code'},
     {label: 'Change Password'},
   ];
 
-  const onLogout = () => {
-    Alert.alert('Logout');
+  const onLogout = async () => {
+    try {
+      await auth.signOut();
+      navigation.popToTop();
+    } catch (error) {
+      console.error('Error logging out:', error.message);
+    }
   };
+
   return (
     <View style={styles.container}>
       <StatusBar />
-      <View style={{flex: 2,}}>
+      <View style={{flex: 2}}>
         <LinearGradient
           colors={[
             'rgba(255, 255, 255, 0.35)',
@@ -36,7 +73,7 @@ const ProfileScreen = () => {
             'rgba(34, 40, 49, 0.35)',
           ]}
           style={styles.gradientBackground}>
-            <Header text="Profile" RighticonName="settingsIcon" />
+          <Header text="Profile" RighticonName="settingsIcon" />
           <View
             style={{
               height: 110,
@@ -44,12 +81,14 @@ const ProfileScreen = () => {
             }}></View>
         </LinearGradient>
         <View style={styles.imgView}>
-          <Image
-            source={require('../../../assets/images/profile.png')}
-            style={{height: 100, width: 100}}
-          />
-          <Text style={styles.nametxt}>Muhammad Qasim</Text>
-          <Text style={styles.professiontxt}>Orthopedic Surgeon</Text>
+          <View style={styles.circle}>
+            <Image
+              source={require('../../../assets/images/placeholder.jpg')}
+              style={styles.image}
+            />
+          </View>
+          <Text style={styles.nametxt}>{name}</Text>
+          <Text style={styles.professiontxt}>{expertise}</Text>
           <Text style={styles.statustxt}>Available</Text>
           <TouchableOpacity style={styles.editBtn}>
             <Text style={{color: Colors.secondaryColor}}>Edit Profile</Text>
@@ -94,6 +133,20 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  circle: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    overflow: 'hidden', 
+    borderWidth: 5,
+    borderColor: Colors.secondaryColor,
+  },
+  image: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
   imgView: {
     flex: 1,
     alignItems: 'center',
@@ -102,6 +155,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   nametxt: {
+    marginTop:"2%",
     fontSize: 18,
     color: Colors.tertiaryColor,
     fontFamily: Fonts.semiBold,

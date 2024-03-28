@@ -13,10 +13,11 @@ import Colors from '../../assets/colors/colors';
 import Fonts from '../../assets/fonts/fonts';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../../configs/firebaseConfig';
+import { fetchUserData } from '../../helpers/fetchUserData';
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('junaidnadeem266@gmail.com');
+  const [password, setPassword] = useState('123123123');
   const [showPassword, setShowPassword] = useState(true);
 
   const handleEmailChange = (text: string) => {
@@ -38,6 +39,8 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
 
       if (user.emailVerified) {
         navigation.navigate('HomeScreen');
+        
+        fetchUserData(user);
       } else {
         Alert.alert('Email not verified', 'Please go to your inbox and verify your email address.');
       }
