@@ -49,14 +49,13 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
 
       await updateProfile(user, {
         displayName: `${signupConfig.firstName} ${signupConfig.lastName}`,
-        // You can include other properties here
       });
 
       // Store additional user information in Firestore
       const usersCollectionRef = collection(db, 'users');
       const userDocRef = await addDoc(usersCollectionRef, {
         uid: user.uid,
-        catergory: signupConfig.category,
+        category: signupConfig.category,
         isIntern: signupConfig.isIntern,
         expertise: signupConfig.expertise,
         expertiseInput: signupConfig.expertiseInput,

@@ -1,51 +1,75 @@
 import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import InputField from '../../components/InputField';
 import SelectDropdown from '../../components/SelectDropdown';
-import { Categorydata,Expertisedata } from '../Signup/signupConstantData';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Categorydata, Expertisedata} from '../Signup/signupConstantData';
+import {fetchData, updateData} from './EditProfileHelper';
 
 const EditProfileScreen = ({navigation}: any) => {
-  const [fname,setFname] = useState('');
-  const [lname,setLname] = useState('');
-  const [workplace,setWorkplace] = useState('');
+  const [fname, setFname] = useState('');
+  const [lname, setLname] = useState('');
+  const [workplace, setWorkplace] = useState('');
   const [value, setValue] = useState<string | null>('');
   const [value2, setValue2] = useState<string | null>('');
-  const [abouttxt,setabouttxt] = useState('');
+  const [abouttxt, setabouttxt] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDataFromAsyncStorage = async () => {
       try {
-        const fullname = await AsyncStorage.getItem('name');
-        const expertiseValue = await AsyncStorage.getItem('expertise');
-        const isInternValue = await AsyncStorage.getItem('isIntern');
+        const {
+          firstname,
+          lastname,
+          workplace,
+          category,
+          expertiseValue,
+          about,
+        } = await fetchData();
 
-        if (fullname) {
-          setFname(fullname);
-        }
-
-        if (isInternValue !== 'true' && expertiseValue !== null) {
-          setValue2(expertiseValue);
-        } else {
-          setValue2('Medical Intern');
-        }
+        setFname(firstname);
+        setLname(lastname);
+        setWorkplace(workplace);
+        setValue(category);
+        setValue2(expertiseValue);
+        setabouttxt(about);
       } catch (error) {
         console.error('Error fetching data from AsyncStorage:', error.message);
       }
     };
 
-    fetchData();
+    fetchDataFromAsyncStorage();
   }, []);
 
+  const imageBtnHandler = () => {
+    console.log('Image Button Pressed');
+  };
 
-
-  const imageBtnHandler = () =>{
-    console.log("Image Button Pressed");
-  }
-
+  const saveData = async () => {
+    const dataFromAsyncStorage = await fetchData();
+  
+    if (
+      fname === dataFromAsyncStorage.firstname &&
+      lname === dataFromAsyncStorage.lastname &&
+      workplace === dataFromAsyncStorage.workplace &&
+      value === dataFromAsyncStorage.category &&
+      value2 === dataFromAsyncStorage.expertiseValue &&
+      abouttxt === dataFromAsyncStorage.about
+    ) {
+      navigation.pop();
+    } else {
+      updateData({
+        firstname: fname,
+        lastname: lname,
+        workplace,
+        category: value,
+        expertiseValue: value2,
+        about: abouttxt,
+      });
+    }
+  };
+  
 
   return (
     <ScrollView style={styles.container}>
@@ -58,7 +82,7 @@ const EditProfileScreen = ({navigation}: any) => {
         </TouchableOpacity>
         <Text style={styles.headertxt}>Edit Profile</Text>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={saveData}>
           <Text style={styles.headerbtn}>Save</Text>
         </TouchableOpacity>
       </View>
@@ -81,22 +105,15 @@ const EditProfileScreen = ({navigation}: any) => {
 
       <View style={styles.body}>
         <Text style={styles.bodylabels}>First Name</Text>
-        <InputField
-          handleChange={setFname}
-          value={fname}
-          width={95}
-        />
+        <InputField handleChange={setFname} value={fname} width={95} />
 
         <Text style={styles.bodylabels}>Last Name</Text>
-        <InputField
-          handleChange={setLname}
-          value={lname}
-          width={95}
-        />
+        <InputField handleChange={setLname} value={lname} width={95} />
 
         <Text style={styles.bodylabels}>Workplace</Text>
         <InputField
           handleChange={setWorkplace}
+          placeholder="Enter Workplace"
           value={workplace}
           width={95}
         />
@@ -108,6 +125,7 @@ const EditProfileScreen = ({navigation}: any) => {
           value={value}
           onChange={item => {
             setValue(item.value);
+            setValue2(null);
           }}
         />
 

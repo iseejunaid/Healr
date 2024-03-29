@@ -17,7 +17,7 @@ export const fetchUserData = async (user: object) => {
 
     querySnapshot.forEach(doc => {
       const userData = doc.data();
-
+      
       category = userData.category;
       isIntern = userData.isIntern;
       expertise = userData.expertise;
