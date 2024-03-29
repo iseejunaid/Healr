@@ -23,28 +23,41 @@ const ProfileScreen = ({navigation}: any) => {
     return str.replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const name = await AsyncStorage.getItem('name');
-        const isInternValue = await AsyncStorage.getItem('isIntern');
-        const expertiseValue = await AsyncStorage.getItem('expertise');
+  const fetchData = async () => {
+    try {
+      const name = await AsyncStorage.getItem('name');
+      const isInternValue = await AsyncStorage.getItem('isIntern');
+      const expertiseValue = await AsyncStorage.getItem('expertise') ?? '';
+      const expertiseInput = await AsyncStorage.getItem('expertiseInput') ?? '';
 
-        if(name){
-          setName(name);
-        }
-
-        if (isInternValue !== 'true' && expertiseValue !== null) {
-          setExpertise(capitalizeFirstLetter(expertiseValue));
-        }else{
-          setExpertise('Medical Intern');
-        }
-      } catch (error) {
-        console.error('Error fetching data from AsyncStorage:', error.message);
+      if(name){
+        setName(name);
+      }      
+      if(isInternValue === 'true'){
+        setExpertise('Medical Intern');
+        return;
       }
-    };
+      if(expertiseValue === 'unlisted'){
+        setExpertise(capitalizeFirstLetter(expertiseInput));
+      } else {
+        setExpertise(capitalizeFirstLetter(expertiseValue));
+      }
 
-    fetchData();
+    } catch (error) {
+      console.error('Error fetching data from AsyncStorage:', error.message);
+    }
+  };
+
+  // Fetch data on initial render and whenever the screen gains focus
+  useEffect(() => {
+    fetchData(); // Fetch data on initial render
+
+    // Use useFocusEffect to fetch data whenever the screen gains focus
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchData(); // Fetch data whenever the screen gains focus
+    });
+
+    return unsubscribe; // Clean up the subscription when component unmounts
   }, []);
 
   const items = [

@@ -8,16 +8,15 @@ export const fetchData = async () => {
     const workplace = (await AsyncStorage.getItem('workplace')) ?? '';
     const category = (await AsyncStorage.getItem('category')) ?? '';
     const expertiseValue = (await AsyncStorage.getItem('expertise')) ?? '';
+    const expertiseInput = (await AsyncStorage.getItem('expertiseInput')) ?? '';
     const about = (await AsyncStorage.getItem('about')) ?? '';
 
-    const [firstname, lastname] = fullname.split(' ');
-
     return {
-      firstname,
-      lastname,
+      fullname,
       workplace,
       category,
       expertiseValue,
+      expertiseInput,
       about,
     };
   } catch (error) {
@@ -32,10 +31,10 @@ export const updateData = async (updatedData: any) => {
 
     const newData = { ...currentData, ...updatedData };
 
-    const updatedFields: Record<string, any> = {};
+    const updatedFields: Record<string, any> = {};    
 
-    if (newData.firstname !== currentData.firstname || newData.lastname !== currentData.lastname) {
-      updatedFields['name'] = `${newData.firstname} ${newData.lastname}`;
+    if (newData.fullname !== currentData.fullname){
+      updatedFields['name'] = newData.fullname;
     }
     if (newData.workplace !== currentData.workplace) {
       updatedFields['workplace'] = newData.workplace;
@@ -49,18 +48,18 @@ export const updateData = async (updatedData: any) => {
     if (newData.about !== currentData.about) {
       updatedFields['about'] = newData.about;
     }
+    if(newData.expertiseInput !== currentData.expertiseInput) {
+      updatedFields['expertiseInput'] = newData.expertiseInput;      
+    }
 
-    // await AsyncStorage.multiSet(Object.entries(updatedFields));
+    await AsyncStorage.multiSet(Object.entries(updatedFields));    
 
     // Update data in Firestore
-    const uid = await AsyncStorage.getItem('uid');
-
     if (updatedFields['name']) {
-      const user = auth.currentUser;
+      const user = auth.currentUser;      
 
       if (user) {
-        // await updateProfile(user, { displayName: updatedFields['name'] });
-        console.log('Display name updated successfully:', updatedFields['name']);
+        await updateProfile(user, { displayName: updatedFields['name'] });
       } else {
         console.error('Error updating display name:', error.message);
       }
@@ -69,16 +68,14 @@ export const updateData = async (updatedData: any) => {
     delete updatedFields['name'];
     
     if (Object.keys(updatedFields).length > 0) {
-      console.log('Updated fields:', updatedFields);
-    } else {
-      console.log('No fields to update');
+      const docid = (await AsyncStorage.getItem('docid'));
+      if(docid) {
+        const userRef = db.collection('users').doc(docid);
+        await userRef.update(updatedFields);
+      }else {
+        console.error('No docid found');
+      }
     }
-    
-
-
-    // const userRef = db.collection('users').doc(uid);
-    // await userRef.update(updatedFields);
-
   } catch (error) {
     console.error('Error updating data in AsyncStorage:', error.message);
     throw error;

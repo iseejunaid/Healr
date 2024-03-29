@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image, Alert} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
@@ -9,30 +9,30 @@ import {Categorydata, Expertisedata} from '../Signup/signupConstantData';
 import {fetchData, updateData} from './EditProfileHelper';
 
 const EditProfileScreen = ({navigation}: any) => {
-  const [fname, setFname] = useState('');
-  const [lname, setLname] = useState('');
+  const [name, setName] = useState('');
   const [workplace, setWorkplace] = useState('');
   const [value, setValue] = useState<string | null>('');
   const [value2, setValue2] = useState<string | null>('');
+  const [inputData, setInputData] = useState('');
   const [abouttxt, setabouttxt] = useState('');
 
   useEffect(() => {
     const fetchDataFromAsyncStorage = async () => {
       try {
         const {
-          firstname,
-          lastname,
+          fullname,
           workplace,
           category,
           expertiseValue,
+          expertiseInput,
           about,
         } = await fetchData();
 
-        setFname(firstname);
-        setLname(lastname);
+        setName(fullname);
         setWorkplace(workplace);
         setValue(category);
         setValue2(expertiseValue);
+        setInputData(expertiseInput);
         setabouttxt(about);
       } catch (error) {
         console.error('Error fetching data from AsyncStorage:', error.message);
@@ -48,28 +48,37 @@ const EditProfileScreen = ({navigation}: any) => {
 
   const saveData = async () => {
     const dataFromAsyncStorage = await fetchData();
-  
+
     if (
-      fname === dataFromAsyncStorage.firstname &&
-      lname === dataFromAsyncStorage.lastname &&
+      name === dataFromAsyncStorage.fullname &&
       workplace === dataFromAsyncStorage.workplace &&
       value === dataFromAsyncStorage.category &&
       value2 === dataFromAsyncStorage.expertiseValue &&
+      inputData === dataFromAsyncStorage.expertiseInput &&
       abouttxt === dataFromAsyncStorage.about
     ) {
       navigation.pop();
     } else {
-      updateData({
-        firstname: fname,
-        lastname: lname,
-        workplace,
-        category: value,
-        expertiseValue: value2,
-        about: abouttxt,
-      });
+      if (value2) {                
+        if (value2 === 'unlisted' ? inputData !== '' : true) {
+          updateData({
+            fullname: name,
+            workplace: workplace,
+            category: value,
+            expertiseValue: value2,
+            expertiseInput: inputData,
+            about: abouttxt,
+          });
+        } else {
+          Alert.alert('Missing Entry', 'Please specify your Expertise');
+        }
+      } else {
+        Alert.alert('Missing Entry', 'Please select Area of Expertise');
+      }
     }
+    //TODO: Add loading state and set it to true before calling updateData
+    //pass loading to function and in function loading will be set to false    
   };
-  
 
   return (
     <ScrollView style={styles.container}>
@@ -104,11 +113,8 @@ const EditProfileScreen = ({navigation}: any) => {
       </View>
 
       <View style={styles.body}>
-        <Text style={styles.bodylabels}>First Name</Text>
-        <InputField handleChange={setFname} value={fname} width={95} />
-
-        <Text style={styles.bodylabels}>Last Name</Text>
-        <InputField handleChange={setLname} value={lname} width={95} />
+        <Text style={styles.bodylabels}>Full Name</Text>
+        <InputField handleChange={setName} value={name} width={95} />
 
         <Text style={styles.bodylabels}>Workplace</Text>
         <InputField
@@ -126,6 +132,7 @@ const EditProfileScreen = ({navigation}: any) => {
           onChange={item => {
             setValue(item.value);
             setValue2(null);
+            setInputData('');
           }}
         />
 
@@ -138,12 +145,26 @@ const EditProfileScreen = ({navigation}: any) => {
           value={value2}
           onChange={item => {
             setValue2(item.value);
+            setInputData('');
           }}
         />
+
+        {value2 == 'unlisted' ? (
+          <>
+            <Text style={[styles.bodylabels, {marginTop: 10}]}>Expertise</Text>
+            <InputField
+              handleChange={setInputData}
+              value={inputData}
+              placeholder="Please Specify"
+              width={95}
+            />
+          </>
+        ) : null}
 
         <Text style={[styles.bodylabels, {marginTop: 10}]}>About</Text>
         <TextInput
           style={styles.input}
+          placeholder="Write about yourself..."
           multiline={true}
           numberOfLines={4}
           value={abouttxt}

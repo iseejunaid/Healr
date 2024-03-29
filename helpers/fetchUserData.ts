@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const fetchUserData = async (user: object) => {
   const uid = user.uid;
   const name = user.displayName;
+  var docid = '';
   var category = '';
   var isIntern = false;
   var expertise = '';
@@ -18,6 +19,7 @@ export const fetchUserData = async (user: object) => {
     querySnapshot.forEach(doc => {
       const userData = doc.data();
       
+      docid = doc.id;      
       category = userData.category;
       isIntern = userData.isIntern;
       expertise = userData.expertise;
@@ -33,6 +35,7 @@ export const fetchUserData = async (user: object) => {
     try {
       const dataToStore = [
         ['uid', uid.toString()],
+        ['docid', docid.toString()],
         ['name', name.toString()],
         ['category', category.toString()],
         ['isIntern', isIntern.toString()],
@@ -47,7 +50,7 @@ export const fetchUserData = async (user: object) => {
       if (workplace) {
         dataToStore.push(['workplace', workplace.toString()]);
       }
-      await AsyncStorage.multiSet(dataToStore);
+      await AsyncStorage.multiSet(dataToStore as [string, string][]);
     } catch (error) {
       console.error('Error storing data in AsyncStorage:', error.message);
     }
