@@ -1,10 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth, db } from '../../../configs/firebaseConfig';
-import { updateProfile } from 'firebase/auth';
+import { User, updateProfile } from 'firebase/auth';
+import { storage } from '../../../configs/firebaseConfig';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+
 
 export const fetchData = async () => {
   try {
     const fullname = (await AsyncStorage.getItem('name')) ?? '';
+    const photoURL = (await AsyncStorage.getItem('photoURL')) ?? '';
     const workplace = (await AsyncStorage.getItem('workplace')) ?? '';
     const category = (await AsyncStorage.getItem('category')) ?? '';
     const expertiseValue = (await AsyncStorage.getItem('expertise')) ?? '';
@@ -13,6 +17,7 @@ export const fetchData = async () => {
 
     return {
       fullname,
+      photoURL,
       workplace,
       category,
       expertiseValue,
@@ -36,6 +41,9 @@ export const updateData = async (updatedData: any) => {
     if (newData.fullname !== currentData.fullname){
       updatedFields['name'] = newData.fullname;
     }
+    if (newData.photoURL !== currentData.photoURL) {
+      updatedFields['photoURL'] = newData.photoURL;
+    }
     if (newData.workplace !== currentData.workplace) {
       updatedFields['workplace'] = newData.workplace;
     }
@@ -55,24 +63,27 @@ export const updateData = async (updatedData: any) => {
     await AsyncStorage.multiSet(Object.entries(updatedFields));    
 
     // Update data in Firestore
+    const user = auth.currentUser;      
     if (updatedFields['name']) {
-      const user = auth.currentUser;      
-
       if (user) {
         await updateProfile(user, { displayName: updatedFields['name'] });
       } else {
         console.error('Error updating display name:', error.message);
       }
-
+      delete updatedFields['name'];
     }
-    delete updatedFields['name'];
-    
+
+    if (updatedFields['photoURL']) {
+      await uploadImage(updatedFields['photoURL'],user);
+      delete updatedFields['photoURL'];
+    }
+
     if (Object.keys(updatedFields).length > 0) {
       const docid = (await AsyncStorage.getItem('docid'));
-      if(docid) {
+      if (docid) {
         const userRef = db.collection('users').doc(docid);
         await userRef.update(updatedFields);
-      }else {
+      } else {
         console.error('No docid found');
       }
     }
@@ -80,4 +91,28 @@ export const updateData = async (updatedData: any) => {
     console.error('Error updating data in AsyncStorage:', error.message);
     throw error;
   }
+  console.log('Data updated successfully');
+  
+};
+
+export const uploadImage = async (uri: any,user:any) => {
+  const response = await fetch(uri);
+  const blob = await response.blob();
+
+  const storageRef = ref(storage, "profileImages/" + user.uid);
+  const uploadTask = uploadBytesResumable(storageRef, blob);
+
+  uploadTask.on('state_changed',
+    (snapshot) => {
+    },
+    (error) => {
+      console.log('Upload Error: ', error);
+    },
+    () => {
+      getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+        await updateProfile(user, { photoURL: uri });
+        await AsyncStorage.setItem('photoURL', downloadURL);
+      });
+    }
+  );
 };

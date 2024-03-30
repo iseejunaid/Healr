@@ -7,8 +7,10 @@ import InputField from '../../components/InputField';
 import SelectDropdown from '../../components/SelectDropdown';
 import {Categorydata, Expertisedata} from '../Signup/signupConstantData';
 import {fetchData, updateData} from './EditProfileHelper';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const EditProfileScreen = ({navigation}: any) => {
+  const [profileImage, setProfileImage] = useState<string | null>('');
   const [name, setName] = useState('');
   const [workplace, setWorkplace] = useState('');
   const [value, setValue] = useState<string | null>('');
@@ -21,6 +23,7 @@ const EditProfileScreen = ({navigation}: any) => {
       try {
         const {
           fullname,
+          photoURL,
           workplace,
           category,
           expertiseValue,
@@ -29,6 +32,7 @@ const EditProfileScreen = ({navigation}: any) => {
         } = await fetchData();
 
         setName(fullname);
+        setProfileImage(photoURL);
         setWorkplace(workplace);
         setValue(category);
         setValue2(expertiseValue);
@@ -43,13 +47,31 @@ const EditProfileScreen = ({navigation}: any) => {
   }, []);
 
   const imageBtnHandler = () => {
-    console.log('Image Button Pressed');
+    ImagePicker.openPicker({
+      width: 150,
+      height: 150,
+      cropping: true,
+      includeBase64: true,
+      cropperCircleOverlay: true,
+      cropperToolbarTitle: 'Edit Image',
+      cropperToolbarColor: Colors.secondaryColor,
+      cropperStatusBarColor: Colors.secondaryColor,
+      cropperToolbarWidgetColor: Colors.tertiaryColor,
+      cropperActiveWidgetColor: Colors.primaryColor,
+    }).then(image => {
+      setProfileImage(image.path);
+    }).catch(error => {
+      console.log('ImagePicker Error: ', error);
+    });
+
   };
 
+  
   const saveData = async () => {
     const dataFromAsyncStorage = await fetchData();
-
+        
     if (
+      profileImage == dataFromAsyncStorage.photoURL &&
       name === dataFromAsyncStorage.fullname &&
       workplace === dataFromAsyncStorage.workplace &&
       value === dataFromAsyncStorage.category &&
@@ -63,6 +85,7 @@ const EditProfileScreen = ({navigation}: any) => {
         if (value2 === 'unlisted' ? inputData !== '' : true) {
           updateData({
             fullname: name,
+            photoURL: profileImage,
             workplace: workplace,
             category: value,
             expertiseValue: value2,
@@ -76,6 +99,7 @@ const EditProfileScreen = ({navigation}: any) => {
         Alert.alert('Missing Entry', 'Please select Area of Expertise');
       }
     }
+    ImagePicker.clean();
     //TODO: Add loading state and set it to true before calling updateData
     //pass loading to function and in function loading will be set to false    
   };
@@ -98,10 +122,14 @@ const EditProfileScreen = ({navigation}: any) => {
 
       <View style={styles.profileImg}>
         <View style={styles.circle} onStartShouldSetResponder={imageBtnHandler}>
+        {profileImage ? (
+            <Image source={{uri: profileImage}} style={styles.image} />
+          ) : (
           <Image
             source={require('../../../assets/images/placeholder.jpg')}
             style={styles.image}
           />
+          )}
         </View>
         <View
           style={styles.editImgContainer}
@@ -221,8 +249,8 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: 120,
-    height: 120,
+    width: '100%',
+    height: '100%',
     resizeMode: 'cover',
   },
   editImgContainer: {

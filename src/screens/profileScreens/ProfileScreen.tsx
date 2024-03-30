@@ -17,33 +17,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = ({navigation}: any) => {
   const [name, setName] = useState('');
+  const [profileImage, setProfileImage] = useState('');
   const [expertise, setExpertise] = useState('');
 
   const capitalizeFirstLetter = (str: string) => {
-    return str.replace(/\b\w/g, (char) => char.toUpperCase());
+    return str.replace(/\b\w/g, char => char.toUpperCase());
   };
 
   const fetchData = async () => {
     try {
       const name = await AsyncStorage.getItem('name');
+      setProfileImage((await AsyncStorage.getItem('photoURL')) ?? '');
       const isInternValue = await AsyncStorage.getItem('isIntern');
-      const expertiseValue = await AsyncStorage.getItem('expertise') ?? '';
-      const expertiseInput = await AsyncStorage.getItem('expertiseInput') ?? '';
+      const expertiseValue = (await AsyncStorage.getItem('expertise')) ?? '';
+      const expertiseInput =
+        (await AsyncStorage.getItem('expertiseInput')) ?? '';
 
-      if(name){
+      if (name) {
         setName(name);
-      }      
-      if(isInternValue === 'true'){
+      }
+      if (isInternValue === 'true') {
         setExpertise('Medical Intern');
         return;
       }
-      if(expertiseValue === 'unlisted'){
+      if (expertiseValue === 'unlisted') {
         setExpertise(capitalizeFirstLetter(expertiseInput));
       } else {
         setExpertise(capitalizeFirstLetter(expertiseValue));
       }
-
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching data from AsyncStorage:', error.message);
     }
   };
@@ -71,7 +73,7 @@ const ProfileScreen = ({navigation}: any) => {
     try {
       await auth.signOut();
       navigation.popToTop();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error logging out:', error.message);
     }
   };
@@ -96,10 +98,14 @@ const ProfileScreen = ({navigation}: any) => {
         </LinearGradient>
         <View style={styles.imgView}>
           <View style={styles.circle}>
-            <Image
-              source={require('../../../assets/images/placeholder.jpg')}
-              style={styles.image}
-            />
+            {profileImage ? (
+              <Image source={{uri: profileImage}} style={styles.image} />
+            ) : (
+              <Image
+                source={require('../../../assets/images/placeholder.jpg')}
+                style={styles.image}
+              />
+            )}
           </View>
           <Text style={styles.nametxt}>{name}</Text>
           <Text style={styles.professiontxt}>{expertise}</Text>
@@ -159,7 +165,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    overflow: 'hidden', 
+    overflow: 'hidden',
     borderWidth: 5,
     borderColor: Colors.secondaryColor,
   },
@@ -177,7 +183,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   nametxt: {
-    marginTop:"2%",
+    marginTop: '2%',
     fontSize: 18,
     color: Colors.tertiaryColor,
     fontFamily: Fonts.semiBold,

@@ -3,7 +3,9 @@ import {getDocs, collection, query, where} from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const fetchUserData = async (user: object) => {
+  
   const uid = user.uid;
+  const photoURL = user.photoURL;
   const name = user.displayName;
   var docid = '';
   var category = '';
@@ -43,6 +45,10 @@ export const fetchUserData = async (user: object) => {
         ['about', about.toString()],
       ];
 
+      if(photoURL){
+        dataToStore.push(['photoURL', photoURL.toString()]);
+      }
+      
       if (expertiseInput) {
         dataToStore.push(['expertiseInput', expertiseInput.toString()]);
       }
