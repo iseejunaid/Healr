@@ -90,9 +90,7 @@ export const updateData = async (updatedData: any) => {
   } catch (error) {
     console.error('Error updating data in AsyncStorage:', error.message);
     throw error;
-  }
-  console.log('Data updated successfully');
-  
+  }  
 };
 
 export const uploadImage = async (uri: any,user:any) => {

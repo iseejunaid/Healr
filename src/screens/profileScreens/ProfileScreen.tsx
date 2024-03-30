@@ -14,17 +14,20 @@ import Fonts from '../../../assets/fonts/fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import {auth} from '../../../configs/firebaseConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from '../../components/Loader';
 
 const ProfileScreen = ({navigation}: any) => {
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [expertise, setExpertise] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const capitalizeFirstLetter = (str: string) => {
     return str.replace(/\b\w/g, char => char.toUpperCase());
   };
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const name = await AsyncStorage.getItem('name');
       setProfileImage((await AsyncStorage.getItem('photoURL')) ?? '');
@@ -48,6 +51,7 @@ const ProfileScreen = ({navigation}: any) => {
     } catch (error: any) {
       console.error('Error fetching data from AsyncStorage:', error.message);
     }
+    setLoading(false);
   };
 
   // Fetch data on initial render and whenever the screen gains focus
@@ -96,17 +100,23 @@ const ProfileScreen = ({navigation}: any) => {
               width: '100%',
             }}></View>
         </LinearGradient>
+          {loading ? (
+            <Loader/>
+          ) : (
         <View style={styles.imgView}>
-          <View style={styles.circle}>
-            {profileImage ? (
-              <Image source={{uri: profileImage}} style={styles.image} />
-            ) : (
-              <Image
-                source={require('../../../assets/images/placeholder.jpg')}
-                style={styles.image}
-              />
-            )}
-          </View>
+          
+            <View style={styles.circle}>
+              {profileImage ? (
+                <Image source={{uri: profileImage}} style={styles.image} />
+              ) : (
+                <Image
+                  source={require('../../../assets/images/placeholder.jpg')}
+                  style={styles.image}
+                />
+              )}
+            </View>
+          
+
           <Text style={styles.nametxt}>{name}</Text>
           <Text style={styles.professiontxt}>{expertise}</Text>
           <Text style={styles.statustxt}>Available</Text>
@@ -116,6 +126,7 @@ const ProfileScreen = ({navigation}: any) => {
             <Text style={{color: Colors.secondaryColor}}>Edit Profile</Text>
           </TouchableOpacity>
         </View>
+          )}
       </View>
 
       <View

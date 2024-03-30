@@ -14,7 +14,7 @@ export const fetchUserData = async (user: object) => {
   var expertiseInput = '';
   var workplace = '';
   var about = '';
-  try {
+  try {    
     const q = query(collection(db, 'users'), where('uid', '==', uid));
     const querySnapshot = await getDocs(q);
 
@@ -45,10 +45,12 @@ export const fetchUserData = async (user: object) => {
         ['about', about.toString()],
       ];
 
-      if(photoURL){
+      if(photoURL){        
         dataToStore.push(['photoURL', photoURL.toString()]);
+      }else{
+        dataToStore.push(['photoURL', '']);
       }
-      
+          
       if (expertiseInput) {
         dataToStore.push(['expertiseInput', expertiseInput.toString()]);
       }
@@ -57,6 +59,7 @@ export const fetchUserData = async (user: object) => {
         dataToStore.push(['workplace', workplace.toString()]);
       }
       await AsyncStorage.multiSet(dataToStore as [string, string][]);
+      
     } catch (error) {
       console.error('Error storing data in AsyncStorage:', error.message);
     }

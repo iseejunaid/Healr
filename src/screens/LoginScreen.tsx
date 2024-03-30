@@ -14,11 +14,13 @@ import Fonts from '../../assets/fonts/fonts';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../../configs/firebaseConfig';
 import { fetchUserData } from '../../helpers/fetchUserData';
+import Loader from '../components/Loader';
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
   const [email, setEmail] = useState('junaidnadeem266@gmail.com');
   const [password, setPassword] = useState('123123123');
   const [showPassword, setShowPassword] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const handleEmailChange = (text: string) => {
     setEmail(text);
@@ -29,6 +31,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -40,7 +43,9 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
       if (user.emailVerified) {
         navigation.navigate('HomeScreen');
         
-        fetchUserData(user);
+        fetchUserData(user).then(() => {
+          setLoading(false);
+        });
       } else {
         Alert.alert('Email not verified', 'Please go to your inbox and verify your email address.');
       }
@@ -70,50 +75,55 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.top}>
-        <Text style={styles.toptxt}>Login</Text>
-      </View>
-      <View style={styles.middle}>
-        <InputField
-          handleChange={handleEmailChange}
-          value={email}
-          placeholder="Phone Number or Email Address"
-          width={95}
-        />
-        <InputField
-          handleChange={handlePasswordChange}
-          value={password}
-          placeholder="Password"
-          secureTextEntry={showPassword}
-          width={86}
-          iconPressed={passwordIconHandler}
-          source={
-            showPassword
-              ? require('../../assets/images/eyeslash.png')
-              : require('../../assets/images/eyeslash1.png')
-          }
-        />
-
-        <View style={styles.forgotbtn}>
-          <TouchableOpacity onPress={forgotbtnHandler}>
-            <Text style={styles.forgotbtntxt}>Forgot Password?</Text>
-          </TouchableOpacity>
+    loading ? (
+      <Loader backgroundColor={Colors.tertiaryColor}/>
+    ) : (
+      <ScrollView style={styles.container}>
+        <View style={styles.top}>
+          <Text style={styles.toptxt}>Login</Text>
         </View>
-        <View style={styles.submitbtn}>
-          <PressableBtn text="Submit" onPress={handleSubmit} />
+        <View style={styles.middle}>
+          <InputField
+            handleChange={handleEmailChange}
+            value={email}
+            placeholder="Phone Number or Email Address"
+            width={95}
+          />
+          <InputField
+            handleChange={handlePasswordChange}
+            value={password}
+            placeholder="Password"
+            secureTextEntry={showPassword}
+            width={86}
+            iconPressed={passwordIconHandler}
+            source={
+              showPassword
+                ? require('../../assets/images/eyeslash.png')
+                : require('../../assets/images/eyeslash1.png')
+            }
+          />
+  
+          <View style={styles.forgotbtn}>
+            <TouchableOpacity onPress={forgotbtnHandler}>
+              <Text style={styles.forgotbtntxt}>Forgot Password?</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.submitbtn}>
+            <PressableBtn text="Submit" onPress={handleSubmit} />
+          </View>
         </View>
-      </View>
-      <View style={styles.bottom}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={styles.bottomtxt}>New to Healr? </Text>
-          <TouchableOpacity onPress={signupHandler}>
-            <Text style={styles.bottombtntxt}>Let's Begin!</Text>
-          </TouchableOpacity>
+        <View style={styles.bottom}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={styles.bottomtxt}>New to Healr? </Text>
+            <TouchableOpacity onPress={signupHandler}>
+              <Text style={styles.bottombtntxt}>Let's Begin!</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    )
   );
+  
 };
 const styles = StyleSheet.create({
   container: {

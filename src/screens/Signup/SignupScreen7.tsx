@@ -12,13 +12,19 @@ import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import {signupConfig} from './signupVariables';
-import { createUserWithEmailAndPassword,sendEmailVerification,updateProfile } from 'firebase/auth';
-import { collection, addDoc } from 'firebase/firestore';
-import { auth, db } from '../../../configs/firebaseConfig';
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  updateProfile,
+} from 'firebase/auth';
+import {collection, addDoc} from 'firebase/firestore';
+import {auth, db} from '../../../configs/firebaseConfig';
+import Loader from '../../components/Loader';
 
 const SignupScreen7 = ({navigation}: {navigation: any}) => {
   const [pass, setPass] = useState('123123123');
   const [confirmPass, setConfirmPass] = useState('123123123');
+  const [loading, setLoading] = useState(false);
 
   const handlePassChange = (text: string) => {
     setPass(text);
@@ -37,6 +43,7 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
       return;
     }
     try {
+      setLoading(true);
       // Create the user with email and password
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -61,11 +68,12 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
         expertiseInput: signupConfig.expertiseInput,
         about: 'Healing the World!',
       });
-      
 
       // Send email verification
-      await sendEmailVerification(user);
-      
+      await sendEmailVerification(user).then(() => {
+        setLoading(false);
+      });
+
       Alert.alert(
         'Success!',
         'Signup successful. Please check your email for verification.',
@@ -79,9 +87,7 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
       console.log(error);
       Alert.alert('Error!', `Signup failed: ${(error as Error).message}`);
     }
-    
   };
-
 
   const backBtnHandler = () => {
     navigation.pop();
@@ -89,7 +95,9 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
     setConfirmPass('');
   };
 
-  return (
+  return loading ? (
+    <Loader backgroundColor={Colors.tertiaryColor} />
+  ) : (
     <ScrollView style={styles.container}>
       <View style={styles.stepsCountView}>
         <Text style={[styles.stepsCountTxt, {color: Colors.primaryColor}]}>

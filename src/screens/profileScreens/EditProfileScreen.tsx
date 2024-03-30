@@ -7,6 +7,7 @@ import InputField from '../../components/InputField';
 import SelectDropdown from '../../components/SelectDropdown';
 import {Categorydata, Expertisedata} from '../Signup/signupConstantData';
 import {fetchData, updateData} from './EditProfileHelper';
+import Loader from '../../components/Loader';
 import ImagePicker from 'react-native-image-crop-picker';
 
 const EditProfileScreen = ({navigation}: any) => {
@@ -17,34 +18,43 @@ const EditProfileScreen = ({navigation}: any) => {
   const [value2, setValue2] = useState<string | null>('');
   const [inputData, setInputData] = useState('');
   const [abouttxt, setabouttxt] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const fetchDataFromAsyncStorage = async () => {
-      try {
-        const {
-          fullname,
-          photoURL,
-          workplace,
-          category,
-          expertiseValue,
-          expertiseInput,
-          about,
-        } = await fetchData();
+        try {
+            const {
+                fullname,
+                photoURL,
+                workplace,
+                category,
+                expertiseValue,
+                expertiseInput,
+                about,
+            } = await fetchData();
 
-        setName(fullname);
-        setProfileImage(photoURL);
-        setWorkplace(workplace);
-        setValue(category);
-        setValue2(expertiseValue);
-        setInputData(expertiseInput);
-        setabouttxt(about);
-      } catch (error) {
-        console.error('Error fetching data from AsyncStorage:', error.message);
-      }
+            // Update states
+            Promise.all([
+                setName(fullname),
+                setProfileImage(photoURL),
+                setWorkplace(workplace),
+                setValue(category),
+                setValue2(expertiseValue),
+                setInputData(expertiseInput),
+                setabouttxt(about)
+            ]).then(() => {
+                setLoading(false); // Set loading to false after all states are updated
+            });
+        } catch (error) {
+            console.error('Error fetching data from AsyncStorage:', error.message);
+            setLoading(false); // Make sure to handle loading state in case of error
+        }        
     };
 
     fetchDataFromAsyncStorage();
-  }, []);
+}, []);
+
 
   const imageBtnHandler = () => {
     ImagePicker.openPicker({
@@ -58,7 +68,7 @@ const EditProfileScreen = ({navigation}: any) => {
       cropperStatusBarColor: Colors.secondaryColor,
       cropperToolbarWidgetColor: Colors.tertiaryColor,
       cropperActiveWidgetColor: Colors.primaryColor,
-    }).then(image => {
+    }).then(image => {      
       setProfileImage(image.path);
     }).catch(error => {
       console.log('ImagePicker Error: ', error);
@@ -68,6 +78,7 @@ const EditProfileScreen = ({navigation}: any) => {
 
   
   const saveData = async () => {
+    setLoading(true);
     const dataFromAsyncStorage = await fetchData();
         
     if (
@@ -80,6 +91,7 @@ const EditProfileScreen = ({navigation}: any) => {
       abouttxt === dataFromAsyncStorage.about
     ) {
       navigation.pop();
+      setLoading(false);
     } else {
       if (value2) {                
         if (value2 === 'unlisted' ? inputData !== '' : true) {
@@ -91,20 +103,26 @@ const EditProfileScreen = ({navigation}: any) => {
             expertiseValue: value2,
             expertiseInput: inputData,
             about: abouttxt,
+          }).then(() => {
+            navigation.pop();
+            setLoading(false);
           });
         } else {
           Alert.alert('Missing Entry', 'Please specify your Expertise');
+          setLoading(false);
         }
       } else {
         Alert.alert('Missing Entry', 'Please select Area of Expertise');
+        setLoading(false);
       }
     }
     ImagePicker.clean();
-    //TODO: Add loading state and set it to true before calling updateData
-    //pass loading to function and in function loading will be set to false    
   };
 
   return (
+    loading ? (
+      <Loader backgroundColor={Colors.secondaryColor}/>
+    ) : (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.pop()}>
@@ -200,6 +218,7 @@ const EditProfileScreen = ({navigation}: any) => {
         />
       </View>
     </ScrollView>
+    )
   );
 };
 
