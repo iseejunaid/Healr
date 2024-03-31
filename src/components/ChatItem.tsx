@@ -5,22 +5,31 @@ import Fonts from '../../assets/fonts/fonts';
 import Colors from '../../assets/colors/colors';
 
 interface ChatItemProps {
+  navigation: any;
   profileImageSource: any;
   userName: string;
   message: string;
   time: string;
   notificationCount?: number;
-  onPress: () => void;
 }
 
 const ChatItem: React.FC<ChatItemProps> = ({
+  navigation,
   profileImageSource,
   userName,
   message,
   time,
   notificationCount,
-  onPress
 }) => {
+
+  const onPress = () => {
+    navigation.navigate('IndividualChat', {
+      userName: userName,
+      profileImageSource: profileImageSource,
+      message: message,
+    });
+  };
+  
   return (
     <TouchableOpacity style={styles.chatItemContainer}
     onPress={onPress}>

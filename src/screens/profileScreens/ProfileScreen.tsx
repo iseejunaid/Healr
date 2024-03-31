@@ -20,6 +20,7 @@ const ProfileScreen = ({navigation}: any) => {
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [expertise, setExpertise] = useState('');
+  const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
 
   const capitalizeFirstLetter = (str: string) => {
@@ -31,14 +32,17 @@ const ProfileScreen = ({navigation}: any) => {
     try {
       const name = await AsyncStorage.getItem('name');
       setProfileImage((await AsyncStorage.getItem('photoURL')) ?? '');
+      const statusValue = await AsyncStorage.getItem('status');
       const isInternValue = await AsyncStorage.getItem('isIntern');
       const expertiseValue = (await AsyncStorage.getItem('expertise')) ?? '';
-      const expertiseInput =
-        (await AsyncStorage.getItem('expertiseInput')) ?? '';
+      const expertiseInput = (await AsyncStorage.getItem('expertiseInput')) ?? '';
 
       if (name) {
         setName(name);
       }
+
+      setStatus(statusValue ? capitalizeFirstLetter(statusValue) : '');
+
       if (isInternValue === 'true') {
         setExpertise('Medical Intern');
         return;
@@ -54,9 +58,8 @@ const ProfileScreen = ({navigation}: any) => {
     setLoading(false);
   };
 
-  // Fetch data on initial render and whenever the screen gains focus
   useEffect(() => {
-    fetchData(); // Fetch data on initial render
+    fetchData();
 
     // Use useFocusEffect to fetch data whenever the screen gains focus
     const unsubscribe = navigation.addListener('focus', () => {
@@ -119,7 +122,7 @@ const ProfileScreen = ({navigation}: any) => {
 
           <Text style={styles.nametxt}>{name}</Text>
           <Text style={styles.professiontxt}>{expertise}</Text>
-          <Text style={styles.statustxt}>Available</Text>
+          <Text style={styles.statustxt}>{status}</Text>
           <TouchableOpacity
             style={styles.editBtn}
             onPress={() => navigation.navigate('EditProfile')}>

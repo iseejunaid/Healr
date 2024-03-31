@@ -4,21 +4,18 @@ import {
   StyleSheet,
   ScrollView,
   Image,
-  Text,
   TouchableOpacity,
 } from 'react-native';
 import Header from '../../components/Header';
 import Colors from '../../../assets/colors/colors';
 import InputField from '../../components/InputField';
 import ChatItem from '../../components/ChatItem';
-const ChatScreen: React.FC = () => {
+
+const ChatScreen: React.FC = ({navigation}: any) => {
   const [searchValue, setSearchValue] = useState('');
 
   const handleSearchValueChange = (text: string) => {
     setSearchValue(text);
-  };
-  const onPress = () => {
-    console.log('Chat Item Pressed');
   };
 
   return (
@@ -33,7 +30,7 @@ const ChatScreen: React.FC = () => {
           width={95}
         />
         <ChatItem
-          onPress={onPress}
+          navigation={navigation}
           profileImageSource={require('../../../assets/images/profile.png')}
           userName="Muhammad Qasim"
           message="This is a sample message sent by Muhammad Qasim"
@@ -41,7 +38,7 @@ const ChatScreen: React.FC = () => {
           notificationCount={2}
         />
         <ChatItem
-          onPress={onPress}
+          navigation={navigation}
           profileImageSource={require('../../../assets/images/profile.png')}
           userName="Muhammad Qasim"
           message="This is a sample message sent by Muhammad Qasim"
@@ -51,8 +48,7 @@ const ChatScreen: React.FC = () => {
       <TouchableOpacity
         style={styles.newChatButton}
         activeOpacity={0.7}
-        onPress={() => {
-        }}>
+        onPress={() => {}}>
         <Image
           source={require('../../../assets/images/newChat.png')}
           style={styles.newChatIcon}

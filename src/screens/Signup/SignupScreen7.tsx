@@ -66,6 +66,7 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
         isIntern: signupConfig.isIntern,
         expertise: signupConfig.expertise,
         expertiseInput: signupConfig.expertiseInput,
+        status: 'available',
         about: 'Healing the World!',
       });
 

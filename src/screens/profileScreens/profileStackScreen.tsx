@@ -5,12 +5,7 @@ import EditProfileScreen from './EditProfileScreen';
 import Colors from '../../../assets/colors/colors';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
-type ProfileStackParamList = {
-  ProfileScreen: undefined;
-  EditProfile: undefined;
-};
-
-const ProfileStack = createStackNavigator<ProfileStackParamList>();
+const ProfileStack = createStackNavigator();
 
 const ProfileStackScreen = ({navigation, route}: any) => {
   React.useLayoutEffect(() => {

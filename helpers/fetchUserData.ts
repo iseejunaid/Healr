@@ -3,7 +3,7 @@ import {getDocs, collection, query, where} from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const fetchUserData = async (user: object) => {
-  
+
   const uid = user.uid;
   const photoURL = user.photoURL;
   const name = user.displayName;
@@ -13,6 +13,7 @@ export const fetchUserData = async (user: object) => {
   var expertise = '';
   var expertiseInput = '';
   var workplace = '';
+  var status = '';
   var about = '';
   try {    
     const q = query(collection(db, 'users'), where('uid', '==', uid));
@@ -31,6 +32,7 @@ export const fetchUserData = async (user: object) => {
       if (userData.workplace) {
         workplace = userData.workplace;
       }
+      status = userData.status;
       about = userData.about;
     });
 
@@ -42,6 +44,7 @@ export const fetchUserData = async (user: object) => {
         ['category', category.toString()],
         ['isIntern', isIntern.toString()],
         ['expertise', expertise.toString()],
+        ['status', status.toString()],
         ['about', about.toString()],
       ];
 
