@@ -14,6 +14,7 @@ export const fetchData = async () => {
     const expertiseValue = (await AsyncStorage.getItem('expertise')) ?? '';
     const expertiseInput = (await AsyncStorage.getItem('expertiseInput')) ?? '';
     const about = (await AsyncStorage.getItem('about')) ?? '';
+    
 
     return {
       fullname,

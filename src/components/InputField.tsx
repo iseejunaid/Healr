@@ -12,8 +12,8 @@ import Fonts from '../../assets/fonts/fonts';
 
 interface InputFieldProps {
   style?: any;
-  handleChange: (text: string) => void;
-  value: string;
+  handleChange?: (text: string) => void;
+  value?: string;
   placeholder?: string;
   width: number;
   keyboardType?: any;
