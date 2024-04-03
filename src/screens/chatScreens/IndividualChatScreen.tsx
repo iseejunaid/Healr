@@ -1,11 +1,19 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback, useEffect, useLayoutEffect} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Actions, Composer, GiftedChat, Send} from 'react-native-gifted-chat';
+import {Bubble, Composer, GiftedChat, Send} from 'react-native-gifted-chat';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+} from 'firebase/firestore';
+import {auth, db} from '../../../configs/firebaseConfig';
 
 interface Message {
-  _id: number;
+  _id: string;
   text: string;
   createdAt: Date;
   user: {
@@ -15,33 +23,60 @@ interface Message {
   };
 }
 
-const IndividualChatScreen = ({navigation}:any) => {
+
+const IndividualChatScreen = ({navigation}: any) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText] = useState('');
 
-  const composeMsg = text => {
-    let uuid = getNewUuid();
-    let createdAt = new Date().toISOString();
+  const onSend = (messages: any) => {
+    const messageText = messages?.text;
+    const msg = composeMsg(messageText);
+    setText('');
+    console.log(msg);
+    addDoc(collection(db, 'chats'), msg)
+  };
+
+  const composeMsg = (text: string) => {
+    console.log('text', text);
+
+    const createdAt = new Date();
     const msg = {
-      _id: uuid,
-      createdAt: createdAt,
-      text: text,
-      user: {_id: 1, name: 'User 1'},
+      _id: 1, // receiverID
+      createdAt,
+      text,
+      user: {_id: auth?.currentUser?.uid, name: 'User 1'},
     };
     return msg;
   };
 
+  useEffect(() => {
+    const collectionRef = collection(db, 'chats');
+    const q = query(collectionRef, orderBy('createdAt', 'desc'));
+
+    const unsubscribe = onSnapshot(q, querySnapshot => {
+      setMessages(
+        querySnapshot.docs.map(doc => ({
+          _id: doc.id,
+          text: doc.data().text,
+          createdAt: doc.data().createdAt.toDate(),
+          user: doc.data().user,
+        })),
+      );
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const customtInputToolbar = () => {
     return (
       <View style={styles.customInputView}>
-        <TouchableOpacity onPress={()=> console.log("Pressed")}>
-            <Image
-            source={require('../../../assets/images/back.png')}
-            style={styles.sendIcon}
-          />
+        <TouchableOpacity
+          style={{paddingTop: 6}}
+          onPress={() => console.log('Pressed')}>
+          <Image source={require('../../../assets/images/chatOptions.png')} />
         </TouchableOpacity>
         <Composer
-          placeholder="Type message here"
+          placeholder="Message"
           text={text}
           onTextChanged={val => {
             setText(val);
@@ -54,45 +89,68 @@ const IndividualChatScreen = ({navigation}:any) => {
           onSend={mes => onSend(mes)}
           text={text}
           label="Send">
-          <Image
-            source={require('../../../assets/images/back.png')}
-            style={styles.sendIcon}
-          />
+          {text !== '' ? (
+            <Image source={require('../../../assets/images/sendMessage.png')} />
+          ) : (
+            <Image
+              source={require('../../../assets/images/recordMessage.png')}
+            />
+          )}
         </Send>
       </View>
     );
   };
 
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-      {
-        _id: 2,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 1,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ]);
-  }, []);
-
-  const onSend = useCallback((messages = []) => {
-    setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, messages),
+  const renderCustomBubble = (props: any) => {
+    return (
+      <Bubble
+        {...props}
+        timeTextStyle={{
+          right: {color: Colors.quadraryColor, fontFamily: Fonts.regular},
+          left: {color: Colors.quadraryColor, fontFamily: Fonts.regular},
+        }}
+        textStyle={{
+          right: {color: Colors.secondaryWhite, fontFamily: Fonts.regular},
+          left: {color: 'black', fontFamily: Fonts.regular},
+        }}
+        wrapperStyle={{
+          left: {
+            padding: 2,
+            backgroundColor: Colors.secondaryColor,
+          },
+          right: {
+            padding: 2,
+            backgroundColor: Colors.tertiaryColor,
+          },
+        }}
+      />
     );
-  }, []);
+  };
+
+  // useEffect(() => {
+  //   setMessages([
+  //     {
+  //       _id: 1,
+  //       text: 'Hello developer',
+  //       createdAt: new Date(),
+  //       user: {
+  //         _id: 2,
+  //         name: 'React Native',
+  //         avatar: 'https://placeimg.com/140/140/any',
+  //       },
+  //     },
+  //     {
+  //       _id: 2,
+  //       text: 'Hello developer',
+  //       createdAt: new Date(),
+  //       user: {
+  //         _id: 1,
+  //         name: 'React Native',
+  //         avatar: 'https://placeimg.com/140/140/any',
+  //       },
+  //     },
+  //   ]);
+  // }, []);
 
   return (
     <View style={{flex: 1}}>
@@ -153,10 +211,15 @@ const IndividualChatScreen = ({navigation}:any) => {
         </View>
       </View>
       <GiftedChat
+        messagesContainerStyle={{
+          backgroundColor: Colors.secondaryWhite,
+          borderRadius: 15,
+        }}
+        renderAvatar={null}
+        renderBubble={renderCustomBubble}
         messages={messages}
-        onSend={messages => onSend(messages)}
         user={{
-          _id: 1,
+          _id: auth?.currentUser?.uid || '',
         }}
         renderInputToolbar={customtInputToolbar}
       />
@@ -174,11 +237,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  headerText: {
-    fontSize: 18,
-    color: 'black',
-    fontWeight: 'bold',
-  },
   backImg: {
     height: 20,
     width: 22,
@@ -194,27 +252,19 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   customInputView: {
-    height:55,
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    backgroundColor: 'red',    
+    paddingHorizontal: 15,
+    paddingTop: 2,
+    backgroundColor: Colors.secondaryColor,
   },
   composerTxt: {
-    flex: 1,
-    borderRadius: 20,
-    backgroundColor: 'white',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    height: 45,
+    backgroundColor: Colors.secondaryWhite,
+    borderRadius: 6,
   },
   sendBtnContainer: {
     marginLeft: 10,
-  },
-  sendIcon: {
-    width: 24,
-    height: 24,
-    tintColor: 'blue',
+    paddingBottom: 3,
   },
 });
