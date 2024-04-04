@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,9 +10,15 @@ import Header from '../../components/Header';
 import Colors from '../../../assets/colors/colors';
 import InputField from '../../components/InputField';
 import ChatItem from '../../components/ChatItem';
+import { fetchChats } from './ChatHelper';
+import { auth } from '../../../configs/firebaseConfig';
 
 const ChatScreen: React.FC = ({navigation}: any) => {
   const [searchValue, setSearchValue] = useState('');
+
+  useEffect(() => {  
+    fetchChats()
+  },);
 
   const handleSearchValueChange = (text: string) => {
     setSearchValue(text);
