@@ -73,7 +73,7 @@ const EditProfileScreen = ({navigation}: any) => {
     }).catch(error => {
       console.log('ImagePicker Error: ', error);
     });
-
+    return true;
   };
 
   

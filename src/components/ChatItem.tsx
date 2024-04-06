@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     color: Colors.tertiaryColor,
     fontSize: 15,
     lineHeight: 17,
+    width: '80%',
   },
   messageText: {
     fontFamily: Fonts.regular,

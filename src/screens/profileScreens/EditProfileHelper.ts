@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth, db } from '../../../configs/firebaseConfig';
-import { User, updateProfile } from 'firebase/auth';
+import { updateProfile } from 'firebase/auth';
 import { storage } from '../../../configs/firebaseConfig';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
@@ -71,12 +71,10 @@ export const updateData = async (updatedData: any) => {
       } else {
         console.error('Error updating display name:', error.message);
       }
-      delete updatedFields['name'];
     }
 
     if (updatedFields['photoURL']) {
       await uploadImage(updatedFields['photoURL'],user);
-      delete updatedFields['photoURL'];
     }
 
     if (Object.keys(updatedFields).length > 0) {

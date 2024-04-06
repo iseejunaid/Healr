@@ -47,16 +47,13 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
           setLoading(false);
         });
       } else {
+        setLoading(false);
         Alert.alert('Email not verified', 'Please go to your inbox and verify your email address.');
       }
     } catch (error) {
+      setLoading(false);
       Alert.alert('Error', "Login Failed! Please check your credentials and try again.");
     }
-    // navigation.navigate('SignupScreen6', {
-    //   phnNumber: '//db.phnNumber//',
-    //   login: true,
-    //   heading: 'One-time code verification!',
-    // });
   };
 
   const passwordIconHandler = () => {

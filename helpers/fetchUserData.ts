@@ -38,7 +38,6 @@ export const fetchUserData = async (user: object) => {
 
     try {
       const dataToStore = [
-        ['uid', uid.toString()],
         ['docid', docid.toString()],
         ['name', name.toString()],
         ['category', category.toString()],

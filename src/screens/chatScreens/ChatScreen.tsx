@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,19 +10,28 @@ import Header from '../../components/Header';
 import Colors from '../../../assets/colors/colors';
 import InputField from '../../components/InputField';
 import ChatItem from '../../components/ChatItem';
-import { fetchChats } from './ChatHelper';
-import { auth } from '../../../configs/firebaseConfig';
+import {fetchChats} from './ChatHelper';
+import { ChatData } from './ChatHelper';
 
 const ChatScreen: React.FC = ({navigation}: any) => {
   const [searchValue, setSearchValue] = useState('');
+  const [chatsData, setChatsData] = useState<ChatData>({});
 
-  useEffect(() => {  
-    fetchChats()
-  },);
+  const fetchChatsData = useCallback(async () => {
+    const data = await fetchChats();
+    setChatsData(data);
+  }, []);
 
-  const handleSearchValueChange = (text: string) => {
-    setSearchValue(text);
-  };
+  useEffect(() => {
+    fetchChatsData();
+  }, [fetchChatsData]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchChatsData();
+    });
+    return unsubscribe;
+  }, [fetchChatsData, navigation]);
 
   return (
     <View style={styles.container}>
@@ -30,26 +39,30 @@ const ChatScreen: React.FC = ({navigation}: any) => {
       <ScrollView style={styles.chatsContainer}>
         <InputField
           style={styles.searchInput}
-          handleChange={handleSearchValueChange}
+          handleChange={setSearchValue}
           value={searchValue}
           placeholder="Search"
           width={95}
         />
-        <ChatItem
-          navigation={navigation}
-          profileImageSource={require('../../../assets/images/profile.png')}
-          userName="Muhammad Qasim"
-          message="This is a sample message sent by Muhammad Qasim"
-          time="12:30 PM"
-          notificationCount={2}
-        />
-        <ChatItem
-          navigation={navigation}
-          profileImageSource={require('../../../assets/images/profile.png')}
-          userName="Muhammad Qasim"
-          message="This is a sample message sent by Muhammad Qasim"
-          time="12:30 PM"
-        />
+        {Object.keys(chatsData).map((key: string) => {
+          const createdAt = chatsData[key].createdAt.toDate();
+          const timeString = createdAt.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+          console.log(chatsData[key].name);
+          return (            
+            <ChatItem
+              key={key}
+              navigation={navigation}
+              profileImageSource={require('../../../assets/images/profile.png')}
+              userName= {chatsData[key].name}
+              // userName={key}
+              message={chatsData[key].text}
+              time={timeString}
+            />
+          );
+        })}
       </ScrollView>
       <TouchableOpacity
         style={styles.newChatButton}
