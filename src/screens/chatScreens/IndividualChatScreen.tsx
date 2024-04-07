@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
+import React, {useState, useEffect} from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {GiftedChat} from 'react-native-gifted-chat';
 import CustomInputToobar from './CustomInputToobar';
-import { renderCustomBubble } from './ChatBubble';
+import {renderCustomBubble} from './ChatBubble';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import 'react-native-get-random-values';
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
-import { db } from '../../../configs/firebaseConfig';
-import { composeMsg } from './ChatHelper';
+import {collection, onSnapshot, orderBy, query} from 'firebase/firestore';
+import {db} from '../../../configs/firebaseConfig';
+import {composeMsg} from './ChatHelper';
 
 interface Message {
   _id: string;
@@ -20,15 +20,15 @@ interface Message {
   };
 }
 
-const IndividualChatScreen = ({ navigation,route }: any) => {
-  const { userId,userName,status,profileImageSource } = route.params;
-  
+const IndividualChatScreen = ({navigation, route}: any) => {
+  const {userId, userName, status, profileImageSource,receiver_id} = route.params;  
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText] = useState('');
 
   const onSend = (messages: any) => {
     const messageText = messages?.text;
-    const msg = composeMsg(messageText);
+    const msg = composeMsg(messageText,receiver_id);
     setText('');
     db.collection('chats').doc(msg._id).set(msg);
   };
@@ -59,18 +59,38 @@ const IndividualChatScreen = ({ navigation,route }: any) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <View style={styles.headerContainer}>
-        <View style={{ flexDirection: 'row', height: '100%', alignItems: 'center' }}>
-          <TouchableOpacity style={{ height: '100%', justifyContent: 'center' }} onPress={() => navigation.pop()}>
-            <Image source={require('../../../assets/images/back.png')} style={styles.backImg} />
+        <View
+          style={{flexDirection: 'row', height: '100%', alignItems: 'center'}}>
+          <TouchableOpacity
+            style={{height: '100%', justifyContent: 'center'}}
+            onPress={() => navigation.pop()}>
+            <Image
+              source={require('../../../assets/images/back.png')}
+              style={styles.backImg}
+            />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', marginLeft: 20 }} onStartShouldSetResponder={() => { console.log('open Profile') 
-          return false }}>
+          <View
+            style={{flexDirection: 'row', marginLeft: 20}}
+            onStartShouldSetResponder={() => {
+              console.log('open Profile');
+              return false;
+            }}>
             <View style={styles.avatarContainer}>
-              <Image source={profileImageSource} style={styles.avatarImage} />
+              {profileImageSource ? (
+                <Image
+                  source={{uri: profileImageSource}}
+                  style={styles.avatarImage}
+                />
+              ) : (
+                <Image
+                  source={require('../../../assets/images/placeholder.jpg')}
+                  style={styles.avatarImage}
+                />
+              )}
             </View>
-            <View style={{ justifyContent: 'center', paddingLeft: 10 }}>
+            <View style={{justifyContent: 'center', paddingLeft: 10}}>
               <Text style={styles.nameText}>{userName}</Text>
               <Text style={styles.statusText}>{status}</Text>
             </View>
@@ -94,7 +114,7 @@ const IndividualChatScreen = ({ navigation,route }: any) => {
         renderBubble={renderCustomBubble}
         messages={messages}
         user={{
-          _id: userId
+          _id: userId,
         }}
         renderInputToolbar={customtInputToolbar}
       />
@@ -149,4 +169,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-

@@ -36,7 +36,7 @@ const InputField: React.FC<InputFieldProps> = ({
   return (
     <View style={[styles.input,{ ...style }]}>
       <TextInput
-        style={{width: `${width}%`, fontFamily: Fonts.regular, top: 2}}
+        style={{width: `${width}%`, fontFamily: Fonts.regular, top: 2,color:'black'}}
         onChangeText={handleChange}
         value={value}
         placeholder={placeholder}

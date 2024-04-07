@@ -78,6 +78,7 @@ const ProfileScreen = ({navigation}: any) => {
 
   const onLogout = async () => {
     try {
+      await AsyncStorage.clear();
       await auth.signOut();
       navigation.popToTop();
     } catch (error: any) {

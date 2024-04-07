@@ -39,12 +39,11 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
         password,
       );
       const user = userCredential.user;
-
+      
       if (user.emailVerified) {
-        navigation.navigate('HomeScreen');
-        
         fetchUserData(user).then(() => {
           setLoading(false);
+          navigation.navigate('HomeScreen');
         });
       } else {
         setLoading(false);

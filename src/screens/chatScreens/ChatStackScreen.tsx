@@ -9,6 +9,7 @@ import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 const ChatStack = createStackNavigator();
 
 const ChatStackScreen = ({navigation, route}: any) => {
+    
   React.useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
 
@@ -40,22 +41,3 @@ const ChatStackScreen = ({navigation, route}: any) => {
 };
 
 export default ChatStackScreen;
-
-// import React from 'react';
-// import {createStackNavigator} from '@react-navigation/stack';
-// import ChatScreen from './ChatScreen';
-// import IndividualChatScreen from './IndividualChatScreen';
-
-// const ChatStack = createStackNavigator();
-
-// const ChatStackScreen = () => (
-
-//   <ChatStack.Navigator
-//     initialRouteName="ChatHome"
-//     screenOptions={{headerShown: false}}>
-//     <ChatStack.Screen name="ChatHome" component={ChatScreen} />
-//     <ChatStack.Screen name="IndividualChat" component={IndividualChatScreen} />
-//   </ChatStack.Navigator>
-// );
-
-// export default ChatStackScreen;

@@ -5,8 +5,9 @@ import Colors from '../../assets/colors/colors';
 
 interface ChatItemProps {
   navigation: any;
-  profileImageSource: any;
+  profileImageSource?: any;
   userId: string;
+  receiverId: string;
   userName: string;
   message: string;
   time: string;
@@ -18,26 +19,33 @@ const ChatItem: React.FC<ChatItemProps> = ({
   navigation,
   profileImageSource,
   userId,
+  receiverId,
   userName,
   message,
   time,
   status,
   notificationCount,
 }) => {
-
   const onPress = () => {
     navigation.navigate('IndividualChat', {
       userName: userName,
       profileImageSource: profileImageSource,
+      receiverId: receiverId,
       userId: userId,
       status: status,
     });
   };
-  
+
   return (
-    <TouchableOpacity style={styles.chatItemContainer}
-    onPress={onPress}>
-      <Image source={profileImageSource} style={styles.profileImage} />
+    <TouchableOpacity style={styles.chatItemContainer} onPress={onPress}>
+      {profileImageSource ? (
+        <Image source={{uri: profileImageSource}} style={styles.profileImage} />
+      ) : (
+        <Image
+          source={require('../../assets/images/placeholder.jpg')}
+          style={styles.profileImage}
+        />
+      )}
       <View style={styles.messageContainer}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={styles.userName}>{userName}</Text>
