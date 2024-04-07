@@ -12,14 +12,16 @@ import InputField from '../../components/InputField';
 import ChatItem from '../../components/ChatItem';
 import {fetchChats} from './ChatHelper';
 import { ChatData } from './ChatHelper';
+import { auth } from '../../../configs/firebaseConfig';
 
 const ChatScreen: React.FC = ({navigation}: any) => {
   const [searchValue, setSearchValue] = useState('');
   const [chatsData, setChatsData] = useState<ChatData>({});
+  const userId = auth?.currentUser?.uid;
 
   const fetchChatsData = useCallback(async () => {
     const data = await fetchChats();
-    setChatsData(data);
+    setChatsData(data);    
   }, []);
 
   useEffect(() => {
@@ -46,20 +48,22 @@ const ChatScreen: React.FC = ({navigation}: any) => {
         />
         {Object.keys(chatsData).map((key: string) => {
           const createdAt = chatsData[key].createdAt.toDate();
+          const imgSource = chatsData[key].profilepic ?? require('../../../assets/images/placeholder.jpg');
           const timeString = createdAt.toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
           });
-          console.log(chatsData[key].name);
+          
           return (            
             <ChatItem
               key={key}
               navigation={navigation}
-              profileImageSource={require('../../../assets/images/profile.png')}
+              userId={userId ?? ""}
+              profileImageSource={imgSource}
               userName= {chatsData[key].name}
-              // userName={key}
               message={chatsData[key].text}
               time={timeString}
+              status={chatsData[key].status}
             />
           );
         })}

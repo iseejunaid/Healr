@@ -1,4 +1,3 @@
-// ChatItem.tsx
 import React from 'react';
 import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Fonts from '../../assets/fonts/fonts';
@@ -7,18 +6,22 @@ import Colors from '../../assets/colors/colors';
 interface ChatItemProps {
   navigation: any;
   profileImageSource: any;
+  userId: string;
   userName: string;
   message: string;
   time: string;
+  status: string;
   notificationCount?: number;
 }
 
 const ChatItem: React.FC<ChatItemProps> = ({
   navigation,
   profileImageSource,
+  userId,
   userName,
   message,
   time,
+  status,
   notificationCount,
 }) => {
 
@@ -26,7 +29,8 @@ const ChatItem: React.FC<ChatItemProps> = ({
     navigation.navigate('IndividualChat', {
       userName: userName,
       profileImageSource: profileImageSource,
-      message: message,
+      userId: userId,
+      status: status,
     });
   };
   
@@ -85,6 +89,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   profileImage: {
+    borderRadius: 28,
     height: 55,
     width: 55,
   },

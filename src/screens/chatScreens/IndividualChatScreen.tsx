@@ -7,7 +7,7 @@ import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import 'react-native-get-random-values';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
-import { auth, db } from '../../../configs/firebaseConfig';
+import { db } from '../../../configs/firebaseConfig';
 import { composeMsg } from './ChatHelper';
 
 interface Message {
@@ -20,7 +20,9 @@ interface Message {
   };
 }
 
-const IndividualChatScreen = ({ navigation }: any) => {
+const IndividualChatScreen = ({ navigation,route }: any) => {
+  const { userId,userName,status,profileImageSource } = route.params;
+  
   const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText] = useState('');
 
@@ -66,11 +68,11 @@ const IndividualChatScreen = ({ navigation }: any) => {
           <View style={{ flexDirection: 'row', marginLeft: 20 }} onStartShouldSetResponder={() => { console.log('open Profile') 
           return false }}>
             <View style={styles.avatarContainer}>
-              <Image source={require('../../../assets/images/profile.png')} style={styles.avatarImage} />
+              <Image source={profileImageSource} style={styles.avatarImage} />
             </View>
             <View style={{ justifyContent: 'center', paddingLeft: 10 }}>
-              <Text style={styles.nameText}>Ahmad Khan</Text>
-              <Text style={styles.statusText}>Available</Text>
+              <Text style={styles.nameText}>{userName}</Text>
+              <Text style={styles.statusText}>{status}</Text>
             </View>
           </View>
         </View>
@@ -92,7 +94,7 @@ const IndividualChatScreen = ({ navigation }: any) => {
         renderBubble={renderCustomBubble}
         messages={messages}
         user={{
-          _id: auth?.currentUser?.uid || '',
+          _id: userId
         }}
         renderInputToolbar={customtInputToolbar}
       />
