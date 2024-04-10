@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Composer, Send} from 'react-native-gifted-chat';
 import Colors from '../../../assets/colors/colors';
+import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 
 const customtInputToolbar = ({
   text,
@@ -12,6 +13,25 @@ const customtInputToolbar = ({
   setText: (val: string) => void;
   onSend: (mes: any) => void;
 }) => {
+  const audioRecorderPlayer = new AudioRecorderPlayer();
+
+  const startRecording = async () => {
+    // const audioPath = await audioRecorderPlayer.startRecorder();
+    console.log('Recording started');
+    // console.log('Recording started', audioPath);
+  };
+
+  const stopRecording = async () => {
+    // const audioPath = await audioRecorderPlayer.stopRecorder();
+    // console.log('Recording stopped', audioPath);
+    console.log('Recording stopped');
+  };
+
+  const cancelRecording = async () => {
+    // await audioRecorderPlayer.stopRecorder();
+    console.log('Recording cancelled');
+  };
+
   return (
     <View style={styles.customInputView}>
       <TouchableOpacity
@@ -36,7 +56,16 @@ const customtInputToolbar = ({
         {text !== '' ? (
           <Image source={require('../../../assets/images/sendMessage.png')} />
         ) : (
-          <Image source={require('../../../assets/images/recordMessage.png')} />
+          <TouchableOpacity
+            style={{paddingTop: 6}}
+            // onPressIn={startRecording}
+            // onPressOut={stopRecording}
+            onLongPress={startRecording}
+            onPress={cancelRecording}>
+            <Image
+              source={require('../../../assets/images/recordMessage.png')}
+            />
+          </TouchableOpacity>
         )}
       </Send>
     </View>

@@ -21,14 +21,14 @@ interface Message {
 }
 
 const IndividualChatScreen = ({navigation, route}: any) => {
-  const {userId, userName, status, profileImageSource,receiver_id} = route.params;  
-
+  const {userId, userName, status, profileImageSource,receiverId} = route.params;
+  
   const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText] = useState('');
 
   const onSend = (messages: any) => {
     const messageText = messages?.text;
-    const msg = composeMsg(messageText,receiver_id);
+    const msg = composeMsg(messageText,receiverId);
     setText('');
     db.collection('chats').doc(msg._id).set(msg);
   };

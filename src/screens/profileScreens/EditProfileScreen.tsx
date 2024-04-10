@@ -301,5 +301,6 @@ const styles = StyleSheet.create({
     minHeight: 100,
     margin: '3%',
     backgroundColor: Colors.secondaryWhite,
+    color:'black'
   },
 });
