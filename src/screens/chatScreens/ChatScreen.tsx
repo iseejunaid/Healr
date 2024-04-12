@@ -20,10 +20,7 @@ const ChatScreen: React.FC = ({navigation}: any) => {
   const [searchValue, setSearchValue] = useState('');
   const [chatsData, setChatsData] = useState<ChatData>({});
   const [loading, setLoading] = useState(true);
-  const userId = auth?.currentUser?.uid;  
-  console.log('userId', userId);
-  
-  
+  const userId = auth?.currentUser?.uid; 
 
   const fetchChatsData = useCallback(async () => {
     const data = await fetchChats();

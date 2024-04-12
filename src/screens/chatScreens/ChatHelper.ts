@@ -1,7 +1,39 @@
 import { v4 as uuidv4 } from 'uuid';
-import { auth, db } from '../../../configs/firebaseConfig';
+import { auth, db, storage } from '../../../configs/firebaseConfig';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
+
+export const sendMedia = async (data: any, receiver: string) => {
+    try {
+      const resizedImage = await ImageResizer.createResizedImage(
+        data[0].path, 300,300,'JPEG',50);
+  
+      const response = await fetch(resizedImage.uri);
+      const blob = await response.blob();
+  
+      const timestamp = Date.now();
+      const storageRef = ref(storage, `media/${timestamp}`);
+      const uploadTask = uploadBytesResumable(storageRef, blob);
+  
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+        },
+        (error) => {
+          console.log('Upload Error: ', error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+          });
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 export const composeMsg = (text: string,receiver:string) => {
     const createdAt = new Date();

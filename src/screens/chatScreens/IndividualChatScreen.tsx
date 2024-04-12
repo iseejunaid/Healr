@@ -8,7 +8,8 @@ import Fonts from '../../../assets/fonts/fonts';
 import 'react-native-get-random-values';
 import {collection, onSnapshot, orderBy, query} from 'firebase/firestore';
 import {db} from '../../../configs/firebaseConfig';
-import {composeMsg} from './ChatHelper';
+import {composeMsg, sendMedia} from './ChatHelper';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 interface Message {
   _id: string;
@@ -21,16 +22,21 @@ interface Message {
 }
 
 const IndividualChatScreen = ({navigation, route}: any) => {
-  const {userId, userName, status, profileImageSource,receiverId} = route.params;
-  
+  const {userId, userName, status, profileImageSource, receiverId} =
+    route.params;
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText] = useState('');
 
-  const onSend = (messages: any) => {
-    const messageText = messages?.text;
-    const msg = composeMsg(messageText,receiverId);
-    setText('');
-    db.collection('chats').doc(msg._id).set(msg);
+  const onSend = (messages: any, type: string) => {
+    if (type === 'text') {
+      const messageText = messages?.text;
+      const msg = composeMsg(messageText, receiverId);
+      setText('');
+      db.collection('chats').doc(msg._id).set(msg);
+    } else if (type === 'media') {
+      sendMedia(messages, receiverId);
+    }
   };
 
   useEffect(() => {

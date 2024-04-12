@@ -4,6 +4,7 @@ import {Composer, Send} from 'react-native-gifted-chat';
 import Colors from '../../../assets/colors/colors';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import OptionsModal from '../../components/OptionsModal';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 const customtInputToolbar = ({
   text,
@@ -12,7 +13,7 @@ const customtInputToolbar = ({
 }: {
   text: string;
   setText: (val: string) => void;
-  onSend: (mes: any) => void;
+  onSend: (mes: any,type: string) => void;
 }) => {
   const audioRecorderPlayer = new AudioRecorderPlayer();
   const [modalVisible, setModalVisible] = useState(false);
@@ -39,8 +40,34 @@ const customtInputToolbar = ({
   };
 
   const handleOptionClick = (option: any) => {
-    console.log('Option clicked:', option);
-    // setSelectedOption(option);
+    switch (option) {
+      case 'Camera':
+        console.log('Camera clicked');
+        break;
+      case 'Gallery':
+        ImageCropPicker.openPicker({
+          multiple: true,
+          mediaType: 'any',        
+        })
+          .then(data => {
+            onSend(data, 'media');
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        break;
+      case 'Documents':
+        console.log('Documents clicked');
+        break;
+      case 'Healr files':
+        console.log('Healr files clicked');
+        break;
+      case 'Create dossier':
+        console.log('Create dossier clicked');
+        break;
+      default:
+        console.log('Invalid option');
+    }
     setModalVisible(false);
   };
 
@@ -68,7 +95,7 @@ const customtInputToolbar = ({
       <Send
         containerStyle={styles.sendBtnContainer}
         alwaysShowSend
-        onSend={mes => onSend(mes)}
+        onSend={mes => onSend(mes, 'text')}
         text={text}
         label="Send">
         {text !== '' ? (
