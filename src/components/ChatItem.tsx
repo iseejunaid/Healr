@@ -36,7 +36,6 @@ const ChatItem: React.FC<ChatItemProps> = ({
     });
   };
   
-
   return (
     <TouchableOpacity style={styles.chatItemContainer} onPress={onPress}>
       {profileImageSource ? (

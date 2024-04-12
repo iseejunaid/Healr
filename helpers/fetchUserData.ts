@@ -2,7 +2,7 @@ import {db} from '../configs/firebaseConfig'; // Import your Firebase Firestore 
 import {getDocs, collection, query, where} from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const fetchUserData = async (user: object) => {
+export const fetchUserData = async (user: object,token:string) => {
 
   const uid = user.uid;
   const photoURL = user.photoURL;
@@ -39,6 +39,7 @@ export const fetchUserData = async (user: object) => {
     try {
       const dataToStore = [
         ['loggedIn', true.toString()],
+        ['token', token.toString()],
         ['uid', uid.toString()],
         ['docid', docid.toString()],
         ['name', name.toString()],

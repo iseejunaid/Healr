@@ -39,9 +39,10 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
         password,
       );
       const user = userCredential.user;
+      const token = await user.getIdToken(true)      
       
       if (user.emailVerified) {
-        fetchUserData(user).then(() => {
+        fetchUserData(user,token).then(() => {
           setLoading(false);
           navigation.navigate('HomeScreen');
         });

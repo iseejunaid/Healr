@@ -19,39 +19,61 @@ import SignupScreen6 from './src/screens/Signup/SignupScreen6';
 import SignupScreen7 from './src/screens/Signup/SignupScreen7';
 import HomeScreen from './src/screens/Home/HomeScreen';
 import Loader from './src/components/Loader';
+import { auth } from './configs/firebaseConfig';
+
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    const checkLoggedIn = async () => {
-      try {
-        const loggedInValue = await AsyncStorage.getItem('loggedIn');
-        setIsLoggedIn(Boolean(loggedInValue));
-      } catch (error) {
-        console.error('Error reading loggedIn value:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const checkLoggedIn = async () => {
+  //     try {
+  //       const userToken = await AsyncStorage.getItem('token');
+  //       console.log('userToken', userToken);
+        
+  //       if (userToken) {
+  //         await auth.signInWithCustomToken(userToken);
+  //         setIsLoggedIn(true);
+  //       } else {
+  //         setIsLoggedIn(false);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error reading user token:', error);
+  //     }
+  //   };
 
-    checkLoggedIn();
-  }, []);
+  //   checkLoggedIn();
 
-  if (isLoggedIn === null) {
-    return (
-      <View style={{ flex: 1,justifyContent: 'center', alignItems: 'center' }}>
-        <Loader/>
-      </View>
-    );
-  }
+  //   const unsubscribe = auth.onAuthStateChanged(user => {
+  //     if (user) {
+  //       setIsLoggedIn(true);
+  //     } else {
+  //       setIsLoggedIn(false);
+  //     }
+  //   });
+
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, []);;
+
+  // if (isLoggedIn === null) {
+  //   return (
+  //     <View style={{ flex: 1,justifyContent: 'center', alignItems: 'center' }}>
+  //       <Loader/>
+  //     </View>
+  //   );
+  // }
 
   return (
     <SafeAreaProvider>
       <StatusBar backgroundColor={Colors.tertiaryColor} />
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName={isLoggedIn ? 'HomeScreen' : 'LoginScreen'}
+          // initialRouteName={isLoggedIn ? 'HomeScreen' : 'LoginScreen'}
+          initialRouteName={'LoginScreen'}
           screenOptions={{ headerShown: false }}>
               {/* <Stack.Screen name="OnBoardingScreens" component={OnBoardingScreens} /> */}
               <Stack.Screen name="LoginScreen" component={LoginScreen} />
