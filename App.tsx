@@ -51,7 +51,7 @@ export default function App() {
       <StatusBar backgroundColor={Colors.tertiaryColor} />
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName={isLoggedIn ? 'HomeScreen' : 'OnBoardingScreens'}
+          initialRouteName={isLoggedIn ? 'HomeScreen' : 'LoginScreen'}
           screenOptions={{ headerShown: false }}>
               {/* <Stack.Screen name="OnBoardingScreens" component={OnBoardingScreens} /> */}
               <Stack.Screen name="LoginScreen" component={LoginScreen} />

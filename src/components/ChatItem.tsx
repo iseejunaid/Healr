@@ -35,6 +35,7 @@ const ChatItem: React.FC<ChatItemProps> = ({
       status: status,
     });
   };
+  
 
   return (
     <TouchableOpacity style={styles.chatItemContainer} onPress={onPress}>
