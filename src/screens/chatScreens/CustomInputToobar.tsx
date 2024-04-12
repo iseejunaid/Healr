@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Composer, Send} from 'react-native-gifted-chat';
 import Colors from '../../../assets/colors/colors';
@@ -38,16 +38,23 @@ const customtInputToolbar = ({
     setModalVisible(!modalVisible);
   };
 
-  const handleOptionClick = (option:any) => {
+  const handleOptionClick = (option: any) => {
+    console.log('Option clicked:', option);
     // setSelectedOption(option);
     setModalVisible(false);
   };
 
+  const options = [
+    {text: 'Camera', image: require('../../../assets/images/camera.png')},
+    {text: 'Gallery', image: require('../../../assets/images/gallery.png')},
+    {text: 'Documents', image: require('../../../assets/images/documents.png')},
+    {text: 'Healr files', image: require('../../../assets/images/files.png')},
+    {text: 'Create dossier', image: require('../../../assets/images/createDossier.png')},
+  ];
+
   return (
     <View style={styles.customInputView}>
-      <TouchableOpacity
-        style={{paddingTop: 6}}
-        onPress={toggleModal}>
+      <TouchableOpacity style={{paddingTop: 6}} onPress={toggleModal}>
         <Image source={require('../../../assets/images/chatOptions.png')} />
       </TouchableOpacity>
       <Composer
@@ -81,10 +88,11 @@ const customtInputToolbar = ({
       </Send>
       <OptionsModal
         visible={modalVisible}
-        modalStyle={{backgroundColor: Colors.tertiaryColor,bottom: 0,left: 0}}
+        modalStyle={styles.modal}
         foregroundColor={Colors.secondaryWhite}
         onClose={() => setModalVisible(false)}
         onOptionClick={handleOptionClick}
+        options={options}
       />
     </View>
   );
@@ -109,4 +117,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     paddingBottom: 3,
   },
+  modal:{
+    backgroundColor: Colors.tertiaryColor,
+    bottom: 50,
+    left: 5,
+  }
 });

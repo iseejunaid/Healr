@@ -1,6 +1,11 @@
 import React from 'react';
-import {Modal, StyleSheet, TouchableOpacity, View, Text,Image} from 'react-native';
+import { Modal, StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
 import Fonts from '../../assets/fonts/fonts';
+
+interface Option {
+  text: string;
+  image?: any;
+}
 
 interface OptionsModalProps {
   visible: boolean;
@@ -8,6 +13,7 @@ interface OptionsModalProps {
   foregroundColor?: string;
   onClose: () => void;
   onOptionClick: (option: string) => void;
+  options: Option[];
 }
 
 const OptionsModal: React.FC<OptionsModalProps> = ({
@@ -16,26 +22,26 @@ const OptionsModal: React.FC<OptionsModalProps> = ({
   foregroundColor,
   onClose,
   onOptionClick,
+  options,
 }) => {
   const renderModalContent = () => (
     <View style={styles.modalContent}>
-
-      <TouchableOpacity
-        style={styles.optionButton}
-        onPress={() => onOptionClick('Option 1')}>
-        <Image style={[styles.img,{tintColor:foregroundColor || 'green'}]} source={require('../../assets/images/cameraIcon.png')}/>
-        <Text style={{color: foregroundColor || 'green',fontFamily:Fonts.regular}}>Option 1</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.optionButton}
-        onPress={() => onOptionClick('Option 2')}>
-        <Text style={{color: foregroundColor || 'green',fontFamily:Fonts.regular}}>Option 2</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.optionButton}
-        onPress={() => onOptionClick('Option 3')}>
-        <Text style={{color: foregroundColor || 'green',fontFamily:Fonts.regular}}>Option 3</Text>
-      </TouchableOpacity>
+      {options.map((option, index) => (
+        <TouchableOpacity
+          key={index}
+          style={styles.optionButton}
+          onPress={() => onOptionClick(option.text)}>
+          {option.image && (
+            <Image
+              style={[styles.img, { tintColor: foregroundColor || 'green' }]}
+              source={option.image}
+            />
+          )}
+          <Text style={{ color: foregroundColor || 'green', fontFamily: Fonts.regular, marginTop: 4 }}>
+            {option.text}
+          </Text>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 
@@ -46,8 +52,7 @@ const OptionsModal: React.FC<OptionsModalProps> = ({
       visible={visible}
       onRequestClose={onClose}>
       <TouchableOpacity style={styles.modalBackground} onPressOut={onClose}>
-        <View
-          style={[styles.modalContainer,modalStyle]}>
+        <View style={[styles.modalContainer, modalStyle]}>
           {renderModalContent()}
         </View>
       </TouchableOpacity>
@@ -70,17 +75,14 @@ const styles = StyleSheet.create({
   },
   optionButton: {
     flexDirection: 'row',
-    justifyContent:'center',
+    justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
-    backgroundColor:"red",
-    marginBottom: 10,
+    marginBottom: 5,
   },
-  img:{
+  img: {
     marginRight: 10,
-    width: 21,
-    height: 16,
-  }
+  },
 });
 
 export default OptionsModal;
