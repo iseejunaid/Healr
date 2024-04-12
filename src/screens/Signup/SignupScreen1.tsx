@@ -14,7 +14,7 @@ import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import { signupConfig } from './signupVariables';
 
-const SignupScreen = ({navigation}: {navigation: any}) => {
+const SignupScreen1 = ({navigation}: {navigation: any}) => {
   const [fName, setFName] = useState('test');
   const [lName, setLName] = useState('test');
 
@@ -33,7 +33,7 @@ const SignupScreen = ({navigation}: {navigation: any}) => {
     }
     signupConfig.firstName = fName.trim();
     signupConfig.lastName = lName.trim();
-    navigation.navigate('SignupScreen2');
+    navigation.navigate('SignupScreen12');
   };
 
   const backBtnHandler = () => {
@@ -137,4 +137,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupScreen;
+export default SignupScreen1;
