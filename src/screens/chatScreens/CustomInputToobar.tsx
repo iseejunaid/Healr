@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Composer, Send} from 'react-native-gifted-chat';
 import Colors from '../../../assets/colors/colors';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import OptionsModal from '../../components/OptionsModal';
 
 const customtInputToolbar = ({
   text,
@@ -14,6 +15,7 @@ const customtInputToolbar = ({
   onSend: (mes: any) => void;
 }) => {
   const audioRecorderPlayer = new AudioRecorderPlayer();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const startRecording = async () => {
     // const audioPath = await audioRecorderPlayer.startRecorder();
@@ -32,11 +34,20 @@ const customtInputToolbar = ({
     console.log('Recording cancelled');
   };
 
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
+  const handleOptionClick = (option:any) => {
+    // setSelectedOption(option);
+    setModalVisible(false);
+  };
+
   return (
     <View style={styles.customInputView}>
       <TouchableOpacity
         style={{paddingTop: 6}}
-        onPress={() => console.log('Pressed')}>
+        onPress={toggleModal}>
         <Image source={require('../../../assets/images/chatOptions.png')} />
       </TouchableOpacity>
       <Composer
@@ -68,6 +79,13 @@ const customtInputToolbar = ({
           </TouchableOpacity>
         )}
       </Send>
+      <OptionsModal
+        visible={modalVisible}
+        modalStyle={{backgroundColor: Colors.tertiaryColor,bottom: 0,left: 0}}
+        foregroundColor={Colors.secondaryWhite}
+        onClose={() => setModalVisible(false)}
+        onOptionClick={handleOptionClick}
+      />
     </View>
   );
 };
