@@ -9,7 +9,6 @@ import 'react-native-get-random-values';
 import {collection, onSnapshot, orderBy, query} from 'firebase/firestore';
 import {db} from '../../../configs/firebaseConfig';
 import {composeMsg, sendMedia} from './ChatHelper';
-import ImageCropPicker from 'react-native-image-crop-picker';
 
 interface Message {
   _id: string;
@@ -31,7 +30,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
   const onSend = (messages: any, type: string) => {
     if (type === 'text') {
       const messageText = messages?.text;
-      const msg = composeMsg(messageText, receiverId);
+      const msg = composeMsg(messageText, receiverId, 'text');
       setText('');
       db.collection('chats').doc(msg._id).set(msg);
     } else if (type === 'media') {
@@ -49,6 +48,8 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           _id: doc.id,
           receiver_id: doc.data().receiver_id,
           text: doc.data().text,
+          image: doc.data().image,
+          video: doc.data().video,
           createdAt: doc.data().createdAt.toDate(),
           user: {
             _id: doc.data().user._id,
@@ -115,6 +116,14 @@ const IndividualChatScreen = ({navigation, route}: any) => {
         messagesContainerStyle={{
           backgroundColor: Colors.secondaryWhite,
           borderRadius: 15,
+        }}
+        renderMessageVideo={props => {
+          const {currentMessage} = props;
+          return (
+            <View>
+              
+            </View>
+          );
         }}
         renderAvatar={null}
         renderBubble={renderCustomBubble}

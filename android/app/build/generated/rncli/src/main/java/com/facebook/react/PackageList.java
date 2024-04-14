@@ -11,8 +11,6 @@ import com.facebook.react.shell.MainReactPackage;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-// @bam.tech/react-native-image-resizer
-import com.reactnativeimageresizer.ImageResizerPackage;
 // @react-native-async-storage/async-storage
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-community/checkbox
@@ -23,6 +21,8 @@ import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
 // react-native-audio-recorder-player
 import com.dooboolab.audiorecorderplayer.RNAudioRecorderPlayerPackage;
+// react-native-compressor
+import com.reactnativecompressor.CompressorPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 // react-native-get-random-values
@@ -80,12 +80,12 @@ public class PackageList {
   public ArrayList<ReactPackage> getPackages() {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
-      new ImageResizerPackage(),
       new AsyncStoragePackage(),
       new ReactCheckBoxPackage(),
       new ReactNativeFirebaseAppPackage(),
       new ReactNativeFirebaseAuthPackage(),
       new RNAudioRecorderPlayerPackage(),
+      new CompressorPackage(),
       new RNGestureHandlerPackage(),
       new RNGetRandomValuesPackage(),
       new PickerPackage(),
