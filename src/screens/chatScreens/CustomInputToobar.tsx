@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     height: 45,
     backgroundColor: Colors.secondaryWhite,
     borderRadius: 6,
+    color:'black'
   },
   sendBtnContainer: {
     marginLeft: 10,

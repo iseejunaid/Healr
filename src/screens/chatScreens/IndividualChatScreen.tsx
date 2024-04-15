@@ -9,6 +9,7 @@ import 'react-native-get-random-values';
 import {collection, onSnapshot, orderBy, query} from 'firebase/firestore';
 import {db} from '../../../configs/firebaseConfig';
 import {composeMsg, sendMedia} from './ChatHelper';
+import Video from 'react-native-video';
 
 interface Message {
   _id: string;
@@ -121,7 +122,11 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           const {currentMessage} = props;
           return (
             <View>
-              
+              <Video
+                source={{uri: currentMessage?.video}}
+                style={{height: 200, width: 200}}
+                controls={true}
+                />
             </View>
           );
         }}
