@@ -24,6 +24,7 @@ ios/.xcode.env.local
 
 # Android/IntelliJ
 #
+android/app/build/outputs/apk/debug/app-debug.apk
 build/
 .idea
 .gradle
