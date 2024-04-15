@@ -5,10 +5,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { Image } from 'react-native-compressor';
 
-export const sendMedia = async (data: any, receiver: string) => {
+export const sendMedia = async (data: any, receiver: string) => {    
     try {
         const file = data[0];
-        const fileType = file.mime.split('/')[0]; // Get the file type (image or video)
+        const fileType = file.mime.split('/')[0];
 
         let resizedFile;
         if (fileType === 'image') {
@@ -150,8 +150,16 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
     } else if (role === 'receiver') {
 
         if (chatData[senderId]) {
-            if (chatData[senderId].createdAt < createdAt) {
-                chatData[senderId].text = text;
+            if (chatData[senderId].createdAt < createdAt) {                
+                if(image){
+                    chatData[senderId].text = "Image";
+                }
+                else if(video){
+                    chatData[senderId].text = "Video";
+                }
+                else{
+                    chatData[senderId].text = text;
+                }
                 chatData[senderId].createdAt = createdAt;
             }
         } else {
@@ -173,13 +181,13 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
             chatData[senderId].profilepic = profilepic;
             chatData[senderId].status = status;
             if(image){
-                chatData[receiver_id].text = "Image";
+                chatData[senderId].text = "Image";
             }
             else if(video){
-                chatData[receiver_id].text = "Video";
+                chatData[senderId].text = "Video";
             }
             else{
-                chatData[receiver_id].text = text;
+                chatData[senderId].text = text;
             }
             chatData[senderId].createdAt = createdAt;
         }

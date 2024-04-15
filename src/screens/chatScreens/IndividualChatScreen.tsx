@@ -66,6 +66,19 @@ const IndividualChatScreen = ({navigation, route}: any) => {
     return <CustomInputToobar text={text} setText={setText} onSend={onSend} />;
   };
 
+  const renderVideo = (props: any) => {
+      const {currentMessage} = props;
+      return (
+        <View>
+          <Video
+            source={{uri: currentMessage?.video}}
+            style={{height: 200, width: 200}}
+            controls={true}
+            />
+        </View>
+      );
+    };
+
   return (
     <View style={{flex: 1}}>
       <View style={styles.headerContainer}>
@@ -118,18 +131,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           backgroundColor: Colors.secondaryWhite,
           borderRadius: 15,
         }}
-        renderMessageVideo={props => {
-          const {currentMessage} = props;
-          return (
-            <View>
-              <Video
-                source={{uri: currentMessage?.video}}
-                style={{height: 200, width: 200}}
-                controls={true}
-                />
-            </View>
-          );
-        }}
+        renderMessageVideo={renderVideo}
         renderAvatar={null}
         renderBubble={renderCustomBubble}
         messages={messages}

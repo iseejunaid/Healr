@@ -26,6 +26,7 @@ const ChatItem: React.FC<ChatItemProps> = ({
   status,
   notificationCount,
 }) => {
+  
   const onPress = () => {
     navigation.navigate('IndividualChat', {
       userName: userName,

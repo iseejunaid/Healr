@@ -14,7 +14,6 @@ import {fetchChats} from './ChatHelper';
 import {ChatData} from './ChatHelper';
 import {auth} from '../../../configs/firebaseConfig';
 import Loader from '../../components/Loader';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatScreen: React.FC = ({navigation}: any) => {
   const [searchValue, setSearchValue] = useState('');

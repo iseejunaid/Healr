@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Alert, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Composer, Send} from 'react-native-gifted-chat';
 import Colors from '../../../assets/colors/colors';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import OptionsModal from '../../components/OptionsModal';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import { requestCameraPermission } from '../../../helpers/permissions';
 
 const customtInputToolbar = ({
   text,
@@ -39,10 +40,30 @@ const customtInputToolbar = ({
     setModalVisible(!modalVisible);
   };
 
-  const handleOptionClick = (option: any) => {
+  const handleOptionClick = async (option: any) => {
     switch (option) {
       case 'Camera':
-        console.log('Camera clicked');
+        const permission = await requestCameraPermission();        
+        if(permission){
+          ImageCropPicker.openCamera({
+            mediaType: 'any',
+          })
+          .then(data => {
+            const formattedData = {
+              path: data.path,
+              mime: data.mime,
+              size: data.size,
+              width: data.width,
+              height: data.height,
+            };
+            onSend([formattedData], 'media');
+          })
+            .catch(err => {
+              console.log(err);
+            });
+        }else{
+          Alert.alert('Permission required', 'Please allow camera permission to use this feature');
+        }
         break;
       case 'Gallery':
         ImageCropPicker.openPicker({
