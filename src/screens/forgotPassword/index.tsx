@@ -5,11 +5,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
+import { auth } from '../../../configs/firebaseConfig';
 
 const ForgotPassScreen = ({navigation}: {navigation: any}) => {
   const [email, setEmail] = useState('');
@@ -17,13 +19,24 @@ const ForgotPassScreen = ({navigation}: {navigation: any}) => {
   const handleEmailChange = (text: string) => {
     setEmail(text);
   };
-  const handleSubmit = () => {
-    setEmail('');
-    navigation.navigate('SignupScreen6', {
-      email: '//props.email//',
-      heading: 'Verify password reset code!',
-    });
+  const handleForgotPassword = async () => {
+    if(email === '') {
+      Alert.alert('Error', 'Please enter your email address.');
+      return;
+    }
+    try {
+      await auth.sendPasswordResetEmail(email);
+      Alert.alert(
+        'Password reset link sent',
+        'Please check your email to reset your password.'
+      );
+      setEmail('');
+      navigation.pop();
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
   };
+  
   const backbtnHandler = () => {
     setEmail('');
     navigation.pop();
@@ -39,7 +52,7 @@ const ForgotPassScreen = ({navigation}: {navigation: any}) => {
       <View style={styles.middle}>
         <View style={styles.middletxtView}>
           <Text style={styles.middletxt}>
-            Please enter your phone number or
+            Please enter your
           </Text>
           <Text style={styles.middletxt}>email address to receive the</Text>
           <Text style={[styles.middletxt, {color: Colors.primaryColor}]}>
@@ -49,11 +62,11 @@ const ForgotPassScreen = ({navigation}: {navigation: any}) => {
         <InputField
           handleChange={handleEmailChange}
           value={email}
-          placeholder="Phone Number or Email Address"
+          placeholder="Email Address"
           width={95}
         />
         <View style={styles.submitbtn}>
-          <PressableBtn text="Next" onPress={handleSubmit} />
+          <PressableBtn text="Next" onPress={handleForgotPassword} />
         </View>
       </View>
       <View style={styles.bottom}>
