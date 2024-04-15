@@ -114,7 +114,7 @@ export const fetchChats = async () => {
 
 
 const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
-    const { receiver_id, text, createdAt, user: { _id: senderId } } = doc.data();
+    const { receiver_id,image,video, text, createdAt, user: { _id: senderId } } = doc.data();
 
     if (role === 'sender') {
         if (chatData[receiver_id]) {
@@ -132,11 +132,19 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
             const name = userData ? userData.name : '';
             const profilepic = userData ? userData.profilepic : '';
             const status = userData ? userData.status : '';
-
+            
             chatData[receiver_id].name = name;
             chatData[receiver_id].profilepic = profilepic;
             chatData[receiver_id].status = status;
-            chatData[receiver_id].text = "you: " + text;
+            if(image){
+                chatData[receiver_id].text = "you: Image";
+            }
+            else if(video){
+                chatData[receiver_id].text = "you: Video";
+            }
+            else{
+                chatData[receiver_id].text = "you: " + text;
+            }
             chatData[receiver_id].createdAt = createdAt;
         }
     } else if (role === 'receiver') {
@@ -164,7 +172,15 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
             chatData[senderId].name = name;
             chatData[senderId].profilepic = profilepic;
             chatData[senderId].status = status;
-            chatData[senderId].text = text;
+            if(image){
+                chatData[receiver_id].text = "Image";
+            }
+            else if(video){
+                chatData[receiver_id].text = "Video";
+            }
+            else{
+                chatData[receiver_id].text = text;
+            }
             chatData[senderId].createdAt = createdAt;
         }
     }
