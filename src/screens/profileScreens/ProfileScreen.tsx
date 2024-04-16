@@ -21,7 +21,7 @@ const ProfileScreen = ({navigation}: any) => {
   const [profileImage, setProfileImage] = useState('');
   const [expertise, setExpertise] = useState('');
   const [status, setStatus] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);  
 
   const capitalizeFirstLetter = (str: string) => {
     return str.replace(/\b\w/g, char => char.toUpperCase());
@@ -51,7 +51,7 @@ const ProfileScreen = ({navigation}: any) => {
         setExpertise(capitalizeFirstLetter(expertiseInput));
       } else {
         setExpertise(capitalizeFirstLetter(expertiseValue));
-      }
+      }      
     } catch (error: any) {
       console.error('Error fetching data from AsyncStorage:', error.message);
     }
@@ -119,7 +119,6 @@ const ProfileScreen = ({navigation}: any) => {
                 />
               )}
             </View>
-          
 
           <Text style={styles.nametxt}>{name}</Text>
           <Text style={styles.professiontxt}>{expertise}</Text>

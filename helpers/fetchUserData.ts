@@ -15,6 +15,7 @@ export const fetchUserData = async (user: object,token:string) => {
   var workplace = '';
   var status = '';
   var about = '';
+    
   try {    
     const q = query(collection(db, 'users'), where('uid', '==', uid));
     const querySnapshot = await getDocs(q);

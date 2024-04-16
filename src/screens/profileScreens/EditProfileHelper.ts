@@ -14,7 +14,7 @@ export const fetchData = async () => {
     const expertiseValue = (await AsyncStorage.getItem('expertise')) ?? '';
     const expertiseInput = (await AsyncStorage.getItem('expertiseInput')) ?? '';
     const about = (await AsyncStorage.getItem('about')) ?? '';
-    
+
 
     return {
       fullname,
@@ -37,9 +37,9 @@ export const updateData = async (updatedData: any) => {
 
     const newData = { ...currentData, ...updatedData };
 
-    const updatedFields: Record<string, any> = {};    
+    const updatedFields: Record<string, any> = {};
 
-    if (newData.fullname !== currentData.fullname){
+    if (newData.fullname !== currentData.fullname) {
       updatedFields['name'] = newData.fullname;
     }
     if (newData.photoURL !== currentData.photoURL) {
@@ -57,14 +57,14 @@ export const updateData = async (updatedData: any) => {
     if (newData.about !== currentData.about) {
       updatedFields['about'] = newData.about;
     }
-    if(newData.expertiseInput !== currentData.expertiseInput) {
-      updatedFields['expertiseInput'] = newData.expertiseInput;      
+    if (newData.expertiseInput !== currentData.expertiseInput) {
+      updatedFields['expertiseInput'] = newData.expertiseInput;
     }
 
-    await AsyncStorage.multiSet(Object.entries(updatedFields));    
+    await AsyncStorage.multiSet(Object.entries(updatedFields));
 
     // Update data in Firestore
-    const user = auth.currentUser;      
+    const user = auth.currentUser;
     if (updatedFields['name']) {
       if (user) {
         await updateProfile(user, { displayName: updatedFields['name'] });
@@ -74,7 +74,16 @@ export const updateData = async (updatedData: any) => {
     }
 
     if (updatedFields['photoURL']) {
-      await uploadImage(updatedFields['photoURL'],user);
+      try {
+        const url = await uploadImage(updatedFields['photoURL'], user);
+        if (url) {
+          updatedFields['photoURL'] = url;
+        } else {
+          console.log('Error uploading image');
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      }
     }
 
     if (Object.keys(updatedFields).length > 0) {
@@ -89,27 +98,41 @@ export const updateData = async (updatedData: any) => {
   } catch (error) {
     console.error('Error updating data in AsyncStorage:', error.message);
     throw error;
-  }  
+  }
 };
 
-export const uploadImage = async (uri: any,user:any) => {
-  const response = await fetch(uri);
-  const blob = await response.blob();
+export const uploadImage = async (uri: any, user: any) => {
+  try {
+    const response = await fetch(uri);
+    const blob = await response.blob();
 
-  const storageRef = ref(storage, "profileImages/" + user.uid);
-  const uploadTask = uploadBytesResumable(storageRef, blob);
+    const storageRef = ref(storage, "profileImages/" + user.uid);
+    const uploadTask = uploadBytesResumable(storageRef, blob);
 
-  uploadTask.on('state_changed',
-    (snapshot) => {
-    },
-    (error) => {
-      console.log('Upload Error: ', error);
-    },
-    () => {
-      getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-        await updateProfile(user, { photoURL: uri });
-        await AsyncStorage.setItem('photoURL', downloadURL);
-      });
-    }
-  );
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => { },
+        (error) => {
+          console.log("Upload Error: ", error);
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref)
+            .then(async (downloadURL) => {
+              await updateProfile(user, { photoURL: downloadURL });
+              await AsyncStorage.setItem("photoURL", downloadURL);
+              resolve(downloadURL);
+            })
+            .catch((error) => {
+              console.log("Error getting download URL: ", error);
+              reject(error);
+            });
+        }
+      );
+    });
+  } catch (error) {
+    console.log("Fetch Error: ", error);
+    throw error;
+  }
 };

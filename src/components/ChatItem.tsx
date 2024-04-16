@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Fonts from '../../assets/fonts/fonts';
 import Colors from '../../assets/colors/colors';
@@ -36,7 +36,18 @@ const ChatItem: React.FC<ChatItemProps> = ({
       status: status,
     });
   };
-  
+  const [icon,setIcon] = useState('null')
+
+  useEffect(() => {
+    if(message.includes('Image') && message.length < 11) {
+      setIcon('image');
+    }else if(message.includes('Video') && message.length < 11) {
+      setIcon('video');
+    }else if(message.includes('Document') && message.length < 13) {      
+      setIcon('document');
+    }
+  }, [message]);
+
   return (
     <TouchableOpacity style={styles.chatItemContainer} onPress={onPress}>
       {profileImageSource ? (
@@ -68,14 +79,19 @@ const ChatItem: React.FC<ChatItemProps> = ({
               styles.messageText,
               {
                 color: notificationCount
-                  ? Colors.tertiaryColor
-                  : Colors.quadraryColor,
+                ? Colors.tertiaryColor
+                : Colors.quadraryColor,
                 width: notificationCount ? '90%' : '100%',
               },
             ]}
             numberOfLines={1}
             ellipsizeMode="tail">
             {message}
+            {
+              icon === 'image' ? <Image source={require('../../assets/images/chatImage.png')} /> : 
+              icon === 'video' ? <Image source={require('../../assets/images/chatVideo.png')} /> : 
+              icon === 'document' ? <Image source={require('../../assets/images/chatDocument.png')} /> : null
+            }
           </Text>
           {notificationCount ? (
             <View style={styles.notificationBadge}>
@@ -106,6 +122,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 5,
     width: '82%',
+    paddingLeft: 5,
   },
   userName: {
     fontFamily: Fonts.regular,
@@ -117,6 +134,8 @@ const styles = StyleSheet.create({
   messageText: {
     fontFamily: Fonts.regular,
     color: Colors.tertiaryColor,
+    paddingTop: 2,
+    paddingLeft: 2,
     fontSize: 14,
     lineHeight: 18,
   },
