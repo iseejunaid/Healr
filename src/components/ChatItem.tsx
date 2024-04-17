@@ -1,7 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+} from 'react-native';
 import Fonts from '../../assets/fonts/fonts';
 import Colors from '../../assets/colors/colors';
+import OptionsModal from './OptionsModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface ChatItemProps {
   navigation: any;
@@ -26,7 +35,41 @@ const ChatItem: React.FC<ChatItemProps> = ({
   status,
   notificationCount,
 }) => {
-  
+  const [icon, setIcon] = useState<'image' | 'video' | 'document' | 'null'>(
+    'null',
+  );
+  const [markAsUnread, setMarkAsUnread] = useState(false);
+  const [isOptionsModalVisible, setIsOptionsModalVisible] = useState(false);
+  const [chatItemLayout, setChatItemLayout] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
+
+  const chatItemRef = useRef(null);
+
+  useEffect(() => {
+    const fetchMarkAsUnreadStatus = async () => {
+      const markunread = await getMarkAsUnreadStatus(receiverId);
+      if (markunread !== null) {
+        setMarkAsUnread(markunread);
+      }
+    };
+
+    fetchMarkAsUnreadStatus();
+
+    if (message.includes('Image') && message.length < 11) {
+      setIcon('image');
+    } else if (message.includes('Video') && message.length < 11) {
+      setIcon('video');
+    } else if (message.includes('Document') && message.length < 13) {
+      setIcon('document');
+    } else {
+      setIcon('null');
+    }
+  }, [message, userId]);
+
   const onPress = () => {
     navigation.navigate('IndividualChat', {
       userName: userName,
@@ -36,71 +79,149 @@ const ChatItem: React.FC<ChatItemProps> = ({
       status: status,
     });
   };
-  const [icon,setIcon] = useState('null')
 
-  useEffect(() => {
-    if(message.includes('Image') && message.length < 11) {
-      setIcon('image');
-    }else if(message.includes('Video') && message.length < 11) {
-      setIcon('video');
-    }else if(message.includes('Document') && message.length < 13) {      
-      setIcon('document');
+  const toggleOptionsModal = () => {
+    setIsOptionsModalVisible(!isOptionsModalVisible);
+  };
+
+  const onOptionClick = async (option: string) => {
+    switch (option) {
+      case 'Mark as unread':
+        setMarkAsUnread(true);
+        await saveMarkAsUnreadStatus(receiverId, true);
+        break;
+      case 'Mark as read':
+        setMarkAsUnread(false);
+        await saveMarkAsUnreadStatus(receiverId, false);
+        break;
+      case 'Delete':
+        console.log('Delete');
+        break;
+      case 'Clear chat':
+        console.log('Clear chat');
+        break;
+      case 'Block':
+        console.log('Block');
+        break;
     }
-  }, [message]);
+    setIsOptionsModalVisible(false);
+  };
+
+  const handleLayout = () => {
+    chatItemRef.current.measure((x, y, width, height, pageX, pageY) => {
+      setChatItemLayout({x: pageX, y: pageY, width, height});
+    });
+  };
+  const modalOptions = [
+    { text: markAsUnread ? 'Mark as read' : 'Mark as unread' },
+    { text: 'Delete' },
+    { text: 'Clear chat' },
+    { text: 'Block' },
+  ];
+  
+  const saveMarkAsUnreadStatus = async (key: string, value: boolean) => {
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(value));      
+    } catch (error) {
+      console.error('Error saving mark as unread status:', error);
+    }
+  };
+
+  const getMarkAsUnreadStatus = async (key: string): Promise<boolean | null> => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      return value ? JSON.parse(value) : null;
+    } catch (error) {
+      console.error('Error getting mark as unread status:', error);
+      return null;
+    }
+  };
 
   return (
-    <TouchableOpacity style={styles.chatItemContainer} onPress={onPress}>
-      {profileImageSource ? (
-        <Image source={{uri: profileImageSource}} style={styles.profileImage} />
-      ) : (
-        <Image
-          source={require('../../assets/images/placeholder.jpg')}
-          style={styles.profileImage}
-        />
-      )}
-      <View style={styles.messageContainer}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.userName}>{userName}</Text>
-          <Text
-            style={[
-              styles.timeText,
-              {
-                color: notificationCount
-                  ? Colors.primaryColor
-                  : Colors.quadraryColor,
-              },
-            ]}>
-            {time}
-          </Text>
+    <>
+      <TouchableOpacity
+        style={styles.chatItemContainer}
+        onPress={onPress}
+        onLongPress={toggleOptionsModal}
+        ref={chatItemRef}
+        onLayout={handleLayout}>
+        {profileImageSource ? (
+          <Image
+            source={{uri: profileImageSource}}
+            style={styles.profileImage}
+          />
+        ) : (
+          <Image
+            source={require('../../assets/images/placeholder.jpg')}
+            style={styles.profileImage}
+          />
+        )}
+        <View style={styles.messageContainer}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={styles.userName}>{userName}</Text>
+            <Text
+              style={[
+                styles.timeText,
+                {
+                  color: notificationCount || markAsUnread
+                    ? Colors.primaryColor
+                    : Colors.quadraryColor,
+                },
+              ]}>
+              {time}
+            </Text>
+          </View>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text
+              style={[
+                styles.messageText,
+                {
+                  color: notificationCount || markAsUnread
+                    ? Colors.tertiaryColor
+                    : Colors.quadraryColor,
+                  width: notificationCount || markAsUnread ? '90%' : '100%',
+                },
+              ]}
+              numberOfLines={1}
+              ellipsizeMode="tail">
+              {message}
+              {icon === 'image' ? (
+                <Image source={require('../../assets/images/chatImage.png')} />
+              ) : icon === 'video' ? (
+                <Image source={require('../../assets/images/chatVideo.png')} />
+              ) : icon === 'document' ? (
+                <Image
+                  source={require('../../assets/images/chatDocument.png')}
+                />
+              ) : null}
+            </Text>
+            {notificationCount ? (
+              <View style={styles.notificationBadge}>
+                <Text style={styles.notificationText}>{notificationCount}</Text>
+              </View>
+            ) : null}
+
+            {markAsUnread && (!notificationCount || notificationCount === 0) ? (
+              <View style={styles.notificationBadge}>
+                <Text style={styles.notificationText}></Text>
+              </View>
+            ) : null}
+          </View>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text
-            style={[
-              styles.messageText,
-              {
-                color: notificationCount
-                ? Colors.tertiaryColor
-                : Colors.quadraryColor,
-                width: notificationCount ? '90%' : '100%',
-              },
-            ]}
-            numberOfLines={1}
-            ellipsizeMode="tail">
-            {message}
-            {
-              icon === 'image' ? <Image source={require('../../assets/images/chatImage.png')} /> : 
-              icon === 'video' ? <Image source={require('../../assets/images/chatVideo.png')} /> : 
-              icon === 'document' ? <Image source={require('../../assets/images/chatDocument.png')} /> : null
-            }
-          </Text>
-          {notificationCount ? (
-            <View style={styles.notificationBadge}>
-              <Text style={styles.notificationText}>{notificationCount}</Text>
-            </View>
-          ) : null}
-        </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+      <OptionsModal
+        visible={isOptionsModalVisible}
+        onClose={toggleOptionsModal}
+        foregroundColor={Colors.tertiaryColor}
+        onOptionClick={onOptionClick}
+        modalStyle={{
+          top: chatItemLayout.y,
+          left: chatItemLayout.x + chatItemLayout.width - 140,
+          backgroundColor: Colors.secondaryWhite,
+        }}
+        options={modalOptions}
+      />
+    </>
   );
 };
 
@@ -147,7 +268,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.regular,
     fontSize: 12,
     lineHeight: 14,
-    // left: '550%',
   },
   notificationBadge: {
     backgroundColor: Colors.primaryColor,

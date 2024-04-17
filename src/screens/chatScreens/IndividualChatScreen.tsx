@@ -97,7 +97,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           style={{flexDirection: 'row', height: '100%', alignItems: 'center'}}>
           <TouchableOpacity
             style={{height: '100%', justifyContent: 'center'}}
-            onPress={() => navigation.pop()}>
+            onPress={() => navigation.popToTop({ screen: 'ChatHome' })}>
             <Image
               source={require('../../../assets/images/back.png')}
               style={styles.backImg}
