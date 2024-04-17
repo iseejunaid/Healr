@@ -80,18 +80,24 @@ const NewChat = ({navigation}: any) => {
               <View style={styles.heading}>
                 <Text style={styles.headingText}>Contacts on Healr</Text>
               </View>
-              {healerContacts.map((contact, index) => (
-                <ContactItem
-                  key={index}
-                  navigation={navigation}
-                  profileImageSource={contact.photoURL}
-                  userName={contact?.name || 'Unknown'}
-                  expertise={contact?.expertise || 'N/A'}
-                  userId={userId}
-                  status={contact?.status || 'unavailable'}
-                  receiverId={contact?.receiverId || 'Unknown'}
-                />
-              ))}
+              {healerContacts.map((contact, index) => {
+                var name = contact?.name || 'Unknown';
+                if (userId == contact?.receiverId) {
+                  name = name + ' (You)';
+                }
+                return (
+                  <ContactItem
+                    key={index}
+                    navigation={navigation}
+                    profileImageSource={contact.photoURL}
+                    userName={name}
+                    expertise={contact?.expertise || 'N/A'}
+                    userId={userId}
+                    status={contact?.status || 'unavailable'}
+                    receiverId={contact?.receiverId || 'Unknown'}
+                  />
+                );
+              })}
             </>
           )}
           {invitableContacts.length > 0 && (
@@ -105,7 +111,7 @@ const NewChat = ({navigation}: any) => {
                   navigation={navigation}
                   userName={contact?.name || 'Unknown'}
                   expertise="Invite"
-                  invitable
+                  invitable = {contact.phoneNumber}
                 />
               ))}
             </>

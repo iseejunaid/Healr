@@ -130,10 +130,10 @@ const IndividualChatScreen = ({navigation, route}: any) => {
         </View>
         <View style={styles.callIconsContainer}>
           <TouchableOpacity style={styles.callIcon}>
-            <Image source={require('../../../assets/images/call.png')} />
+            {/* <Image source={require('../../../assets/images/call.png')} /> */}
           </TouchableOpacity>
           <TouchableOpacity style={styles.callIcon}>
-            <Image source={require('../../../assets/images/videoCall.png')} />
+            <Image source={require('../../../assets/images/call.png')} />
           </TouchableOpacity>
         </View>
       </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Image, Text, StyleSheet, TouchableOpacity, Linking} from 'react-native';
 import Fonts from '../../assets/fonts/fonts';
 import Colors from '../../assets/colors/colors';
 
@@ -10,7 +10,7 @@ interface ContactItemProps {
   receiverId?: string;
   userName: string;
   expertise: string;
-  invitable?: boolean;
+  invitable?: string;
   status?: string;
 }
 
@@ -25,14 +25,19 @@ const ContactItem: React.FC<ContactItemProps> = ({
   status
 }) => {
   const onPress = () => {
-    if(invitable) return;
-    navigation.navigate('IndividualChat', {
-      userName: userName,
-      profileImageSource: profileImageSource,
-      receiverId: receiverId,
-      userId: userId,
-      status: status,
-    });
+    if(invitable){
+      const message = `Hey! I would like to invite you to join Healr. Here is the link to download the app: https://healrworld.com/download`;
+      const smsUri = `sms:${invitable}${message ? `?body=${encodeURIComponent(message)}` : ''}`;
+      Linking.openURL(smsUri).catch(err => console.error('An error occurred', err));
+    }else{
+      navigation.navigate('IndividualChat', {
+        userName: userName,
+        profileImageSource: profileImageSource,
+        receiverId: receiverId,
+        userId: userId,
+        status: status,
+      });
+    }
   };  
   return (
     <TouchableOpacity style={styles.contactItemContainer} onPress={onPress}>
