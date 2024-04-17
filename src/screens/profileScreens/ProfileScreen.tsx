@@ -33,7 +33,6 @@ const ProfileScreen = ({navigation}: any) => {
       const name = await AsyncStorage.getItem('name');
       setProfileImage((await AsyncStorage.getItem('photoURL')) ?? '');
       const statusValue = await AsyncStorage.getItem('status');
-      const isInternValue = await AsyncStorage.getItem('isIntern');
       const expertiseValue = (await AsyncStorage.getItem('expertise')) ?? '';
       const expertiseInput = (await AsyncStorage.getItem('expertiseInput')) ?? '';
 
@@ -42,11 +41,7 @@ const ProfileScreen = ({navigation}: any) => {
       }
 
       setStatus(statusValue ? capitalizeFirstLetter(statusValue) : '');
-
-      if (isInternValue === 'true') {
-        setExpertise('Medical Intern');
-        return;
-      }
+      
       if (expertiseValue === 'unlisted') {
         setExpertise(capitalizeFirstLetter(expertiseInput));
       } else {

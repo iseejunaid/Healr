@@ -13,6 +13,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 const EditProfileScreen = ({navigation}: any) => {
   const [profileImage, setProfileImage] = useState<string | null>('');
   const [name, setName] = useState('');
+  const [phnNumber, setPhnNumber] = useState('');
   const [workplace, setWorkplace] = useState('');
   const [value, setValue] = useState<string | null>('');
   const [value2, setValue2] = useState<string | null>('');
@@ -23,38 +24,39 @@ const EditProfileScreen = ({navigation}: any) => {
   useEffect(() => {
     setLoading(true);
     const fetchDataFromAsyncStorage = async () => {
-        try {
-            const {
-                fullname,
-                photoURL,
-                workplace,
-                category,
-                expertiseValue,
-                expertiseInput,
-                about,
-            } = await fetchData();
+      try {
+        const {
+          fullname,
+          phnNumber,
+          photoURL,
+          workplace,
+          category,
+          expertiseValue,
+          expertiseInput,
+          about,
+        } = await fetchData();
 
-            // Update states
-            Promise.all([
-                setName(fullname),
-                setProfileImage(photoURL),
-                setWorkplace(workplace),
-                setValue(category),
-                setValue2(expertiseValue),
-                setInputData(expertiseInput),
-                setabouttxt(about)
-            ]).then(() => {
-                setLoading(false); // Set loading to false after all states are updated
-            });
-        } catch (error) {
-            console.error('Error fetching data from AsyncStorage:', error.message);
-            setLoading(false); // Make sure to handle loading state in case of error
-        }        
+        // Update states
+        Promise.all([
+          setName(fullname),
+          setPhnNumber(phnNumber),
+          setProfileImage(photoURL),
+          setWorkplace(workplace),
+          setValue(category),
+          setValue2(expertiseValue),
+          setInputData(expertiseInput),
+          setabouttxt(about),
+        ]).then(() => {
+          setLoading(false); // Set loading to false after all states are updated
+        });
+      } catch (error) {
+        console.error('Error fetching data from AsyncStorage:', error.message);
+        setLoading(false); // Make sure to handle loading state in case of error
+      }
     };
 
     fetchDataFromAsyncStorage();
-}, []);
-
+  }, []);
 
   const imageBtnHandler = () => {
     ImagePicker.openPicker({
@@ -68,22 +70,24 @@ const EditProfileScreen = ({navigation}: any) => {
       cropperStatusBarColor: Colors.secondaryColor,
       cropperToolbarWidgetColor: Colors.tertiaryColor,
       cropperActiveWidgetColor: Colors.primaryColor,
-    }).then(image => {      
-      setProfileImage(image.path);
-    }).catch(error => {
-      console.log('ImagePicker Error: ', error);
-    });
+    })
+      .then(image => {
+        setProfileImage(image.path);
+      })
+      .catch(error => {
+        console.log('ImagePicker Error: ', error);
+      });
     return true;
   };
 
-  
   const saveData = async () => {
     setLoading(true);
     const dataFromAsyncStorage = await fetchData();
-        
+
     if (
       profileImage == dataFromAsyncStorage.photoURL &&
       name === dataFromAsyncStorage.fullname &&
+      phnNumber === dataFromAsyncStorage.phnNumber &&
       workplace === dataFromAsyncStorage.workplace &&
       value === dataFromAsyncStorage.category &&
       value2 === dataFromAsyncStorage.expertiseValue &&
@@ -93,10 +97,11 @@ const EditProfileScreen = ({navigation}: any) => {
       navigation.pop();
       setLoading(false);
     } else {
-      if (value2) {                
+      if (value2) {
         if (value2 === 'unlisted' ? inputData !== '' : true) {
           updateData({
             fullname: name,
+            phnNumber: phnNumber,
             photoURL: profileImage,
             workplace: workplace,
             category: value,
@@ -119,11 +124,10 @@ const EditProfileScreen = ({navigation}: any) => {
     ImagePicker.clean();
   };
 
-  return (
-    loading ? (
-      <Loader backgroundColor={Colors.secondaryColor}/>
-    ) : (
-    <ScrollView style={styles.container}>
+  return loading ? (
+    <Loader backgroundColor={Colors.secondaryColor} />
+  ) : (
+    <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.pop()}>
           <Image
@@ -138,87 +142,99 @@ const EditProfileScreen = ({navigation}: any) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.profileImg}>
-        <View style={styles.circle} onStartShouldSetResponder={imageBtnHandler}>
-        {profileImage ? (
-            <Image source={{uri: profileImage}} style={styles.image} />
-          ) : (
-          <Image
-            source={require('../../../assets/images/placeholder.jpg')}
-            style={styles.image}
-          />
-          )}
-        </View>
-        <View
-          style={styles.editImgContainer}
-          onStartShouldSetResponder={imageBtnHandler}>
-          <Image
-            source={require('../../../assets/images/editPictureIcon.png')}
-          />
-        </View>
-      </View>
-
-      <View style={styles.body}>
-        <Text style={styles.bodylabels}>Full Name</Text>
-        <InputField handleChange={setName} value={name} width={95} />
-
-        <Text style={styles.bodylabels}>Workplace</Text>
-        <InputField
-          handleChange={setWorkplace}
-          placeholder="Enter Workplace"
-          value={workplace}
-          width={95}
-        />
-
-        <Text style={styles.bodylabels}>Profession Category</Text>
-        <SelectDropdown
-          data={Categorydata}
-          placeholder={'Select Category'}
-          value={value}
-          onChange={item => {
-            setValue(item.value);
-            setValue2(null);
-            setInputData('');
-          }}
-        />
-
-        <Text style={[styles.bodylabels, {marginTop: 10}]}>
-          Area of Expertise
-        </Text>
-        <SelectDropdown
-          data={Expertisedata(value)}
-          placeholder={'Select Expertise'}
-          value={value2}
-          onChange={item => {
-            setValue2(item.value);
-            setInputData('');
-          }}
-        />
-
-        {value2 == 'unlisted' ? (
-          <>
-            <Text style={[styles.bodylabels, {marginTop: 10}]}>Expertise</Text>
-            <InputField
-              handleChange={setInputData}
-              value={inputData}
-              placeholder="Please Specify"
-              width={95}
+      <ScrollView>
+        <View style={styles.profileImg}>
+          <View
+            style={styles.circle}
+            onStartShouldSetResponder={imageBtnHandler}>
+            {profileImage ? (
+              <Image source={{uri: profileImage}} style={styles.image} />
+            ) : (
+              <Image
+                source={require('../../../assets/images/placeholder.jpg')}
+                style={styles.image}
+              />
+            )}
+          </View>
+          <View
+            style={styles.editImgContainer}
+            onStartShouldSetResponder={imageBtnHandler}>
+            <Image
+              source={require('../../../assets/images/editPictureIcon.png')}
             />
-          </>
-        ) : null}
+          </View>
+        </View>
 
-        <Text style={[styles.bodylabels, {marginTop: 10}]}>About</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Write about yourself..."
-          multiline={true}
-          numberOfLines={4}
-          value={abouttxt}
-          onChangeText={setabouttxt}
-        />
-      </View>
-    </ScrollView>
-    )
+        <View style={styles.body}>
+          <Text style={styles.bodylabels}>Full Name</Text>
+          <InputField handleChange={setName} value={name} width={95} />
+
+          <Text style={styles.bodylabels}>Phone Number</Text>
+          <InputField
+            handleChange={setPhnNumber}
+            value={phnNumber}
+            width={95}
+          />
+
+          <Text style={styles.bodylabels}>Workplace</Text>
+          <InputField
+            handleChange={setWorkplace}
+            placeholder="Enter Workplace"
+            value={workplace}
+            width={95}
+          />
+
+          <Text style={styles.bodylabels}>Profession Category</Text>
+          <SelectDropdown
+            data={Categorydata}
+            placeholder={'Select Category'}
+            value={value}
+            onChange={item => {
+              setValue(item.value);
+              setValue2(null);
+              setInputData('');
+            }}
+          />
+
+          <Text style={[styles.bodylabels, {marginTop: 10}]}>
+            Area of Expertise
+          </Text>
+          <SelectDropdown
+            data={Expertisedata(value)}
+            placeholder={'Select Expertise'}
+            value={value2}
+            onChange={item => {
+              setValue2(item.value);
+              setInputData('');
+            }}
+          />
+
+          {value2 == 'unlisted' ? (
+            <>
+              <Text style={[styles.bodylabels, {marginTop: 10}]}>
+                Expertise
+              </Text>
+              <InputField
+                handleChange={setInputData}
+                value={inputData}
+                placeholder="Please Specify"
+                width={95}
+              />
+            </>
+          ) : null}
+
+          <Text style={[styles.bodylabels, {marginTop: 10}]}>About</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Write about yourself..."
+            multiline={true}
+            value={abouttxt}
+            onChangeText={setabouttxt}
+            textAlignVertical="top"
+          />
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -301,6 +317,6 @@ const styles = StyleSheet.create({
     minHeight: 100,
     margin: '3%',
     backgroundColor: Colors.secondaryWhite,
-    color:'black'
+    color: 'black',
   },
 });

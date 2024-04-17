@@ -8,6 +8,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 export const fetchData = async () => {
   try {
     const fullname = (await AsyncStorage.getItem('name')) ?? '';
+    const phnNumber= (await AsyncStorage.getItem('phnNumber')) ?? '';
     const photoURL = (await AsyncStorage.getItem('photoURL')) ?? '';
     const workplace = (await AsyncStorage.getItem('workplace')) ?? '';
     const category = (await AsyncStorage.getItem('category')) ?? '';
@@ -18,6 +19,7 @@ export const fetchData = async () => {
 
     return {
       fullname,
+      phnNumber,
       photoURL,
       workplace,
       category,
@@ -41,6 +43,9 @@ export const updateData = async (updatedData: any) => {
 
     if (newData.fullname !== currentData.fullname) {
       updatedFields['name'] = newData.fullname;
+    }
+    if (newData.phnNumber !== currentData.phnNumber) {
+      updatedFields['phnNumber'] = newData.phnNumber;
     }
     if (newData.photoURL !== currentData.photoURL) {
       updatedFields['photoURL'] = newData.photoURL;
