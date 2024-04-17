@@ -70,7 +70,7 @@ const SignupScreen2 = ({navigation}: {navigation: any}) => {
         <SelectDropdown
           data={Categorydata}
           placeholder={'Select Category'}
-          value={value}
+          value={value ?? null}
           onChange={item => {
             setValue(item.value);
           }}

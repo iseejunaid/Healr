@@ -19,6 +19,7 @@ const NewChat = ({navigation}: any) => {
   const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(false);
+  const [searchText, setSearchText] = useState('');
   const [healerContacts, setHealerContacts] = useState<
     {
       photoURL: any;
@@ -33,6 +34,8 @@ const NewChat = ({navigation}: any) => {
   const [invitableContacts, setInvitableContacts] = useState<
     {name: string; phoneNumber: string}[]
   >([]);
+  const [defaultHealrContacts, setDefaultHealrContacts] = useState([])
+  const [defaultInvitableContacts, setDefaultInvitableContacts] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,7 +49,21 @@ const NewChat = ({navigation}: any) => {
     };
     fetchUserId();
     fetchData().then(() => setLoading(false));
+    setDefaultHealrContacts(healerContacts as any)
+    setDefaultInvitableContacts(invitableContacts as any)
   }, []);
+
+  useEffect(()=>{
+    if(searchText){
+      const filteredHealerContacts = healerContacts.filter(contact => contact.name.toLowerCase().includes(searchText.toLowerCase()));
+      setHealerContacts(filteredHealerContacts);
+      const filteredInvitableContacts = invitableContacts.filter(contact => contact.name.toLowerCase().includes(searchText.toLowerCase()));
+      setInvitableContacts(filteredInvitableContacts);
+    }else{
+      setHealerContacts(defaultHealrContacts)
+      setInvitableContacts(defaultInvitableContacts)
+    }
+  },[searchText])
 
   return (
     <View style={styles.container}>
@@ -57,7 +74,7 @@ const NewChat = ({navigation}: any) => {
           </TouchableOpacity>
           <View style={styles.headerText}>
             <Text style={styles.headerTitle}>Select Contact</Text>
-            <Text style={styles.headerSubtitle}>5 Contacts</Text>
+            <Text style={styles.headerSubtitle}>{healerContacts.length} Contacts</Text>
           </View>
         </View>
         <TouchableOpacity onPress={() => setSearch(!search)}>
@@ -66,7 +83,7 @@ const NewChat = ({navigation}: any) => {
       </View>
       {search && (
         <View style={{alignItems: 'center'}}>
-          <InputField style={{width: '90%'}} placeholder="Search" width={95} />
+          <InputField value={searchText} handleChange={setSearchText} style={{width: '90%'}} placeholder="Search" width={95} />
         </View>
       )}
       {loading ? (

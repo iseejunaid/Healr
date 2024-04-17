@@ -235,7 +235,8 @@ export const fetchContacts = async () => {
 };
 
 const fetchDbContacts = async () => {
-    const dbContacts = collection(db, 'users');
+    const usersRef = collection(db, 'users');
+    const dbContacts = query(usersRef, orderBy('name'));
     try {
         const querySnapshot = await getDocs(dbContacts);
         const contacts = querySnapshot.docs.map(doc => ({
@@ -263,7 +264,8 @@ const fetchLocalContacts = async () => {
                 name: contact.displayName,
                 phoneNumber: contact.phoneNumbers.length > 0 ? contact.phoneNumbers[0].number : '',
             }));
-            return localContacts;
+            localContacts.sort((a, b) => a.name.localeCompare(b.name));
+            return localContacts
         } else {
             console.log('Contacts permission denied');
             return [];
