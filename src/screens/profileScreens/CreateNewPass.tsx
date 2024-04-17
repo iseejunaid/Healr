@@ -6,23 +6,53 @@ import {
   TouchableOpacity,
   ScrollView,
   StatusBar,
+  Alert,
 } from 'react-native';
 import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
+import {auth} from '../../../configs/firebaseConfig';
+import firebase from 'firebase/compat';
 
 const CreateNewPassScreen = ({navigation}: {navigation: any}) => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSubmit = () => {
-    setPassword('');
-    setConfirmPassword('');
-    navigation.navigate('LoginScreen');
+  const handleSubmit = async () => {
+    try {
+      if (currentPassword === '' || password === '' || confirmPassword === '') {
+        Alert.alert('Missing Fields', 'Please fill all the fields');
+      } else if (password !== confirmPassword) {
+        Alert.alert(
+          'Passwords Mismatch',
+          'New Passwod and Confirm Password should be same',
+        );
+      } else {
+        const user = auth.currentUser;
+        const credential = firebase.auth.EmailAuthProvider.credential(
+          user.email,
+          currentPassword,
+        );
+        await user.reauthenticateWithCredential(credential);
+        await user.updatePassword(password);
+
+        Alert.alert(
+          'Password Updated',
+          'Your password has been updated successfully',
+        );
+        setCurrentPassword('');
+        setPassword('');
+        setConfirmPassword('');
+        navigation.pop();
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
   };
   const backbtnHandler = () => {
+    setCurrentPassword('');
     setPassword('');
     setConfirmPassword('');
     navigation.pop();
@@ -30,7 +60,10 @@ const CreateNewPassScreen = ({navigation}: {navigation: any}) => {
 
   return (
     <ScrollView style={styles.container}>
-      <StatusBar backgroundColor={Colors.tertiaryColor} barStyle={'light-content'}/>
+      <StatusBar
+        backgroundColor={Colors.tertiaryColor}
+        barStyle={'light-content'}
+      />
       <View style={styles.top}>
         <Text style={styles.toptxt}>Create a new</Text>
         <Text style={styles.toptxt}>password!</Text>
