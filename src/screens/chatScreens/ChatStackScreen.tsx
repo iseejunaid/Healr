@@ -1,9 +1,10 @@
 import React from 'react';
-import ChatScreen from './ChatScreen';
-import IndividualChatScreen from './IndividualChatScreen';
 import {createStackNavigator} from '@react-navigation/stack';
 import Colors from '../../../assets/colors/colors';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import ChatScreen from './ChatScreen';
+import IndividualChatScreen from './IndividualChatScreen';
+import NewChat from './NewChat';
 
 
 const ChatStack = createStackNavigator();
@@ -13,7 +14,7 @@ const ChatStackScreen = ({navigation, route}: any) => {
   React.useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
 
-    if (routeName === 'IndividualChat') {
+    if (routeName === 'IndividualChat' || routeName === 'newChat') {
       navigation.setOptions({tabBarStyle: {display: 'none'}});
     } else {
       navigation.setOptions({
@@ -36,6 +37,7 @@ const ChatStackScreen = ({navigation, route}: any) => {
         name="IndividualChat"
         component={IndividualChatScreen}
       />
+      <ChatStack.Screen name="NewChat" component={NewChat} />
     </ChatStack.Navigator>
   );
 };

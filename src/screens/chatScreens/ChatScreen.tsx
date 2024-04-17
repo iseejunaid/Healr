@@ -41,7 +41,7 @@ const ChatScreen: React.FC = ({navigation}: any) => {
 
   return (
     <View style={styles.container}>
-      <Header text="Chats" LefticonName="cameraIcon" RighticonName="dotsIcon" />
+      <Header text="Chats" RighticonName="dotsIcon" />
       {loading ? (
         <View style={styles.chatsContainer}>
           <Loader backgroundColor={Colors.secondaryColor} />
@@ -88,7 +88,7 @@ const ChatScreen: React.FC = ({navigation}: any) => {
       <TouchableOpacity
         style={styles.newChatButton}
         activeOpacity={0.7}
-        onPress={() => {}}>
+        onPress={() => {navigation.navigate('NewChat')}}>
         <Image
           source={require('../../../assets/images/newChat.png')}
           style={styles.newChatIcon}
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondaryColor,
   },
   chatsContainer: {
-    height: 630,
+    height: '90%',
     width: '100%',
   },
   searchInput: {

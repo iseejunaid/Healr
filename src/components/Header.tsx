@@ -14,13 +14,11 @@ const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName}) => {
   const renderImage = (ImageName: string | undefined) => {
     switch (ImageName) {
       case 'cameraIcon':
-        return require('../../assets/images/cameraIcon.png');
+        // return require('../../assets/images/cameraIcon.png');
       case 'dotsIcon':
         return require('../../assets/images/dotsIcon.png');
       case 'settingsIcon':
         // return require('../../assets/images/settingsIcon.png');
-      case 'undefined':
-        break;
       default:
         break;
     }
@@ -51,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName}) => {
     <View style={styles.header}>
       <TouchableOpacity style={styles.camerabtn} onPress={() => imgPressHandler(LefticonName)}>
 
-        <Image source={renderImage(LefticonName)} style={styles.cameraimg} />
+        <Image source={renderImage(LefticonName)} style={styles.cameraimg}/>
       </TouchableOpacity>
 
       <View style={[styles.MainText,{width: RighticonName === 'settingsIcon' ? '80%' : '84%',}]}>
