@@ -12,13 +12,23 @@ import InputField from '../../components/InputField';
 import Fonts from '../../../assets/fonts/fonts';
 import ContactItem from '../../components/ContactItem';
 import {fetchContacts} from './ChatHelper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from '../../components/Loader';
 
 const NewChat = ({navigation}: any) => {
+  const [userId, setUserId] = useState('');
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(false);
   const [healerContacts, setHealerContacts] = useState<
     {
-        photoURL: any;name: any; phnNumber: any; expertise: any; expertiseInput: any
-}[]
+      photoURL: any;
+      name: any;
+      phnNumber: any;
+      expertise: any;
+      expertiseInput: any;
+      receiverId: any;
+      status: any;
+    }[]
   >([]);
   const [invitableContacts, setInvitableContacts] = useState<
     {name: string; phoneNumber: string}[]
@@ -30,10 +40,12 @@ const NewChat = ({navigation}: any) => {
       setHealerContacts(HealrContacts);
       setInvitableContacts(invitableContacts);
     };
-
-    fetchData();
-    console.log(healerContacts);
-    
+    const fetchUserId = async () => {
+      const id = await AsyncStorage.getItem('uid');
+      setUserId(id || '');
+    };
+    fetchUserId();
+    fetchData().then(() => setLoading(false));
   }, []);
 
   return (
@@ -57,42 +69,49 @@ const NewChat = ({navigation}: any) => {
           <InputField style={{width: '90%'}} placeholder="Search" width={95} />
         </View>
       )}
-      <ScrollView style={styles.contactListContainer}>
-        {healerContacts.length > 0 && (
-          <>
-            <View style={styles.heading}>
-              <Text style={styles.headingText}>Contacts on Healr</Text>
-            </View>
-            {healerContacts.map((contact, index) => (
-              <ContactItem
-                key={index}
-                navigation={navigation}
-                profileImageSource={contact.photoURL}
-                userName={contact?.name || 'Unknown'}
-                expertise={contact?.expertise || 'N/A'}
-                userId=" /* Update this with appropriate user ID */ "
-                receiverId=" /* Update this with appropriate receiver ID */ "
-              />
-            ))}
-          </>
-        )}
-        {invitableContacts.length > 0 && (
-          <>
-            <View style={styles.heading}>
-              <Text style={styles.headingText}>Invite to Healr</Text>
-            </View>
-            {invitableContacts.map((contact, index) => (
-              <ContactItem
-                key={index}
-                navigation={navigation}
-                userName={contact?.name || 'Unknown'}
-                expertise='Invite'
-                invitable
-              />
-            ))}
-          </>
-        )}
-      </ScrollView>
+      {loading ? (
+        <View style={styles.contactListContainer}>
+          <Loader backgroundColor={Colors.secondaryColor} />
+        </View>
+      ) : (
+        <ScrollView style={styles.contactListContainer}>
+          {healerContacts.length > 0 && (
+            <>
+              <View style={styles.heading}>
+                <Text style={styles.headingText}>Contacts on Healr</Text>
+              </View>
+              {healerContacts.map((contact, index) => (
+                <ContactItem
+                  key={index}
+                  navigation={navigation}
+                  profileImageSource={contact.photoURL}
+                  userName={contact?.name || 'Unknown'}
+                  expertise={contact?.expertise || 'N/A'}
+                  userId={userId}
+                  status={contact?.status || 'unavailable'}
+                  receiverId={contact?.receiverId || 'Unknown'}
+                />
+              ))}
+            </>
+          )}
+          {invitableContacts.length > 0 && (
+            <>
+              <View style={styles.heading}>
+                <Text style={styles.headingText}>Invite to Healr</Text>
+              </View>
+              {invitableContacts.map((contact, index) => (
+                <ContactItem
+                  key={index}
+                  navigation={navigation}
+                  userName={contact?.name || 'Unknown'}
+                  expertise="Invite"
+                  invitable
+                />
+              ))}
+            </>
+          )}
+        </ScrollView>
+      )}
     </View>
   );
 };

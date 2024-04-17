@@ -244,6 +244,8 @@ const fetchDbContacts = async () => {
             expertise: doc.data().expertise,
             expertiseInput: doc.data().expertiseInput ? doc.data().expertiseInput : null,
             photoURL: doc.data().photoURL ? doc.data().photoURL : null,
+            receiverId: doc.data().uid,
+            status: doc.data().status,
         }));
         return contacts;
     } catch (error) {

@@ -6,7 +6,13 @@ import {renderCustomBubble} from './ChatBubble';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import 'react-native-get-random-values';
-import {collection, onSnapshot, orderBy, query} from 'firebase/firestore';
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from 'firebase/firestore';
 import {db} from '../../../configs/firebaseConfig';
 import {composeMsg, sendMedia} from './ChatHelper';
 import Video from 'react-native-video';
@@ -41,8 +47,13 @@ const IndividualChatScreen = ({navigation, route}: any) => {
 
   useEffect(() => {
     const collectionRef = collection(db, 'chats');
-    const q = query(collectionRef, orderBy('createdAt', 'desc'));
-
+    const q = query(
+      collectionRef,
+      orderBy('createdAt', 'desc'),
+      where('user._id', 'in', [userId, receiverId]),
+      where('receiver_id', 'in', [userId, receiverId]),
+    );
+    
     const unsubscribe = onSnapshot(q, querySnapshot => {
       setMessages(
         querySnapshot.docs.map(doc => ({
@@ -60,24 +71,24 @@ const IndividualChatScreen = ({navigation, route}: any) => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [userId, receiverId]);
 
   const customtInputToolbar = () => {
     return <CustomInputToobar text={text} setText={setText} onSend={onSend} />;
   };
 
   const renderVideo = (props: any) => {
-      const {currentMessage} = props;
-      return (
-        <View>
-          <Video
-            source={{uri: currentMessage?.video}}
-            style={{height: 200, width: 200}}
-            controls={true}
-            />
-        </View>
-      );
-    };
+    const {currentMessage} = props;
+    return (
+      <View>
+        <Video
+          source={{uri: currentMessage?.video}}
+          style={{height: 200, width: 200}}
+          controls={true}
+        />
+      </View>
+    );
+  };
 
   return (
     <View style={{flex: 1}}>

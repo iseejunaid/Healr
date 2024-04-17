@@ -11,6 +11,7 @@ interface ContactItemProps {
   userName: string;
   expertise: string;
   invitable?: boolean;
+  status?: string;
 }
 
 const ContactItem: React.FC<ContactItemProps> = ({
@@ -21,13 +22,16 @@ const ContactItem: React.FC<ContactItemProps> = ({
   userName,
   expertise,
   invitable,
+  status
 }) => {
   const onPress = () => {
+    if(invitable) return;
     navigation.navigate('IndividualChat', {
       userName: userName,
       profileImageSource: profileImageSource,
       receiverId: receiverId,
       userId: userId,
+      status: status,
     });
   };  
   return (
