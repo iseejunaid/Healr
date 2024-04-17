@@ -7,7 +7,6 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { createUserWithEmailAndPassword,sendEmailVerification } from "firebase/auth";
 import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
@@ -33,7 +32,7 @@ const SignupScreen1 = ({navigation}: {navigation: any}) => {
     }
     signupConfig.firstName = fName.trim();
     signupConfig.lastName = lName.trim();
-    navigation.navigate('SignupScreen12');
+    navigation.navigate('SignupScreen2');
   };
 
   const backBtnHandler = () => {

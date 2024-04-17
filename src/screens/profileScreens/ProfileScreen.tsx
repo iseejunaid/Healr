@@ -76,6 +76,27 @@ const ProfileScreen = ({navigation}: any) => {
     {label: 'Change Password'},
   ];
 
+  const optionsHandler = (label: string) => {    
+    switch (label) {
+      case 'Status':
+        console.log('Status');
+        break;
+      case 'My QR Code':
+        console.log('My QR Code');
+        break;
+      case 'Notifications':
+        console.log('Notifications');
+        break;
+      case 'Change Password':
+        console.log('Change Password');
+        
+        navigation.navigate('CreateNewPassScreen');
+        break;
+      default:
+        break;
+    }
+  }
+
   const onLogout = async () => {
     try {
       await AsyncStorage.clear();
@@ -140,7 +161,8 @@ const ProfileScreen = ({navigation}: any) => {
           marginBottom: '4%',
         }}>
         {items.map(({label}, index) => (
-          <TouchableOpacity key={index} style={styles.middle}>
+          <TouchableOpacity key={index} style={styles.middle}
+          onPress={() => optionsHandler(label)}>
             <Text style={styles.middletxt}>{label}</Text>
             <Image
               source={require('../../../assets/images/rightArrow.png')}

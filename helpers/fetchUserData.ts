@@ -9,7 +9,7 @@ export const fetchUserData = async (user: object,token:string) => {
   const name = user.displayName;
   var docid = '';
   var category = '';
-  var isIntern = false;
+  var phnNumber = '';
   var expertise = '';
   var expertiseInput = '';
   var workplace = '';
@@ -25,7 +25,7 @@ export const fetchUserData = async (user: object,token:string) => {
       
       docid = doc.id;      
       category = userData.category;
-      isIntern = userData.isIntern;
+      phnNumber = userData.phnNumber;
       expertise = userData.expertise;
       if (userData.expertiseInput) {
         expertiseInput = userData.expertiseInput;
@@ -45,7 +45,7 @@ export const fetchUserData = async (user: object,token:string) => {
         ['docid', docid.toString()],
         ['name', name.toString()],
         ['category', category.toString()],
-        ['isIntern', isIntern.toString()],
+        ['phnNumber', phnNumber.toString()],
         ['expertise', expertise.toString()],
         ['status', status.toString()],
         ['about', about.toString()],

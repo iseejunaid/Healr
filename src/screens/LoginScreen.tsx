@@ -66,7 +66,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
     setPassword('');
   };
   const signupHandler = () => {
-    navigation.navigate('SignupScreen');
+    navigation.navigate('SignupScreen1');
     setEmail('');
     setPassword('');
   };
@@ -83,7 +83,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
           <InputField
             handleChange={handleEmailChange}
             value={email}
-            placeholder="Phone Number or Email Address"
+            placeholder="Email Address"
             width={95}
           />
           <InputField

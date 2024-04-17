@@ -21,15 +21,12 @@ const SignupScreen5 = ({navigation}: {navigation: any}) => {
   };
 
   const handleNext = () => {
-    if (phoneNumber.length < 10) {
+    if (phoneNumber.length < 11) {
       Alert.alert('Error!','Please enter a valid phone number');
       return;
     }
     signupConfig.phnNumber = phoneNumber;
-    navigation.navigate('SignupScreen6', {
-      phnNumber: phoneNumber,
-      heading: 'One-time code verification!',
-    });
+    navigation.navigate('SignupScreen7');
   };
 
   const backBtnHandler = () => {
@@ -46,13 +43,11 @@ const SignupScreen5 = ({navigation}: {navigation: any}) => {
         <Text style={styles.stepsCountTxt}>4 of 5</Text>
       </View>
       <View style={styles.top}>
-        <Text style={styles.toptxt}>Ring in the verification!</Text>
+        <Text style={styles.toptxt}>Provide Your Phone Number!</Text>
       </View>
       <View style={styles.middle}>
         <Text style={styles.middletxt}>
-          We're almost done!{' '}
-          <Text style={{color: Colors.primaryColor}}>Verify</Text> your phone
-          number to jump into the last step.
+        We're almost done! Please provide your phone number to proceed with the final step.
         </Text>
         <InputField
           handleChange={handleEmailChange}

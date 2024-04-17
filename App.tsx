@@ -9,7 +9,7 @@ import Colors from './assets/colors/colors';
 import OnBoardingScreens from './src/screens/onBoarding/onBoardingScreenSwiper';
 import LoginScreen from './src/screens/LoginScreen';
 import ForgotPassScreen from './src/screens/forgotPassword/index';
-import CreateNewPassScreen from './src/screens/forgotPassword/CreateNewPass';
+import CreateNewPassScreen from './src/screens/profileScreens/CreateNewPass';
 import SignupScreen1 from './src/screens/Signup/SignupScreen1';
 import SignupScreen2 from './src/screens/Signup/SignupScreen2';
 import SignupScreen3 from './src/screens/Signup/SignupScreen3';

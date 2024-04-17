@@ -12,9 +12,7 @@ import Fonts from '../../../assets/fonts/fonts';
 
 const SignupScreen4 = ({navigation}: {navigation: any}) => {
   const handleNext = () => {
-    //phone verification
-    // navigation.navigate('SignupScreen5');
-    navigation.navigate('SignupScreen7');
+    navigation.navigate('SignupScreen5');
   };
   const backBtnHandler = () => {
     navigation.pop();

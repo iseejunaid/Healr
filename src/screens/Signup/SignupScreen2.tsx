@@ -13,13 +13,11 @@ import {Categorydata, Expertisedata} from './signupConstantData';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import SelectDropdown from '../../components/SelectDropdown';
-import CheckBox from '@react-native-community/checkbox';
 import { signupConfig } from './signupVariables';
 
 const SignupScreen2 = ({navigation}: {navigation: any}) => {
   const [value, setValue] = useState<string | null>();
   const [value2, setValue2] = useState<string | null>(null);
-  const [isChecked, setIsChecked] = useState(false);
   const [inputData, setInputData] = useState('');
 
   useEffect(() => {
@@ -44,7 +42,6 @@ const SignupScreen2 = ({navigation}: {navigation: any}) => {
       return;
     }
     signupConfig.category = value;
-    signupConfig.isIntern = isChecked;
     signupConfig.expertise = value2;
     signupConfig.expertiseInput = inputData;
     navigation.navigate('SignupScreen3');
@@ -53,7 +50,6 @@ const SignupScreen2 = ({navigation}: {navigation: any}) => {
     navigation.pop();
     setValue(null);
     setValue2(null);
-    setIsChecked(false);
     setInputData('');
   };
 
@@ -79,21 +75,6 @@ const SignupScreen2 = ({navigation}: {navigation: any}) => {
             setValue(item.value);
           }}
         />
-        {value == null ? (
-          <View style={styles.middleChkbox}>
-            <CheckBox
-              disabled={false}
-              tintColors={{
-                true: Colors.primaryColor,
-                false: Colors.secondaryColor,
-              }}
-              value={isChecked}
-              onValueChange={newValue => setIsChecked(newValue)}
-            />
-            <Text style={styles.middleChkboxtxt}>Medical Trainee</Text>
-          </View>
-        ) : null}
-
         {value != null ? (
           <SelectDropdown
             data={Expertisedata(value)}

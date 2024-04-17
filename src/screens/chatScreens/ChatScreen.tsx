@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
-  ScrollView,
+  ScrollView,Text,
   Image,
   TouchableOpacity,
 } from 'react-native';
@@ -14,22 +14,19 @@ import {fetchChats} from './ChatHelper';
 import {ChatData} from './ChatHelper';
 import {auth} from '../../../configs/firebaseConfig';
 import Loader from '../../components/Loader';
+import Fonts from '../../../assets/fonts/fonts';
 
 const ChatScreen: React.FC = ({navigation}: any) => {
   const [searchValue, setSearchValue] = useState('');
   const [chatsData, setChatsData] = useState<ChatData>({});
   const [loading, setLoading] = useState(true);
-  const userId = auth?.currentUser?.uid; 
+  const userId = auth?.currentUser?.uid;
 
   const fetchChatsData = useCallback(async () => {
     const data = await fetchChats();
     setChatsData(data);
+    setLoading(false);
   }, []);
-
-  useEffect(() => {
-    if(Object.keys(chatsData).length !== 0)
-      setLoading(false);
-  }, [chatsData]);
 
   useEffect(() => {
     fetchChatsData();
@@ -58,59 +55,36 @@ const ChatScreen: React.FC = ({navigation}: any) => {
             placeholder="Search"
             width={95}
           />
-          {Object.keys(chatsData).map((key: string) => {
-            const createdAt = chatsData[key].createdAt.toDate();
-            const imgSource = chatsData[key].profilepic ?? '';
-            const timeString = createdAt.toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            });
-            return (
-              <ChatItem
-                key={key}
-                navigation={navigation}
-                receiverId={key}
-                userId={userId ?? ''}
-                profileImageSource={imgSource}
-                userName={chatsData[key].name}
-                message={chatsData[key].text}
-                time={timeString}
-                status={chatsData[key].status}
-              />
-            );
-          })}
+          {Object.keys(chatsData).length > 0 ? (
+            Object.keys(chatsData).map((key: string) => {
+              const createdAt = chatsData[key].createdAt.toDate();
+              const imgSource = chatsData[key].profilepic ?? '';
+              const timeString = createdAt.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              });
+              return (
+                <ChatItem
+                  key={key}
+                  navigation={navigation}
+                  receiverId={key}
+                  userId={userId ?? ''}
+                  profileImageSource={imgSource}
+                  userName={chatsData[key].name}
+                  message={chatsData[key].text}
+                  time={timeString}
+                  status={chatsData[key].status}
+                />
+              );
+            })
+          ) : (
+            <View style={{height:500,width:'100%',alignItems:'center',justifyContent:'center'}}>
+              <Image source={require('../../../assets/images/noChat.png')}/>
+              <Text style={{marginTop:'5%',fontFamily:Fonts.regular,color:Colors.tertiaryColor}}>Ready to Talk? Let's Begin!</Text>
+            </View>
+          )}
         </ScrollView>
       )}
-      {/* <ScrollView style={styles.chatsContainer}>
-        <InputField
-          style={styles.searchInput}
-          handleChange={setSearchValue}
-          value={searchValue}
-          placeholder="Search"
-          width={95}
-        />
-        {Object.keys(chatsData).map((key: string) => {
-          const createdAt = chatsData[key].createdAt.toDate();
-          const imgSource = chatsData[key].profilepic ?? '';
-          const timeString = createdAt.toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          });
-          return (            
-            <ChatItem
-              key={key}
-              navigation={navigation}
-              receiverId={key}
-              userId={userId ?? ""}
-              profileImageSource={imgSource}
-              userName= {chatsData[key].name}
-              message={chatsData[key].text}
-              time={timeString}
-              status={chatsData[key].status}
-            />
-          );
-        })}
-      </ScrollView> */}
       <TouchableOpacity
         style={styles.newChatButton}
         activeOpacity={0.7}

@@ -63,10 +63,10 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
       const userDocRef = await addDoc(usersCollectionRef, {
         uid: user.uid,
         category: signupConfig.category,
-        isIntern: signupConfig.isIntern,
         expertise: signupConfig.expertise,
         expertiseInput: signupConfig.expertiseInput,
         name: `${signupConfig.firstName} ${signupConfig.lastName}`,
+        phnNumber: signupConfig.phnNumber,
         status: 'available',
         about: 'Healing the World!',
       });
@@ -81,7 +81,7 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
         'Signup successful. Please check your email for verification.',
       );
 
-      navigation.pop(5);
+      navigation.pop(6);
 
       setPass('');
       setConfirmPass('');
