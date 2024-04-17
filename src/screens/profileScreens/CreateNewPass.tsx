@@ -32,11 +32,11 @@ const CreateNewPassScreen = ({navigation}: {navigation: any}) => {
       } else {
         const user = auth.currentUser;
         const credential = firebase.auth.EmailAuthProvider.credential(
-          user.email,
+          user?.email ?? '',
           currentPassword,
         );
-        await user.reauthenticateWithCredential(credential);
-        await user.updatePassword(password);
+        await user?.reauthenticateWithCredential(credential);
+        await user?.updatePassword(password);
 
         Alert.alert(
           'Password Updated',
@@ -47,7 +47,7 @@ const CreateNewPassScreen = ({navigation}: {navigation: any}) => {
         setConfirmPassword('');
         navigation.pop();
       }
-    } catch (error) {
+    } catch (error:any) {
       Alert.alert('Error', error.message);
     }
   };

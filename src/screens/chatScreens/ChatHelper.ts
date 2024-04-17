@@ -4,8 +4,10 @@ import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { Image } from 'react-native-compressor';
+import { requestContactsPermission } from '../../../helpers/permissions';
+import Contacts from 'react-native-contacts';
 
-export const sendMedia = async (data: any, receiver: string) => {    
+export const sendMedia = async (data: any, receiver: string) => {
     try {
         const file = data[0];
         const fileType = file.mime.split('/')[0];
@@ -114,7 +116,7 @@ export const fetchChats = async () => {
 
 
 const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
-    const { receiver_id,image,video, text, createdAt, user: { _id: senderId } } = doc.data();
+    const { receiver_id, image, video, text, createdAt, user: { _id: senderId } } = doc.data();
 
     if (role === 'sender') {
         if (chatData[receiver_id]) {
@@ -132,17 +134,17 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
             const name = userData ? userData.name : '';
             const profilepic = userData ? userData.profilepic : '';
             const status = userData ? userData.status : '';
-            
+
             chatData[receiver_id].name = name;
             chatData[receiver_id].profilepic = profilepic;
             chatData[receiver_id].status = status;
-            if(image){
+            if (image) {
                 chatData[receiver_id].text = "you: Image";
             }
-            else if(video){
+            else if (video) {
                 chatData[receiver_id].text = "you: Video";
             }
-            else{
+            else {
                 chatData[receiver_id].text = "you: " + text;
             }
             chatData[receiver_id].createdAt = createdAt;
@@ -150,14 +152,14 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
     } else if (role === 'receiver') {
 
         if (chatData[senderId]) {
-            if (chatData[senderId].createdAt < createdAt) {                
-                if(image){
+            if (chatData[senderId].createdAt < createdAt) {
+                if (image) {
                     chatData[senderId].text = "Image";
                 }
-                else if(video){
+                else if (video) {
                     chatData[senderId].text = "Video";
                 }
-                else{
+                else {
                     chatData[senderId].text = text;
                 }
                 chatData[senderId].createdAt = createdAt;
@@ -180,13 +182,13 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
             chatData[senderId].name = name;
             chatData[senderId].profilepic = profilepic;
             chatData[senderId].status = status;
-            if(image){
+            if (image) {
                 chatData[senderId].text = "Image";
             }
-            else if(video){
+            else if (video) {
                 chatData[senderId].text = "Video";
             }
-            else{
+            else {
                 chatData[senderId].text = text;
             }
             chatData[senderId].createdAt = createdAt;
@@ -217,4 +219,55 @@ const fetchUser = async (id: string) => {
 
 const fetchUserId = async () => {
     return await AsyncStorage.getItem('uid') ?? '';
+};
+
+export const fetchContacts = async () => {
+    const dbContacts = await fetchDbContacts();
+    const localContacts = await fetchLocalContacts();
+    
+    const HealrContacts = dbContacts.filter(dbContact => 
+        localContacts.some(localContact => localContact.phoneNumber === dbContact.phnNumber)
+    );
+    const invitableContacts = localContacts.filter((contact) => 
+        !dbContacts.some(dbContact => dbContact.phnNumber === contact.phoneNumber))
+    
+    return { HealrContacts, invitableContacts };
+};
+
+const fetchDbContacts = async () => {
+    const dbContacts = collection(db, 'users');
+    try {
+        const querySnapshot = await getDocs(dbContacts);
+        const contacts = querySnapshot.docs.map(doc => ({
+            name: doc.data().name,
+            phnNumber: doc.data().phnNumber,
+            expertise: doc.data().expertise,
+            expertiseInput: doc.data().expertiseInput ? doc.data().expertiseInput : null,
+            photoURL: doc.data().photoURL ? doc.data().photoURL : null,
+        }));
+        return contacts;
+    } catch (error) {
+        console.error('Error retrieving phone numbers: ', error);        
+        return [];
+    }
+};
+
+const fetchLocalContacts = async () => {
+    try {
+        const granted = await requestContactsPermission();
+        if (granted) {
+            const contacts = await Contacts.getAll();
+            const localContacts = contacts.map((contact) => ({
+                name: contact.displayName,
+                phoneNumber: contact.phoneNumbers.length > 0 ? contact.phoneNumbers[0].number : '',
+            }));
+            return localContacts;
+        } else {
+            console.log('Contacts permission denied');
+            return [];
+        }
+    } catch (error) {
+        console.error('Permission error: ', error);
+        return [];
+    }
 };

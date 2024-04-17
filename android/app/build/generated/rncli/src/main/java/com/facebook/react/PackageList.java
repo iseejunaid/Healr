@@ -23,6 +23,8 @@ import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
 import com.dooboolab.audiorecorderplayer.RNAudioRecorderPlayerPackage;
 // react-native-compressor
 import com.reactnativecompressor.CompressorPackage;
+// react-native-contacts
+import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 // react-native-get-random-values
@@ -88,6 +90,7 @@ public class PackageList {
       new ReactNativeFirebaseAuthPackage(),
       new RNAudioRecorderPlayerPackage(),
       new CompressorPackage(),
+      new ReactNativeContacts(),
       new RNGestureHandlerPackage(),
       new RNGetRandomValuesPackage(),
       new PickerPackage(),

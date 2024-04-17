@@ -23,7 +23,7 @@ public class MainApplication extends Application implements ReactApplication {
             @Override
             protected List<ReactPackage> getPackages() {
                 List<ReactPackage> packages = new PackageList(this).getPackages();
-                packages.add(new ReactVideoPackage());  // Add this line
+                packages.add(new ReactVideoPackage());
                 return packages;
             }
 

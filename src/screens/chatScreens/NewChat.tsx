@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -11,9 +11,31 @@ import Colors from '../../../assets/colors/colors';
 import InputField from '../../components/InputField';
 import Fonts from '../../../assets/fonts/fonts';
 import ContactItem from '../../components/ContactItem';
+import {fetchContacts} from './ChatHelper';
 
 const NewChat = ({navigation}: any) => {
   const [search, setSearch] = useState(false);
+  const [healerContacts, setHealerContacts] = useState<
+    {
+        photoURL: any;name: any; phnNumber: any; expertise: any; expertiseInput: any
+}[]
+  >([]);
+  const [invitableContacts, setInvitableContacts] = useState<
+    {name: string; phoneNumber: string}[]
+  >([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const {HealrContacts, invitableContacts} = await fetchContacts();
+      setHealerContacts(HealrContacts);
+      setInvitableContacts(invitableContacts);
+    };
+
+    fetchData();
+    console.log(healerContacts);
+    
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -36,20 +58,40 @@ const NewChat = ({navigation}: any) => {
         </View>
       )}
       <ScrollView style={styles.contactListContainer}>
-        <ContactItem
-            navigation={navigation}
-            userName="John Doe"
-            expertise="React Native Developer"
-            userId='1'
-            receiverId='2'
-        />
-        <ContactItem
-            navigation={navigation}
-            userName="John Doe"
-            expertise="React Native Developer"
-            userId='1'
-            receiverId='2'
-        />
+        {healerContacts.length > 0 && (
+          <>
+            <View style={styles.heading}>
+              <Text style={styles.headingText}>Contacts on Healr</Text>
+            </View>
+            {healerContacts.map((contact, index) => (
+              <ContactItem
+                key={index}
+                navigation={navigation}
+                profileImageSource={contact.photoURL}
+                userName={contact?.name || 'Unknown'}
+                expertise={contact?.expertise || 'N/A'}
+                userId=" /* Update this with appropriate user ID */ "
+                receiverId=" /* Update this with appropriate receiver ID */ "
+              />
+            ))}
+          </>
+        )}
+        {invitableContacts.length > 0 && (
+          <>
+            <View style={styles.heading}>
+              <Text style={styles.headingText}>Invite to Healr</Text>
+            </View>
+            {invitableContacts.map((contact, index) => (
+              <ContactItem
+                key={index}
+                navigation={navigation}
+                userName={contact?.name || 'Unknown'}
+                expertise='Invite'
+                invitable
+              />
+            ))}
+          </>
+        )}
       </ScrollView>
     </View>
   );
@@ -87,6 +129,16 @@ const styles = StyleSheet.create({
     marginTop: -5,
   },
   contactListContainer: {
-    height:'92%',
+    height: '92%',
+  },
+  heading: {
+    paddingLeft: 25,
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  headingText: {
+    fontFamily: Fonts.regular,
+    fontSize: 14,
+    color: Colors.quadraryColor,
   },
 });

@@ -22,3 +22,20 @@ export const requestCameraPermission = async () => {
     return false;
   }
 };
+
+export const requestContactsPermission = async () => {
+  try {
+      const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+          {
+              title: 'Contacts',
+              message: 'This app would like to view your contacts.',
+              buttonPositive: 'Please accept bare mortal',
+          }
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+  } catch (error) {
+      console.error('Permission error: ', error);
+      return false;
+  }
+};

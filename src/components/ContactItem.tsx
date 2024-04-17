@@ -6,10 +6,11 @@ import Colors from '../../assets/colors/colors';
 interface ContactItemProps {
   navigation: any;
   profileImageSource?: any;
-  userId: string;
-  receiverId: string;
+  userId?: string;
+  receiverId?: string;
   userName: string;
   expertise: string;
+  invitable?: boolean;
 }
 
 const ContactItem: React.FC<ContactItemProps> = ({
@@ -19,8 +20,8 @@ const ContactItem: React.FC<ContactItemProps> = ({
   receiverId,
   userName,
   expertise,
+  invitable,
 }) => {
-  
   const onPress = () => {
     navigation.navigate('IndividualChat', {
       userName: userName,
@@ -28,8 +29,7 @@ const ContactItem: React.FC<ContactItemProps> = ({
       receiverId: receiverId,
       userId: userId,
     });
-  };
-
+  };  
   return (
     <TouchableOpacity style={styles.contactItemContainer} onPress={onPress}>
       {profileImageSource ? (
@@ -46,7 +46,7 @@ const ContactItem: React.FC<ContactItemProps> = ({
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text
-            style={styles.expertiseText}
+            style={invitable ? styles.inviteText : styles.expertiseText}
             numberOfLines={1}
             ellipsizeMode="tail">
             {expertise}
@@ -91,5 +91,13 @@ const styles = StyleSheet.create({
     paddingLeft: 2,
     fontSize: 14,
     lineHeight: 18,
-    },
+  },
+  inviteText: {
+    fontFamily: Fonts.semiBold,
+    color: Colors.primaryColor,
+    paddingTop: 2,
+    paddingLeft: 2,
+    fontSize: 14,
+    lineHeight: 18,
+  },
 });
