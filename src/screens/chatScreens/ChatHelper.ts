@@ -8,7 +8,6 @@ import { requestContactsPermission } from '../../../helpers/permissions';
 import Contacts from 'react-native-contacts';
 import RNFS from 'react-native-fs';
 
-
 export const sendMedia = async (data: any, receiver: string) => {
     try {
         const file = data[0];
@@ -20,11 +19,16 @@ export const sendMedia = async (data: any, receiver: string) => {
             resizedFile = resizedImage;
         } else if (fileType === 'video') {
             resizedFile = file.path;
+        } else if (fileType === 'audio') {
+            resizedFile = file.path;
         }
-
-        const response = await fetch(resizedFile);
-        const blob = await response.blob();
-
+        var blob = null;
+        if (fileType !== 'audio') {
+            const response = await fetch(resizedFile);
+            blob = await response.blob();
+        }else{
+            blob = new Blob([resizedFile], { type: 'audio/mp3' });
+        }
         const timestamp = Date.now();
         const storageRef = ref(storage, `media/${timestamp}`);
         const uploadTask = uploadBytesResumable(storageRef, blob);
@@ -52,7 +56,7 @@ export const sendMedia = async (data: any, receiver: string) => {
 
 export const sendDocument = async (data: any, receiver: string) => {
     console.log(data[0]);
-    
+
     try {
         const file = data[0];
         const fileType = 'document';
@@ -74,7 +78,7 @@ export const sendDocument = async (data: any, receiver: string) => {
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    const msg = composeMsg(downloadURL, receiver, fileType,data[0].name);
+                    const msg = composeMsg(downloadURL, receiver, fileType, data[0].name);
                     db.collection('chats').doc(msg._id).set(msg);
                 });
             }
@@ -84,7 +88,7 @@ export const sendDocument = async (data: any, receiver: string) => {
     }
 };
 
-export const composeMsg = (text: string, receiver: string, type: string,name?:string) => {
+export const composeMsg = (text: string, receiver: string, type: string, name?: string) => {
     const createdAt = new Date();
     switch (type) {
         case 'image':
@@ -111,10 +115,19 @@ export const composeMsg = (text: string, receiver: string, type: string,name?:st
                 receiver_id: receiver,
                 createdAt,
                 document: text,
-                documentName:name,
+                documentName: name,
                 user: { _id: auth?.currentUser?.uid },
             };
             return docMsg;
+        case 'audio':
+            const audioMsg = {
+                _id: uuidv4(),
+                receiver_id: receiver,
+                createdAt,
+                audio: text,
+                user: { _id: auth?.currentUser?.uid },
+            };
+            return audioMsg;
         default: {
             const msg = {
                 _id: uuidv4(),

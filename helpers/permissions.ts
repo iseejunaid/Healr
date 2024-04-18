@@ -41,18 +41,29 @@ export const requestContactsPermission = async () => {
 };
 
 export const requestaudioPermission = async () => {
-  try {
-    const granted = await PermissionsAndroid.request(
+  const atLeastAndroid13 = Platform.OS === 'android' && Platform.Version >= 33;
+  
+  const permissions = atLeastAndroid13
+    ? [PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, PermissionsAndroid.PERMISSIONS.READ_MEDIA_AUDIO]
+    : [
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-      {
-        title: 'Contacts',
-        message: 'This app would like to access your mic.',
-        buttonPositive: 'Please accept bare mortal',
-      }
+    ];
+
+  try {
+    const grants = await PermissionsAndroid.requestMultiple(permissions);
+    const allPermissionsGranted = Object.values(grants).every(
+      (result) => result === PermissionsAndroid.RESULTS.GRANTED
     );
-    return granted === PermissionsAndroid.RESULTS.GRANTED;
-  } catch (error) {
-    console.error('Permission error: ', error);
+
+    if (!allPermissionsGranted) {
+      console.log('All required permissions not granted');
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.warn(err);
     return false;
   }
 };

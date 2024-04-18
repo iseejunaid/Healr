@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat';
-import CustomInputToobar from './CustomInputToobar';
-import {renderCustomBubble} from './ChatBubble';
+import CustomInputToobar from './chatComponents/CustomInputToobar';
+import {renderCustomBubble} from './chatComponents/ChatBubble';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import 'react-native-get-random-values';
@@ -15,7 +15,9 @@ import {
 } from 'firebase/firestore';
 import {db} from '../../../configs/firebaseConfig';
 import {composeMsg, sendDocument, sendMedia} from './ChatHelper';
-import Video from 'react-native-video';
+import RenderVideo from './chatComponents/RenderVideo';
+import RenderCustomView from './chatComponents/RenderCustomView';
+import RenderAudio from './chatComponents/RenderAudio';
 
 interface Message {
   _id: string;
@@ -40,7 +42,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
       const msg = composeMsg(messageText, receiverId, 'text');
       setText('');
       db.collection('chats').doc(msg._id).set(msg);
-    } else if (type === 'media') {
+    } else if (type === 'media') {      
       sendMedia(messages, receiverId);
     }else if (type === 'document') {
       sendDocument(messages, receiverId);
@@ -64,6 +66,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           text: doc.data().text,
           image: doc.data().image,
           video: doc.data().video,
+          audio: doc.data().audio,
           document: doc.data().document,
           documentName: doc.data().documentName,
           createdAt: doc.data().createdAt.toDate(),
@@ -81,34 +84,17 @@ const IndividualChatScreen = ({navigation, route}: any) => {
     return <CustomInputToobar text={text} setText={setText} onSend={onSend} />;
   };
 
-  const renderVideo = (props: any) => {
-    const {currentMessage} = props;
-    return (
-      <View>
-        <Video
-          source={{uri: currentMessage?.video}}
-          style={{height: 200, width: 200}}
-          controls={true}
-        />
-      </View>
-    );
-  };
+  const renderVideo = (props: any) => {    
+    return <RenderVideo {...props} />;
+  }
 
   const renderCustomView = (props: any) => {
-    const {currentMessage} = props;
-    
-    if (currentMessage?.document) {      
-      return (
-        <View style={{padding:10,justifyContent:'center',alignItems:'flex-start'}}>
-        <Image
-          source={require('../../../assets/images/individualChatDoc.png')}
-        />
-        <Text style={{color:Colors.secondaryColor,paddingTop:10}}>{currentMessage.documentName}</Text>
-      </View>
-      );
-    }
-    return null;
+    return <RenderCustomView {...props} />;
   };
+
+  const renderAudio = (props: any) => {
+    return <RenderAudio {...props} />;
+  }
 
   return (
     <View style={{flex: 1}}>
@@ -164,6 +150,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
         }}
         renderMessageVideo={renderVideo}
         renderCustomView={renderCustomView}
+        renderMessageAudio={renderAudio}
         renderAvatar={null}
         renderBubble={renderCustomBubble}
         messages={messages}

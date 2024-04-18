@@ -19,8 +19,6 @@ import com.reactnativecommunity.checkbox.ReactCheckBoxPackage;
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 // @react-native-firebase/auth
 import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
-// react-native-audio-recorder-player
-import com.dooboolab.audiorecorderplayer.RNAudioRecorderPlayerPackage;
 // react-native-compressor
 import com.reactnativecompressor.CompressorPackage;
 // react-native-contacts
@@ -41,6 +39,10 @@ import com.BV.LinearGradient.LinearGradientPackage;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 // react-native-screens
 import com.swmansion.rnscreens.RNScreensPackage;
+// react-native-sound
+import com.zmxv.RNSound.RNSoundPackage;
+// react-native-sound-recorder
+import com.kevinresol.react_native_sound_recorder.RNSoundRecorderPackage;
 // react-native-video
 import com.brentvatne.react.ReactVideoPackage;
 
@@ -92,7 +94,6 @@ public class PackageList {
       new ReactCheckBoxPackage(),
       new ReactNativeFirebaseAppPackage(),
       new ReactNativeFirebaseAuthPackage(),
-      new RNAudioRecorderPlayerPackage(),
       new CompressorPackage(),
       new ReactNativeContacts(),
       new RNDocumentPickerPackage(),
@@ -103,6 +104,8 @@ public class PackageList {
       new LinearGradientPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
+      new RNSoundPackage(),
+      new RNSoundRecorderPackage(),
       new ReactVideoPackage()
     ));
   }
