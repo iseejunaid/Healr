@@ -45,6 +45,8 @@ import com.zmxv.RNSound.RNSoundPackage;
 import com.kevinresol.react_native_sound_recorder.RNSoundRecorderPackage;
 // react-native-video
 import com.brentvatne.react.ReactVideoPackage;
+// rn-fetch-blob
+import com.RNFetchBlob.RNFetchBlobPackage;
 
 public class PackageList {
   private Application application;
@@ -106,7 +108,8 @@ public class PackageList {
       new RNScreensPackage(),
       new RNSoundPackage(),
       new RNSoundRecorderPackage(),
-      new ReactVideoPackage()
+      new ReactVideoPackage(),
+      new RNFetchBlobPackage()
     ));
   }
 }

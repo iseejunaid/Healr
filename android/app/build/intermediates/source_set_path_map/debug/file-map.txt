@@ -29,15 +29,15 @@ com.healr.app-material-1.9.0-27 C:\Users\junai\.gradle\caches\transforms-3\9af53
 com.healr.app-appcompat-1.5.0-28 C:\Users\junai\.gradle\caches\transforms-3\a2936e2d728a0090bff53c7b068805d0\transformed\appcompat-1.5.0\res
 com.healr.app-jetified-AndroidLame-kotlin-v0.0.1-29 C:\Users\junai\.gradle\caches\transforms-3\a924277cd2535c7a0246d4fa1d866b4e\transformed\jetified-AndroidLame-kotlin-v0.0.1\res
 com.healr.app-jetified-lifecycle-process-2.4.1-30 C:\Users\junai\.gradle\caches\transforms-3\add8748153c81371ec6beac3b3a624da\transformed\jetified-lifecycle-process-2.4.1\res
-com.healr.app-jetified-annotation-experimental-1.1.0-31 C:\Users\junai\.gradle\caches\transforms-3\d451ecc932c0cec4582a683e5dd8100e\transformed\jetified-annotation-experimental-1.1.0\res
-com.healr.app-jetified-exoplayer-ui-2.13.3-32 C:\Users\junai\.gradle\caches\transforms-3\da55d5f9c92287ba73e525863cd24987\transformed\jetified-exoplayer-ui-2.13.3\res
-com.healr.app-jetified-emoji2-1.2.0-33 C:\Users\junai\.gradle\caches\transforms-3\dfd315444c5e010cf3f48c1ecae621af\transformed\jetified-emoji2-1.2.0\res
-com.healr.app-coordinatorlayout-1.2.0-34 C:\Users\junai\.gradle\caches\transforms-3\e29d2bacd3c982e4fe35df72dad26fe4\transformed\coordinatorlayout-1.2.0\res
-com.healr.app-jetified-appcompat-resources-1.5.0-35 C:\Users\junai\.gradle\caches\transforms-3\e5d1bcffb8f6107b6d6f93527d7bea85\transformed\jetified-appcompat-resources-1.5.0\res
-com.healr.app-media-1.2.1-36 C:\Users\junai\.gradle\caches\transforms-3\eaf823334fa75214118d7a094757a77b\transformed\media-1.2.1\res
-com.healr.app-jetified-lifecycle-viewmodel-savedstate-2.5.0-37 C:\Users\junai\.gradle\caches\transforms-3\ee9fa5067192c21a09ece0e38a7ba46f\transformed\jetified-lifecycle-viewmodel-savedstate-2.5.0\res
-com.healr.app-jetified-core-ktx-1.8.0-38 C:\Users\junai\.gradle\caches\transforms-3\f208e9ac646f8c61b42faa6f6f366f55\transformed\jetified-core-ktx-1.8.0\res
-com.healr.app-jetified-react-android-0.72.7-debug-39 C:\Users\junai\.gradle\caches\transforms-3\f2b9e11f53d62064f6302ae1e098cbf1\transformed\jetified-react-android-0.72.7-debug\res
+com.healr.app-jetified-react-android-0.72.13-debug-31 C:\Users\junai\.gradle\caches\transforms-3\b74c96b5d06b2dccd3bd846be7809976\transformed\jetified-react-android-0.72.13-debug\res
+com.healr.app-jetified-annotation-experimental-1.1.0-32 C:\Users\junai\.gradle\caches\transforms-3\d451ecc932c0cec4582a683e5dd8100e\transformed\jetified-annotation-experimental-1.1.0\res
+com.healr.app-jetified-exoplayer-ui-2.13.3-33 C:\Users\junai\.gradle\caches\transforms-3\da55d5f9c92287ba73e525863cd24987\transformed\jetified-exoplayer-ui-2.13.3\res
+com.healr.app-jetified-emoji2-1.2.0-34 C:\Users\junai\.gradle\caches\transforms-3\dfd315444c5e010cf3f48c1ecae621af\transformed\jetified-emoji2-1.2.0\res
+com.healr.app-coordinatorlayout-1.2.0-35 C:\Users\junai\.gradle\caches\transforms-3\e29d2bacd3c982e4fe35df72dad26fe4\transformed\coordinatorlayout-1.2.0\res
+com.healr.app-jetified-appcompat-resources-1.5.0-36 C:\Users\junai\.gradle\caches\transforms-3\e5d1bcffb8f6107b6d6f93527d7bea85\transformed\jetified-appcompat-resources-1.5.0\res
+com.healr.app-media-1.2.1-37 C:\Users\junai\.gradle\caches\transforms-3\eaf823334fa75214118d7a094757a77b\transformed\media-1.2.1\res
+com.healr.app-jetified-lifecycle-viewmodel-savedstate-2.5.0-38 C:\Users\junai\.gradle\caches\transforms-3\ee9fa5067192c21a09ece0e38a7ba46f\transformed\jetified-lifecycle-viewmodel-savedstate-2.5.0\res
+com.healr.app-jetified-core-ktx-1.8.0-39 C:\Users\junai\.gradle\caches\transforms-3\f208e9ac646f8c61b42faa6f6f366f55\transformed\jetified-core-ktx-1.8.0\res
 com.healr.app-core-1.8.0-40 C:\Users\junai\.gradle\caches\transforms-3\f91bddac5c5a1ea6f3ed77efc5a301a8\transformed\core-1.8.0\res
 com.healr.app-pngs-41 E:\FYP LATEST\Healr\android\app\build\generated\res\pngs\debug
 com.healr.app-res-42 E:\FYP LATEST\Healr\android\app\build\generated\res\processDebugGoogleServices
@@ -52,17 +52,17 @@ com.healr.app-packaged_res-50 E:\FYP LATEST\Healr\node_modules\@react-native-asy
 com.healr.app-packaged_res-51 E:\FYP LATEST\Healr\node_modules\@react-native-community\checkbox\android\build\intermediates\packaged_res\debug
 com.healr.app-packaged_res-52 E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\packaged_res\debug
 com.healr.app-packaged_res-53 E:\FYP LATEST\Healr\node_modules\@react-native-firebase\auth\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-54 E:\FYP LATEST\Healr\node_modules\react-native-audio-recorder-player\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-55 E:\FYP LATEST\Healr\node_modules\react-native-audio\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-56 E:\FYP LATEST\Healr\node_modules\react-native-compressor\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-57 E:\FYP LATEST\Healr\node_modules\react-native-contacts\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-58 E:\FYP LATEST\Healr\node_modules\react-native-document-picker\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-59 E:\FYP LATEST\Healr\node_modules\react-native-fs\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-60 E:\FYP LATEST\Healr\node_modules\react-native-gesture-handler\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-61 E:\FYP LATEST\Healr\node_modules\react-native-get-random-values\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-62 E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-63 E:\FYP LATEST\Healr\node_modules\react-native-linear-gradient\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-64 E:\FYP LATEST\Healr\node_modules\react-native-safe-area-context\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-65 E:\FYP LATEST\Healr\node_modules\react-native-screens\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-66 E:\FYP LATEST\Healr\node_modules\react-native-sound-player\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-67 E:\FYP LATEST\Healr\node_modules\react-native-video\android-exoplayer\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-54 E:\FYP LATEST\Healr\node_modules\react-native-compressor\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-55 E:\FYP LATEST\Healr\node_modules\react-native-contacts\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-56 E:\FYP LATEST\Healr\node_modules\react-native-document-picker\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-57 E:\FYP LATEST\Healr\node_modules\react-native-fs\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-58 E:\FYP LATEST\Healr\node_modules\react-native-gesture-handler\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-59 E:\FYP LATEST\Healr\node_modules\react-native-get-random-values\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-60 E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-61 E:\FYP LATEST\Healr\node_modules\react-native-linear-gradient\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-62 E:\FYP LATEST\Healr\node_modules\react-native-safe-area-context\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-63 E:\FYP LATEST\Healr\node_modules\react-native-screens\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-64 E:\FYP LATEST\Healr\node_modules\react-native-sound-recorder\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-65 E:\FYP LATEST\Healr\node_modules\react-native-sound\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-66 E:\FYP LATEST\Healr\node_modules\react-native-video\android-exoplayer\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-67 E:\FYP LATEST\Healr\node_modules\rn-fetch-blob\android\build\intermediates\packaged_res\debug

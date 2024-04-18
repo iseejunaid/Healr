@@ -26,7 +26,7 @@ export const sendMedia = async (data: any, receiver: string) => {
         if (fileType !== 'audio') {
             const response = await fetch(resizedFile);
             blob = await response.blob();
-        }else{
+        } else {
             blob = new Blob([resizedFile], { type: 'audio/mp3' });
         }
         const timestamp = Date.now();
@@ -175,7 +175,7 @@ export const fetchChats = async () => {
 
 
 const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
-    const { receiver_id, image, video, text, createdAt, user: { _id: senderId } } = doc.data();
+    const { receiver_id, image, video, audio, document, text, createdAt, user: { _id: senderId } } = doc.data();
 
     if (role === 'sender') {
         if (chatData[receiver_id]) {
@@ -203,6 +203,12 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
             else if (video) {
                 chatData[receiver_id].text = "you: Video";
             }
+            else if (audio) {
+                chatData[receiver_id].text = "you: Audio";
+            }
+            else if (document) {
+                chatData[receiver_id].text = "you: Document";
+            }
             else {
                 chatData[receiver_id].text = "you: " + text;
             }
@@ -217,6 +223,12 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
                 }
                 else if (video) {
                     chatData[senderId].text = "Video";
+                }
+                else if (audio) {
+                    chatData[senderId].text = "Audio";
+                }
+                else if (document) {
+                    chatData[senderId].text = "Document";
                 }
                 else {
                     chatData[senderId].text = text;
@@ -246,6 +258,12 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
             }
             else if (video) {
                 chatData[senderId].text = "Video";
+            } 
+            else if (audio) {
+                chatData[senderId].text = "Audio";
+            }
+            else if (document) {
+                chatData[senderId].text = "Document";
             }
             else {
                 chatData[senderId].text = text;

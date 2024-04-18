@@ -1,7 +1,8 @@
 import RNFS from 'react-native-fs';
 import { db, storage } from '../../../configs/firebaseConfig';
 import { fetchUserId } from '../chatScreens/ChatHelper';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
+import RNFetchBlob from 'rn-fetch-blob';
 
 export const uploadFile = async (data: any) => {
     const uid = await fetchUserId();
@@ -22,12 +23,13 @@ export const uploadFile = async (data: any) => {
         }
         const date = new Date().toISOString();
         const name = file.name;
+        const externsion = name.split('.').pop();
         const uri = file.uri;
         const timestamp = Date.now();
         const filePath = `${RNFS.DocumentDirectoryPath}/${file.name}`;
 
         const uploadFileToStorage = async (localPath: string, fileName: string) => {
-            const reference = storage.ref(`HealrFiles/${timestamp}`);
+            const reference = storage.ref(`HealrFiles/${timestamp}` + `.${externsion}`);
             const response = await fetch(`file://${localPath}`);
             const blob = await response.blob();
             try {
@@ -88,7 +90,75 @@ export const fetchFiles = async () => {
     }
 };
 
-export const formatDate = (date:Date) => {
+export const formatDate = (date: Date) => {
     const options = { day: '2-digit', month: 'short', year: 'numeric' };
     return new Date(date).toLocaleDateString('en-GB', options);
 }
+
+export const downloadFile = async (fileName: string,url: string,fileExtension:string, inform?: boolean) => {
+    try {
+        const { dirs } = RNFetchBlob.fs;
+        const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
+        const name = fileName;
+
+        const filePath = `${dirToSave}/${name}`;
+        if (inform) {
+            Alert.alert('Download Started', 'Your file is being downloaded to your phone. You will be notified once the download is complete.');
+        }
+        const res = await RNFetchBlob.config({
+            fileCache: true,
+            addAndroidDownloads: {
+                useDownloadManager: true,
+                notification: true,
+                path: filePath,
+                description: 'File downloaded by user',
+            },
+        }).fetch('GET', url);
+        if (!inform) {
+            openFile(filePath, fileExtension);
+        }
+    } catch (error) {
+        console.error('An error occurred while downloading the file:', error);
+    }
+};
+
+const getMIMEType = (fileExtension: string) => {
+    switch (fileExtension) {
+        case 'pdf':
+            return 'application/pdf';
+        case 'jpg':
+        case 'jpeg':
+            return 'image/jpeg';
+        case 'png':
+            return 'image/png';
+        case 'gif':
+            return 'image/gif';
+        case 'mp4':
+            return 'video/mp4';
+        case 'avi':
+            return 'video/x-msvideo';
+        case 'mov':
+            return 'video/quicktime';
+        default:
+            return `application/${fileExtension}`;
+    }
+};
+
+const openFile = (filePath:string, fileExtension:string) => {
+    console.log('Opening file:', filePath);
+
+    
+    const mime = getMIMEType(fileExtension);
+
+    if (Platform.OS === 'ios') {
+      RNFetchBlob.ios.openDocument(filePath);
+    } else {
+      RNFetchBlob.android.actionViewIntent(filePath, mime)
+        .then(() => {
+          console.log('File opened successfully');
+        })
+        .catch((error) => {
+          console.error('Error opening file:', error);
+        });
+    }
+  };

@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: 8,
     elevation: 2,
+    zIndex: 1,
   },
   modalContent: {
     alignItems: 'flex-start',

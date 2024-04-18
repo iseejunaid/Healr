@@ -99,9 +99,6 @@ const ChatItem: React.FC<ChatItemProps> = ({
       case 'Delete':
         await deleteChat(receiverId, userId);
         break;
-      case 'Clear chat':
-        console.log('Clear chat');
-        break;
       case 'Block':
         console.log('Block');
         break;
