@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     elevation: 4,
     alignSelf: 'center',
     width: '90%',
+    marginBottom:20
   },
   newChatButton: {
     position: 'absolute',

@@ -5,7 +5,8 @@ import Colors from '../../../assets/colors/colors';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import OptionsModal from '../../components/OptionsModal';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import { requestCameraPermission } from '../../../helpers/permissions';
+import {requestCameraPermission, requestaudioPermission} from '../../../helpers/permissions';
+import DocumentPicker from 'react-native-document-picker';
 
 const customtInputToolbar = ({
   text,
@@ -14,27 +15,29 @@ const customtInputToolbar = ({
 }: {
   text: string;
   setText: (val: string) => void;
-  onSend: (mes: any,type: string) => void;
+  onSend: (mes: any, type: string) => void;
 }) => {
   const audioRecorderPlayer = new AudioRecorderPlayer();
   const [modalVisible, setModalVisible] = useState(false);
+  const [placeholder, setPlaceholder] = useState('Message');
 
   const startRecording = async () => {
-    // const audioPath = await audioRecorderPlayer.startRecorder();
-    console.log('Recording started');
-    // console.log('Recording started', audioPath);
+    if(await requestaudioPermission() === false) return;
+    /* const audioPath = await audioRecorderPlayer.startRecorder();
+    setPlaceholder('Recording.....');
+    console.log('Recording started', audioPath); */
   };
 
   const stopRecording = async () => {
-    // const audioPath = await audioRecorderPlayer.stopRecorder();
-    // console.log('Recording stopped', audioPath);
-    console.log('Recording stopped');
+    /* const audioPath = await audioRecorderPlayer.stopRecorder();
+    console.log('Recording stopped', audioPath); */
+    setPlaceholder('Message');
   };
 
-  const cancelRecording = async () => {
+  /* const cancelRecording = async () => {
     // await audioRecorderPlayer.stopRecorder();
     console.log('Recording cancelled');
-  };
+  }; */
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -43,32 +46,35 @@ const customtInputToolbar = ({
   const handleOptionClick = async (option: any) => {
     switch (option) {
       case 'Camera':
-        const permission = await requestCameraPermission();        
-        if(permission){
+        const permission = await requestCameraPermission();
+        if (permission) {
           ImageCropPicker.openCamera({
             mediaType: 'any',
           })
-          .then(data => {
-            const formattedData = {
-              path: data.path,
-              mime: data.mime,
-              size: data.size,
-              width: data.width,
-              height: data.height,
-            };
-            onSend([formattedData], 'media');
-          })
+            .then(data => {
+              const formattedData = {
+                path: data.path,
+                mime: data.mime,
+                size: data.size,
+                width: data.width,
+                height: data.height,
+              };
+              onSend([formattedData], 'media');
+            })
             .catch(err => {
               console.log(err);
             });
-        }else{
-          Alert.alert('Permission required', 'Please allow camera permission to use this feature');
+        } else {
+          Alert.alert(
+            'Permission required',
+            'Please allow camera permission to use this feature',
+          );
         }
         break;
       case 'Gallery':
         ImageCropPicker.openPicker({
           multiple: true,
-          mediaType: 'any',        
+          mediaType: 'any',
         })
           .then(data => {
             onSend(data, 'media');
@@ -78,8 +84,36 @@ const customtInputToolbar = ({
           });
         break;
       case 'Documents':
-        console.log('Documents clicked');
+        try {
+          DocumentPicker.pick({
+            allowMultiSelection: true,
+            type: [DocumentPicker.types.allFiles],
+          })
+          .then(data => {
+            console.log(data);
+            
+            const formattedDataArray = data.map(document => ({
+              uri: document.uri,
+              type: document.type,
+              name: document.name,
+            }));
+  
+            console.log('Documents picked:', formattedDataArray);
+  
+            onSend(formattedDataArray, 'document');
+          })
+          .catch(err => {
+            if (DocumentPicker.isCancel(err)) {
+              console.log('User cancelled the picker');
+            } else {
+              console.log(err);
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
         break;
+  
       case 'Healr files':
         console.log('Healr files clicked');
         break;
@@ -97,7 +131,10 @@ const customtInputToolbar = ({
     {text: 'Gallery', image: require('../../../assets/images/gallery.png')},
     {text: 'Documents', image: require('../../../assets/images/documents.png')},
     {text: 'Healr files', image: require('../../../assets/images/files.png')},
-    {text: 'Create dossier', image: require('../../../assets/images/createDossier.png')},
+    {
+      text: 'Create dossier',
+      image: require('../../../assets/images/createDossier.png'),
+    },
   ];
 
   return (
@@ -106,7 +143,7 @@ const customtInputToolbar = ({
         <Image source={require('../../../assets/images/chatOptions.png')} />
       </TouchableOpacity>
       <Composer
-        placeholder="Message"
+        placeholder={placeholder}
         text={text}
         onTextChanged={val => {
           setText(val);
@@ -125,9 +162,10 @@ const customtInputToolbar = ({
           <TouchableOpacity
             style={{paddingTop: 6}}
             // onPressIn={startRecording}
-            // onPressOut={stopRecording}
+            onPressOut={stopRecording}
             onLongPress={startRecording}
-            onPress={cancelRecording}>
+            /* onPress={cancelRecording} */
+            >
             <Image
               source={require('../../../assets/images/recordMessage.png')}
             />
@@ -160,15 +198,15 @@ const styles = StyleSheet.create({
     height: 45,
     backgroundColor: Colors.secondaryWhite,
     borderRadius: 6,
-    color:'black'
+    color: 'black',
   },
   sendBtnContainer: {
     marginLeft: 10,
     paddingBottom: 3,
   },
-  modal:{
+  modal: {
     backgroundColor: Colors.tertiaryColor,
     bottom: 50,
     left: 5,
-  }
+  },
 });

@@ -1,6 +1,6 @@
-import { PermissionsAndroid } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 
-export const requestCameraPermission = async () => {    
+export const requestCameraPermission = async () => {
   try {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -11,7 +11,7 @@ export const requestCameraPermission = async () => {
         buttonNegative: 'Cancel',
         buttonPositive: 'OK',
       },
-    );    
+    );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       return true;
     } else {
@@ -25,17 +25,34 @@ export const requestCameraPermission = async () => {
 
 export const requestContactsPermission = async () => {
   try {
-      const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
-          {
-              title: 'Contacts',
-              message: 'This app would like to view your contacts.',
-              buttonPositive: 'Please accept bare mortal',
-          }
-      );
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+      {
+        title: 'Contacts',
+        message: 'This app would like to view your contacts.',
+        buttonPositive: 'Please accept bare mortal',
+      }
+    );
+    return granted === PermissionsAndroid.RESULTS.GRANTED;
   } catch (error) {
-      console.error('Permission error: ', error);
-      return false;
+    console.error('Permission error: ', error);
+    return false;
+  }
+};
+
+export const requestaudioPermission = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      {
+        title: 'Contacts',
+        message: 'This app would like to access your mic.',
+        buttonPositive: 'Please accept bare mortal',
+      }
+    );
+    return granted === PermissionsAndroid.RESULTS.GRANTED;
+  } catch (error) {
+    console.error('Permission error: ', error);
+    return false;
   }
 };

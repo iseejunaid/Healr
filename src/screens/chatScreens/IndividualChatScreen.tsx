@@ -14,7 +14,7 @@ import {
   where,
 } from 'firebase/firestore';
 import {db} from '../../../configs/firebaseConfig';
-import {composeMsg, sendMedia} from './ChatHelper';
+import {composeMsg, sendDocument, sendMedia} from './ChatHelper';
 import Video from 'react-native-video';
 
 interface Message {
@@ -42,6 +42,8 @@ const IndividualChatScreen = ({navigation, route}: any) => {
       db.collection('chats').doc(msg._id).set(msg);
     } else if (type === 'media') {
       sendMedia(messages, receiverId);
+    }else if (type === 'document') {
+      sendDocument(messages, receiverId);
     }
   };
 
@@ -62,6 +64,8 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           text: doc.data().text,
           image: doc.data().image,
           video: doc.data().video,
+          document: doc.data().document,
+          documentName: doc.data().documentName,
           createdAt: doc.data().createdAt.toDate(),
           user: {
             _id: doc.data().user._id,
@@ -88,6 +92,22 @@ const IndividualChatScreen = ({navigation, route}: any) => {
         />
       </View>
     );
+  };
+
+  const renderCustomView = (props: any) => {
+    const {currentMessage} = props;
+    
+    if (currentMessage?.document) {      
+      return (
+        <View style={{padding:10,justifyContent:'center',alignItems:'flex-start'}}>
+        <Image
+          source={require('../../../assets/images/individualChatDoc.png')}
+        />
+        <Text style={{color:Colors.secondaryColor,paddingTop:10}}>{currentMessage.documentName}</Text>
+      </View>
+      );
+    }
+    return null;
   };
 
   return (
@@ -143,6 +163,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           borderRadius: 15,
         }}
         renderMessageVideo={renderVideo}
+        renderCustomView={renderCustomView}
         renderAvatar={null}
         renderBubble={renderCustomBubble}
         messages={messages}

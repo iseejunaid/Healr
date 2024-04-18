@@ -11,6 +11,7 @@ import Fonts from '../../assets/fonts/fonts';
 import Colors from '../../assets/colors/colors';
 import OptionsModal from './OptionsModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { deleteChat } from '../screens/chatScreens/ChatHelper';
 
 interface ChatItemProps {
   navigation: any;
@@ -39,6 +40,7 @@ const ChatItem: React.FC<ChatItemProps> = ({
     'null',
   );
   const [markAsUnread, setMarkAsUnread] = useState(false);
+  const [deleted, setDeleted] = useState(false);
   const [isOptionsModalVisible, setIsOptionsModalVisible] = useState(false);
   const [chatItemLayout, setChatItemLayout] = useState({
     x: 0,
@@ -95,7 +97,7 @@ const ChatItem: React.FC<ChatItemProps> = ({
         await saveMarkAsUnreadStatus(receiverId, false);
         break;
       case 'Delete':
-        console.log('Delete');
+        await deleteChat(receiverId, userId);
         break;
       case 'Clear chat':
         console.log('Clear chat');
@@ -115,7 +117,6 @@ const ChatItem: React.FC<ChatItemProps> = ({
   const modalOptions = [
     { text: markAsUnread ? 'Mark as read' : 'Mark as unread' },
     { text: 'Delete' },
-    { text: 'Clear chat' },
     { text: 'Block' },
   ];
   
@@ -215,9 +216,10 @@ const ChatItem: React.FC<ChatItemProps> = ({
         foregroundColor={Colors.tertiaryColor}
         onOptionClick={onOptionClick}
         modalStyle={{
-          top: chatItemLayout.y,
+          top: chatItemLayout.y + 5,
           left: chatItemLayout.x + chatItemLayout.width - 140,
           backgroundColor: Colors.secondaryWhite,
+          width: 140,
         }}
         options={modalOptions}
       />

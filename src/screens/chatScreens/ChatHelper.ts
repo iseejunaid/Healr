@@ -1,11 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
 import { auth, db, storage } from '../../../configs/firebaseConfig';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { collection, deleteDoc, getDocs, orderBy, query, where } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { Image } from 'react-native-compressor';
 import { requestContactsPermission } from '../../../helpers/permissions';
 import Contacts from 'react-native-contacts';
+import RNFS from 'react-native-fs';
+
 
 export const sendMedia = async (data: any, receiver: string) => {
     try {
@@ -48,7 +50,41 @@ export const sendMedia = async (data: any, receiver: string) => {
     }
 };
 
-export const composeMsg = (text: string, receiver: string, type: string) => {
+export const sendDocument = async (data: any, receiver: string) => {
+    console.log(data[0]);
+    
+    try {
+        const file = data[0];
+        const fileType = 'document';
+
+        const blob = await RNFS.readFile(file.uri, 'base64');
+
+        const timestamp = Date.now();
+        const storageRef = ref(storage, `documents/${timestamp}`);
+        const uploadTask = uploadBytesResumable(storageRef, blob);
+
+        uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log(`Upload is ${progress}% done`);
+            },
+            (error) => {
+                console.log('Upload Error: ', error);
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    const msg = composeMsg(downloadURL, receiver, fileType,data[0].name);
+                    db.collection('chats').doc(msg._id).set(msg);
+                });
+            }
+        );
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const composeMsg = (text: string, receiver: string, type: string,name?:string) => {
     const createdAt = new Date();
     switch (type) {
         case 'image':
@@ -69,6 +105,16 @@ export const composeMsg = (text: string, receiver: string, type: string) => {
                 user: { _id: auth?.currentUser?.uid },
             };
             return videoMsg;
+        case 'document':
+            const docMsg = {
+                _id: uuidv4(),
+                receiver_id: receiver,
+                createdAt,
+                document: text,
+                documentName:name,
+                user: { _id: auth?.currentUser?.uid },
+            };
+            return docMsg;
         default: {
             const msg = {
                 _id: uuidv4(),
@@ -217,20 +263,20 @@ const fetchUser = async (id: string) => {
     }
 };
 
-const fetchUserId = async () => {
+export const fetchUserId = async () => {
     return await AsyncStorage.getItem('uid') ?? '';
 };
 
 export const fetchContacts = async () => {
     const dbContacts = await fetchDbContacts();
     const localContacts = await fetchLocalContacts();
-    
-    const HealrContacts = dbContacts.filter(dbContact => 
+
+    const HealrContacts = dbContacts.filter(dbContact =>
         localContacts.some(localContact => localContact.phoneNumber === dbContact.phnNumber)
     );
-    const invitableContacts = localContacts.filter((contact) => 
+    const invitableContacts = localContacts.filter((contact) =>
         !dbContacts.some(dbContact => dbContact.phnNumber === contact.phoneNumber))
-    
+
     return { HealrContacts, invitableContacts };
 };
 
@@ -250,7 +296,7 @@ const fetchDbContacts = async () => {
         }));
         return contacts;
     } catch (error) {
-        console.error('Error retrieving phone numbers: ', error);        
+        console.error('Error retrieving phone numbers: ', error);
         return [];
     }
 };
@@ -275,3 +321,39 @@ const fetchLocalContacts = async () => {
         return [];
     }
 };
+
+export const deleteChat = async (receiverId: string, userId: string) => {
+    try {
+        const chatsCollection = collection(db, 'chats');
+
+        const q = query(
+            chatsCollection,
+            where('receiver_id', '==', receiverId),
+            where('user._id', '==', userId)
+        );
+        const q2 = query(
+            chatsCollection,
+            where('receiver_id', '==', userId),
+            where('user._id', '==', receiverId)
+        );
+
+        const querySnapshot = await getDocs(q);
+        const querySnapshot2 = await getDocs(q2);
+
+        const deletePromises = [];
+
+        querySnapshot.forEach((doc) => {
+            deletePromises.push(deleteDoc(doc.ref));
+        });
+
+        querySnapshot2.forEach((doc) => {
+            deletePromises.push(deleteDoc(doc.ref));
+        });
+
+        await Promise.all(deletePromises);
+    } catch (error) {
+        console.error('Error deleting chat:', error);
+        throw error; // re-throw the error to be caught by the onOptionClick function
+    }
+};
+

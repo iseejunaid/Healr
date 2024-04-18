@@ -8,9 +8,12 @@ interface HeaderProps {
   text: string;
   LefticonName?: string;
   RighticonName?: string;
+  onrightIconPress?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName}) => {
+const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName,
+  onrightIconPress
+}) => {
   const renderImage = (ImageName: string | undefined) => {
     switch (ImageName) {
       case 'cameraIcon':
@@ -49,13 +52,13 @@ const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName}) => {
     <View style={styles.header}>
       <TouchableOpacity style={styles.camerabtn} onPress={() => imgPressHandler(LefticonName)}>
 
-        <Image source={renderImage(LefticonName)} style={styles.cameraimg}/>
+        <Image source={renderImage(LefticonName)} style={styles.cameraimg} />
       </TouchableOpacity>
 
       <View style={[styles.MainText,{width: RighticonName === 'settingsIcon' ? '80%' : '84%',}]}>
         <Text style={styles.headerTxt}>{text}</Text>
       </View>
-      <TouchableOpacity style={styles.dotsbtn} onPress={() => imgPressHandler(RighticonName)}>
+      <TouchableOpacity style={styles.dotsbtn} onPress={onrightIconPress? onrightIconPress:() => imgPressHandler(RighticonName)}>
       <Image source={renderImage(RighticonName)} style={getIconStyles()} />
       </TouchableOpacity>
     </View>

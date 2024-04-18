@@ -47,7 +47,7 @@ const OptionsModal: React.FC<OptionsModalProps> = ({
 
   return (
     <Modal
-      animationType="slide"
+      animationType="none"
       transparent={true}
       visible={visible}
       onRequestClose={onClose}>
