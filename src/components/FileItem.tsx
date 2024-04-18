@@ -22,26 +22,28 @@ const FileItem = ({fileName, date, fileType, url}: any) => {
     setImgSource(source);
   }, [fileType]);
 
-  const handlePress = () => {
-    Linking.openURL(url);
-  }
+  // const handlePress = () => {
+  //   Linking.openURL(url);
+  // }
   
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handlePress}>
+    <View style={styles.container}>
       <View style={styles.imageContainer}>
+        {/* <TouchableOpacity onPress={handlePress}> */}
         <View style={styles.imageWrapper}>
           <Image source={imgSource} />
         </View>
         <View style={styles.textWrapper}>
           <Text style={styles.fileName}>{fileName}</Text>
         </View>
+        {/* </TouchableOpacity> */}
       </View>
       <View style={styles.infoContainer}>
         <Text style={styles.date}>{date}</Text>
         <Text style={styles.fileType}>{fileType}</Text>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     height: 150,
-    width: '50%',
+    width: '50%'
   },
   imageWrapper: {
     height: '50%',

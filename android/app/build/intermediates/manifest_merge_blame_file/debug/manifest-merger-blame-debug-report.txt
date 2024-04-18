@@ -9,43 +9,43 @@
 9        android:targetSdkVersion="33" />
 10
 11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-11-->E:\FYP\Healr\android\app\src\debug\AndroidManifest.xml:5:5-77
-11-->E:\FYP\Healr\android\app\src\debug\AndroidManifest.xml:5:22-75
+11-->E:\FYP LATEST\Healr\android\app\src\debug\AndroidManifest.xml:5:5-77
+11-->E:\FYP LATEST\Healr\android\app\src\debug\AndroidManifest.xml:5:22-75
 12    <uses-permission android:name="android.permission.INTERNET" />
-12-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:3:5-67
-12-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:3:22-64
+12-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:3:5-67
+12-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:3:22-64
 13    <uses-permission android:name="android.permission.CAMERA" />
-13-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:4:5-65
-13-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:4:22-62
+13-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:4:5-65
+13-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:4:22-62
 14    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-14-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:5:5-71
-14-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:5:22-68
+14-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:5:5-71
+14-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:5:22-68
 15    <uses-permission android:name="android.permission.READ_CONTACTS" />
-15-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:6:5-72
-15-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:6:22-69
+15-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:6:5-72
+15-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:6:22-69
 16    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-16-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:7:5-81
-16-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:7:22-78
+16-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:7:5-81
+16-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:7:22-78
 17    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-17-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:8:5-80
-17-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:8:22-77
+17-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:8:5-80
+17-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:8:22-77
 18    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 18-->[com.facebook.flipper:flipper:0.182.0] C:\Users\junai\.gradle\caches\transforms-3\426f122c987f1f036bd238635db2dd0e\transformed\jetified-flipper-0.182.0\AndroidManifest.xml:16:5-76
 18-->[com.facebook.flipper:flipper:0.182.0] C:\Users\junai\.gradle\caches\transforms-3\426f122c987f1f036bd238635db2dd0e\transformed\jetified-flipper-0.182.0\AndroidManifest.xml:16:22-73
 19    <uses-permission android:name="android.permission.WAKE_LOCK" />
-19-->[:react-native-firebase_auth] E:\FYP\Healr\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-68
-19-->[:react-native-firebase_auth] E:\FYP\Healr\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:22-65
+19-->[:react-native-firebase_auth] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-68
+19-->[:react-native-firebase_auth] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:22-65
 20    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-20-->[:react-native-firebase_auth] E:\FYP\Healr\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-79
-20-->[:react-native-firebase_auth] E:\FYP\Healr\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:22-76
+20-->[:react-native-firebase_auth] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-79
+20-->[:react-native-firebase_auth] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:22-76
 21
 22    <queries>
-22-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-11:15
+22-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-11:15
 23        <intent>
-23-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-10:18
+23-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-10:18
 24            <action android:name="android.media.action.IMAGE_CAPTURE" />
-24-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-73
-24-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:21-70
+24-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-73
+24-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:21-70
 25        </intent>
 26    </queries>
 27
@@ -54,77 +54,77 @@
 28-->[com.google.android.recaptcha:recaptcha:18.4.0] C:\Users\junai\.gradle\caches\transforms-3\7bbcbe7d903abbc56a8528347d9c8be2\transformed\jetified-recaptcha-18.4.0\AndroidManifest.xml:9:22-95
 29
 30    <application
-30-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:10:5-29:19
+30-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:10:5-29:19
 31        android:name="com.healr.MainApplication"
-31-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:11:7-38
+31-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:11:7-38
 32        android:allowBackup="false"
-32-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:15:7-34
+32-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:15:7-34
 33        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 33-->[androidx.core:core:1.8.0] C:\Users\junai\.gradle\caches\transforms-3\f91bddac5c5a1ea6f3ed77efc5a301a8\transformed\core-1.8.0\AndroidManifest.xml:24:18-86
 34        android:debuggable="true"
 35        android:icon="@mipmap/ic_launcher"
-35-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:13:7-41
+35-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:13:7-41
 36        android:label="@string/app_name"
-36-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:12:7-39
+36-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:12:7-39
 37        android:roundIcon="@mipmap/ic_launcher_round"
-37-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:14:7-52
+37-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:14:7-52
 38        android:theme="@style/AppTheme"
-38-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:16:7-38
+38-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:16:7-38
 39        android:usesCleartextTraffic="true" >
-39-->E:\FYP\Healr\android\app\src\debug\AndroidManifest.xml:8:9-44
+39-->E:\FYP LATEST\Healr\android\app\src\debug\AndroidManifest.xml:8:9-44
 40        <activity
-40-->E:\FYP\Healr\android\app\src\debug\AndroidManifest.xml:11:9-111
+40-->E:\FYP LATEST\Healr\android\app\src\debug\AndroidManifest.xml:11:9-111
 41            android:name="com.facebook.react.devsupport.DevSettingsActivity"
-41-->E:\FYP\Healr\android\app\src\debug\AndroidManifest.xml:11:19-83
+41-->E:\FYP LATEST\Healr\android\app\src\debug\AndroidManifest.xml:11:19-83
 42            android:exported="false" />
-42-->E:\FYP\Healr\android\app\src\debug\AndroidManifest.xml:11:84-108
+42-->E:\FYP LATEST\Healr\android\app\src\debug\AndroidManifest.xml:11:84-108
 43        <activity
-43-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:17:7-28:18
+43-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:17:7-28:18
 44            android:name="com.healr.MainActivity"
-44-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:18:9-37
+44-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:18:9-37
 45            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
-45-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:20:9-118
+45-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:20:9-118
 46            android:exported="true"
-46-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:23:9-32
+46-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:23:9-32
 47            android:label="@string/app_name"
-47-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:19:9-41
+47-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:19:9-41
 48            android:launchMode="singleTask"
-48-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:21:9-40
+48-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:21:9-40
 49            android:windowSoftInputMode="adjustResize" >
-49-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:22:9-51
+49-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:22:9-51
 50            <intent-filter>
-50-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:24:9-27:25
+50-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:24:9-27:25
 51                <action android:name="android.intent.action.MAIN" />
-51-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:25:13-65
-51-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:25:21-62
+51-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:25:13-65
+51-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:25:21-62
 52
 53                <category android:name="android.intent.category.LAUNCHER" />
-53-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:26:13-73
-53-->E:\FYP\Healr\android\app\src\main\AndroidManifest.xml:26:23-70
+53-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:26:13-73
+53-->E:\FYP LATEST\Healr\android\app\src\main\AndroidManifest.xml:26:23-70
 54            </intent-filter>
 55        </activity>
 56
 57        <meta-data
-57-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:9-11:36
+57-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:9-11:36
 58            android:name="app_data_collection_default_enabled"
-58-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:13-63
+58-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:13-63
 59            android:value="true" />
-59-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-33
+59-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-33
 60
 61        <service
-61-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:9-21:19
+61-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:9-21:19
 62            android:name="com.google.firebase.components.ComponentDiscoveryService"
-62-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-84
+62-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-84
 63            android:directBootAware="true"
-63-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-43
+63-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-43
 64            android:exported="false" >
-64-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-37
+64-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-37
 65            <meta-data
-65-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-20:85
+65-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-20:85
 66                android:name="com.google.firebase.components:io.invertase.firebase.app.ReactNativeFirebaseAppRegistrar"
-66-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:17-120
+66-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:17-120
 67                android:value="com.google.firebase.components.ComponentRegistrar" />
-67-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:17-82
+67-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:17-82
 68            <meta-data
 68-->[com.google.firebase:firebase-auth:22.3.1] C:\Users\junai\.gradle\caches\transforms-3\f97a956b76320aa82c21d0b28c4af2aa\transformed\jetified-firebase-auth-22.3.1\AndroidManifest.xml:69:13-71:85
 69                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
@@ -146,39 +146,39 @@
 77        </service>
 78
 79        <provider
-79-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:9-27:38
+79-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:9-27:38
 80            android:name="io.invertase.firebase.app.ReactNativeFirebaseAppInitProvider"
-80-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:24:13-88
+80-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:24:13-88
 81            android:authorities="com.healr.reactnativefirebaseappinitprovider"
-81-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:25:13-86
+81-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:25:13-86
 82            android:exported="false"
-82-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:13-37
+82-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:13-37
 83            android:initOrder="99" />
-83-->[:react-native-firebase_app] E:\FYP\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-35
+83-->[:react-native-firebase_app] E:\FYP LATEST\Healr\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-35
 84        <provider
-84-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:9-24:20
+84-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:9-24:20
 85            android:name="com.reactnative.ivpusic.imagepicker.IvpusicImagePickerFileProvider"
-85-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:17:13-94
+85-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:17:13-94
 86            android:authorities="com.healr.provider"
-86-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-60
+86-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-60
 87            android:exported="false"
-87-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:13-37
+87-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:13-37
 88            android:grantUriPermissions="true" >
-88-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-47
+88-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-47
 89            <meta-data
-89-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-23:78
+89-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-23:78
 90                android:name="android.support.FILE_PROVIDER_PATHS"
-90-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:17-67
+90-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:17-67
 91                android:resource="@xml/ivpusic_imagepicker_provider_paths" />
-91-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:17-75
+91-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:17-75
 92        </provider>
 93
 94        <activity
-94-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:9-28:72
+94-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:9-28:72
 95            android:name="com.yalantis.ucrop.UCropActivity"
-95-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-60
+95-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-60
 96            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-96-->[:react-native-image-crop-picker] E:\FYP\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-69
+96-->[:react-native-image-crop-picker] E:\FYP LATEST\Healr\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-69
 97        <activity
 97-->[com.google.android.gms:play-services-auth:20.7.0] C:\Users\junai\.gradle\caches\transforms-3\0da3cdb9584e89dc47782341d0fe303c\transformed\jetified-play-services-auth-20.7.0\AndroidManifest.xml:23:9-27:75
 98            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
