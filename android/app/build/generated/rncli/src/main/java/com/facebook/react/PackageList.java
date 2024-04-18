@@ -25,6 +25,10 @@ import com.dooboolab.audiorecorderplayer.RNAudioRecorderPlayerPackage;
 import com.reactnativecompressor.CompressorPackage;
 // react-native-contacts
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
+// react-native-document-picker
+import com.reactnativedocumentpicker.RNDocumentPickerPackage;
+// react-native-fs
+import com.rnfs.RNFSPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 // react-native-get-random-values
@@ -91,6 +95,8 @@ public class PackageList {
       new RNAudioRecorderPlayerPackage(),
       new CompressorPackage(),
       new ReactNativeContacts(),
+      new RNDocumentPickerPackage(),
+      new RNFSPackage(),
       new RNGestureHandlerPackage(),
       new RNGetRandomValuesPackage(),
       new PickerPackage(),
