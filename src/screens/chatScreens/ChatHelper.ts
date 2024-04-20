@@ -7,6 +7,7 @@ import { Image } from 'react-native-compressor';
 import { requestContactsPermission } from '../../../helpers/permissions';
 import Contacts from 'react-native-contacts';
 import RNFS from 'react-native-fs';
+import { copyFile } from '../HealrFilesScreens/HealrFilesHelper';
 
 export const sendMedia = async (data: any, receiver: string) => {
     try {
@@ -55,40 +56,41 @@ export const sendMedia = async (data: any, receiver: string) => {
 };
 
 export const sendDocument = async (data: any, receiver: string) => {
-    console.log(data[0]);
-
-    try {
+    try{
         const file = data[0];
         const fileType = 'document';
-
-        const blob = await RNFS.readFile(file.uri, 'base64');
-
+        const name = file.name;
+        const uri = file.uri;
         const timestamp = Date.now();
-        const storageRef = ref(storage, `documents/${timestamp}`);
-        const uploadTask = uploadBytesResumable(storageRef, blob);
+        const extension = name.split('.').pop();
+        const filePath = `${RNFS.DocumentDirectoryPath}/${name}`;
 
-        uploadTask.on(
-            'state_changed',
-            (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log(`Upload is ${progress}% done`);
-            },
-            (error) => {
-                console.log('Upload Error: ', error);
-            },
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    const msg = composeMsg(downloadURL, receiver, fileType, data[0].name);
-                    db.collection('chats').doc(msg._id).set(msg);
-                });
+        const uploadFileToStorage = async (localPath: string) => {
+            const uploadedFileName = timestamp + '.' + extension;
+            const reference = storage.ref(`documents/${uploadedFileName}`);
+            const response = await fetch(`file://${localPath}`);
+            const blob = await response.blob();
+            try {
+                await reference.put(blob);
+                const downloadURL = await reference.getDownloadURL();
+                const msg = composeMsg(downloadURL, receiver, fileType, name,extension);
+                db.collection('chats').doc(msg._id).set(msg);
+
+            } catch (error) {
+                console.log('Error uploading file:', error);
+                throw error;
             }
-        );
-    } catch (error) {
+        };
+        await copyFile(uri, filePath);
+        await uploadFileToStorage(filePath);
+        
+
+    }catch(error){
         console.log(error);
     }
 };
 
-export const composeMsg = (text: string, receiver: string, type: string, name?: string) => {
+export const composeMsg = (text: string, receiver: string, type: string, name?: string,extension?:string) => {
     const createdAt = new Date();
     switch (type) {
         case 'image':
@@ -116,6 +118,7 @@ export const composeMsg = (text: string, receiver: string, type: string, name?: 
                 createdAt,
                 document: text,
                 documentName: name,
+                documentExtension: extension,
                 user: { _id: auth?.currentUser?.uid },
             };
             return docMsg;

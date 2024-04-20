@@ -15,7 +15,9 @@ import {fetchContacts} from './ChatHelper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../components/Loader';
 
-const NewChat = ({navigation}: any) => {
+const NewChat = ({navigation,route}: any) => {
+  console.log(route.params);
+  
   const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(false);

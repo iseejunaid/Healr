@@ -4,23 +4,52 @@ import {
   Text,
   Image,
   StyleSheet,
-  Linking,
   TouchableOpacity,
-  Platform,
-  Alert,
+  Modal,
+  TextInput,
+  Button,
 } from 'react-native';
 import Fonts from '../../assets/fonts/fonts';
 import Colors from '../../assets/colors/colors';
-import {downloadFile, formatDate} from '../screens/Home/HealrFilesHelper';
+import {
+  deleteFile,
+  downloadFile,
+  formatDate,
+  renameFile,
+  splitFileNameAndExt,
+} from '../screens/HealrFilesScreens/HealrFilesHelper';
 import OptionsModal from './OptionsModal';
+import InputField from './InputField';
+import PressableBtn from './PressableBtn';
 
-const FileItem = ({fileName, date, fileType, url}: any) => {
+const FileItem = ({
+  id,
+  navigation,
+  fileName,
+  date,
+  fileType,
+  url,
+  deleteValue,
+  uploadedFileName,
+  setModified,
+}: any) => {
   const [imgSource, setImgSource] = useState('');
+  const [deleted, setDeleted] = useState(deleteValue);
   const [modalVisible, setModalVisible] = useState(false);
+  const [InitialFileName, setInitialFileName] = useState(fileName);
+  const [rename, setRename] = useState(false);
+  const [newFileName, setNewFileName] = useState('');
+  const [ext, setExt] = useState('');
   const [position, setPosition] = useState({x: 0, y: 0, width: 0, height: 0});
   const imageRef = useRef(null);
 
   date = formatDate(date);
+
+  useEffect(() => {
+    const {renameAbleFilename, ext} = splitFileNameAndExt(fileName);
+    setNewFileName(renameAbleFilename);
+    setExt(ext);
+  }, [fileName]);
 
   useEffect(() => {
     let source = require('../../assets/images/healrDocs.png');
@@ -45,6 +74,11 @@ const FileItem = ({fileName, date, fileType, url}: any) => {
     });
   };
 
+  const toggleRenameModal = () => {
+    setRename(!rename);
+    return false;
+  };
+
   const modalOptions = [
     {text: 'Share'},
     {text: 'Rename'},
@@ -54,20 +88,43 @@ const FileItem = ({fileName, date, fileType, url}: any) => {
 
   const onOptionClick = async (option: string) => {
     switch (option) {
-      case 'Mark as unread':
+      case 'Share':
+        navigation.navigate('Share', {url});
         break;
-      case 'Mark as read':
+      case 'Rename':
+        toggleRenameModal();
         break;
       case 'Delete':
+        setDeleted(true);
+        deleteFile(id, uploadedFileName).then(() => {
+          setModified(true);
+        });
         break;
       case 'Save to phone':
-        downloadFile(fileName, url,'',true);
+        downloadFile(fileName, url, '', true);
         break;
     }
     setModalVisible(false);
   };
 
-  return (
+  const handleRename = async () => {
+    var oldFileName = fileName.split('.')[0];
+    if (newFileName !== oldFileName) {
+      try {
+        setRename(false);
+        const dbFilename = ext ? newFileName + '.' + ext : newFileName;
+        setInitialFileName(dbFilename);
+        await renameFile(id, dbFilename);
+        setModified(true);
+      } catch (error) {
+        console.error('Error renaming file:', error);
+      }
+    } else {
+      setRename(false);
+    }
+  };
+
+  return deleted ? null : (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <TouchableOpacity
@@ -78,7 +135,7 @@ const FileItem = ({fileName, date, fileType, url}: any) => {
             <Image source={imgSource} />
           </View>
           <View style={styles.textWrapper}>
-            <Text style={styles.fileName}>{fileName}</Text>
+            <Text style={styles.fileName}>{InitialFileName}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -100,6 +157,44 @@ const FileItem = ({fileName, date, fileType, url}: any) => {
         }}
         options={modalOptions}
       />
+      <Modal
+        visible={rename}
+        transparent
+        onRequestClose={toggleRenameModal}
+        animationType="fade">
+        <View
+          style={styles.modalBackground}
+          onStartShouldSetResponder={toggleRenameModal}>
+          <View style={styles.renameModalContent}>
+            <Text style={styles.renameText}>Rename</Text>
+            <View style={styles.renameInputContainer}>
+              <InputField
+                style={styles.fileNameInput}
+                value={newFileName}
+                handleChange={setNewFileName}
+                width={95}
+              />
+              <Text style={styles.extText}>.{ext}</Text>
+            </View>
+            <View style={styles.renameBtnContainer}>
+              <PressableBtn
+                text="Cancel"
+                onPress={toggleRenameModal}
+                fontColor="white"
+                backgound="red"
+                width="40%"
+              />
+              <PressableBtn
+                text="Rename"
+                onPress={handleRename}
+                fontColor="white"
+                backgound={Colors.primaryColor}
+                width="40%"
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -137,6 +232,13 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.regular,
     color: Colors.tertiaryColor,
   },
+  fileNameInput: {
+    color: Colors.tertiaryColor,
+    borderBottomColor: Colors.tertiaryColor,
+    borderWidth: 1,
+    width: '85%',
+    marginBottom: 10,
+  },
   infoContainer: {
     width: '50%',
     padding: 10,
@@ -148,6 +250,38 @@ const styles = StyleSheet.create({
   fileType: {
     fontFamily: Fonts.regular,
     color: Colors.quadraryColor,
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  renameModalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 15,
+    width: '80%',
+    elevation: 5,
+  },
+  renameText: {
+    fontFamily: Fonts.semiBold,
+    color: Colors.tertiaryColor,
+    marginBottom: 10,
+  },
+  renameInputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  extText: {
+    fontFamily: Fonts.regular,
+    color: 'grey',
+  },
+  renameBtnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
   },
 });
 

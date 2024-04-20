@@ -1,7 +1,7 @@
-import React, {useEffect,useState} from 'react';
-import {BackHandler, StatusBar, Keyboard} from 'react-native';
+import React, {useEffect} from 'react';
+import {BackHandler, StatusBar} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import HealrFilesScreen from './HealrFilesScreen';
+import HealrFilesStackScreen from '../HealrFilesScreens/HealrFilesStackScreen';
 import ProfileStackScreen from '../profileScreens/profileStackScreen';
 import Colors from '../../../assets/colors/colors';
 import CircleComponent from '../../components/CircleComponent';
@@ -58,7 +58,7 @@ const HomeScreen = ({navigation}: any) => {
         />
         <Tab.Screen
           name="Healrfiles"
-          component={HealrFilesScreen}
+          component={HealrFilesStackScreen}
           options={{
             tabBarIcon: ({focused}) =>
               !keyboard.keyboardShown ? (

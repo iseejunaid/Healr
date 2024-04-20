@@ -69,6 +69,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           audio: doc.data().audio,
           document: doc.data().document,
           documentName: doc.data().documentName,
+          documentType: doc.data().documentExtension,
           createdAt: doc.data().createdAt.toDate(),
           user: {
             _id: doc.data().user._id,

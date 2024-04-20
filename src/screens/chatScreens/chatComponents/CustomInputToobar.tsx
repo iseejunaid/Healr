@@ -119,8 +119,6 @@ const customtInputToolbar = ({
                 name: document.name,
               }));
 
-              console.log('Documents picked:', formattedDataArray);
-
               onSend(formattedDataArray, 'document');
             })
             .catch(err => {
