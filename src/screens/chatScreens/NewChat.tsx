@@ -146,7 +146,7 @@ const NewChat = ({navigation, route}: any) => {
                   <ContactItem
                     key={index}
                     navigation={navigation}
-                    handlePress={() => route.params && sendFile(contact)}
+                    handlePress={route.params ? () => sendFile(contact) : undefined}
                     profileImageSource={contact.photoURL}
                     userName={name}
                     expertise={contact?.expertise || 'N/A'}

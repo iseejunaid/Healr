@@ -26,7 +26,8 @@ const ContactItem: React.FC<ContactItemProps> = ({
   invitable,
   status
 }) => {
-  const onPress = () => {
+  
+  const onPress = () => {    
     if(invitable){
       const message = `Hey! I would like to invite you to join Healr. Here is the link to download the app: https://healrworld.com/download`;
       const smsUri = `sms:${invitable}${message ? `?body=${encodeURIComponent(message)}` : ''}`;
