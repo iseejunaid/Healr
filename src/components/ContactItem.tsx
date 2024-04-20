@@ -6,6 +6,7 @@ import Colors from '../../assets/colors/colors';
 interface ContactItemProps {
   navigation: any;
   profileImageSource?: any;
+  handlePress?: () => void;
   userId?: string;
   receiverId?: string;
   userName: string;
@@ -16,6 +17,7 @@ interface ContactItemProps {
 
 const ContactItem: React.FC<ContactItemProps> = ({
   navigation,
+  handlePress,
   profileImageSource,
   userId,
   receiverId,
@@ -40,7 +42,7 @@ const ContactItem: React.FC<ContactItemProps> = ({
     }
   };  
   return (
-    <TouchableOpacity style={styles.contactItemContainer} onPress={onPress}>
+    <TouchableOpacity style={styles.contactItemContainer} onPress={handlePress? handlePress:onPress}>
       {profileImageSource ? (
         <Image source={{uri: profileImageSource}} style={styles.profileImage} />
       ) : (

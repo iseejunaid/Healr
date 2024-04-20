@@ -6,8 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
-  TextInput,
-  Button,
 } from 'react-native';
 import Fonts from '../../assets/fonts/fonts';
 import Colors from '../../assets/colors/colors';
@@ -89,7 +87,7 @@ const FileItem = ({
   const onOptionClick = async (option: string) => {
     switch (option) {
       case 'Share':
-        navigation.navigate('Share', {url});
+        navigation.navigate('Share', {url,fileType,fileName,ext});
         break;
       case 'Rename':
         toggleRenameModal();
