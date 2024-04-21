@@ -23,6 +23,7 @@ interface ChatItemProps {
   time: string;
   status: string;
   notificationCount?: number;
+  markDelete?: boolean;
 }
 
 const ChatItem: React.FC<ChatItemProps> = ({
@@ -35,12 +36,13 @@ const ChatItem: React.FC<ChatItemProps> = ({
   time,
   status,
   notificationCount,
+  markDelete,
 }) => {
   const [icon, setIcon] = useState<'image' | 'video' | 'document' | 'null'>(
     'null',
   );
   const [markAsUnread, setMarkAsUnread] = useState(false);
-  const [deleted, setDeleted] = useState(false);
+  const [deleted, setDeleted] = useState(markDelete);
   const [isOptionsModalVisible, setIsOptionsModalVisible] = useState(false);
   const [chatItemLayout, setChatItemLayout] = useState({
     x: 0,
@@ -97,6 +99,7 @@ const ChatItem: React.FC<ChatItemProps> = ({
         await saveMarkAsUnreadStatus(receiverId, false);
         break;
       case 'Delete':
+        setDeleted(true);
         await deleteChat(receiverId, userId);
         break;
       case 'Block':
@@ -135,17 +138,18 @@ const ChatItem: React.FC<ChatItemProps> = ({
     }
   };
 
-  return (
+  return !deleted ? (
     <>
       <TouchableOpacity
         style={styles.chatItemContainer}
         onPress={onPress}
         onLongPress={toggleOptionsModal}
         ref={chatItemRef}
-        onLayout={handleLayout}>
+        onLayout={handleLayout}
+      >
         {profileImageSource ? (
           <Image
-            source={{uri: profileImageSource}}
+            source={{ uri: profileImageSource }}
             style={styles.profileImage}
           />
         ) : (
@@ -155,7 +159,7 @@ const ChatItem: React.FC<ChatItemProps> = ({
           />
         )}
         <View style={styles.messageContainer}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.userName}>{userName}</Text>
             <Text
               style={[
@@ -165,11 +169,12 @@ const ChatItem: React.FC<ChatItemProps> = ({
                     ? Colors.primaryColor
                     : Colors.quadraryColor,
                 },
-              ]}>
+              ]}
+            >
               {time}
             </Text>
           </View>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text
               style={[
                 styles.messageText,
@@ -181,16 +186,15 @@ const ChatItem: React.FC<ChatItemProps> = ({
                 },
               ]}
               numberOfLines={1}
-              ellipsizeMode="tail">
+              ellipsizeMode="tail"
+            >
               {message}
               {icon === 'image' ? (
                 <Image source={require('../../assets/images/chatImage.png')} />
               ) : icon === 'video' ? (
                 <Image source={require('../../assets/images/chatVideo.png')} />
               ) : icon === 'document' ? (
-                <Image
-                  source={require('../../assets/images/chatDocument.png')}
-                />
+                <Image source={require('../../assets/images/chatDocument.png')} />
               ) : null}
             </Text>
             {notificationCount ? (
@@ -198,7 +202,7 @@ const ChatItem: React.FC<ChatItemProps> = ({
                 <Text style={styles.notificationText}>{notificationCount}</Text>
               </View>
             ) : null}
-
+  
             {markAsUnread && (!notificationCount || notificationCount === 0) ? (
               <View style={styles.notificationBadge}>
                 <Text style={styles.notificationText}></Text>
@@ -221,7 +225,8 @@ const ChatItem: React.FC<ChatItemProps> = ({
         options={modalOptions}
       />
     </>
-  );
+  ) : null;
+  
 };
 
 export default ChatItem;

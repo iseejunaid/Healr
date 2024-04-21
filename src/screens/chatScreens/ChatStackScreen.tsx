@@ -5,6 +5,7 @@ import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import ChatScreen from './ChatScreen';
 import IndividualChatScreen from './IndividualChatScreen';
 import NewChat from './NewChat';
+import ViewProfileScreen from './ViewProfile';
 
 
 const ChatStack = createStackNavigator();
@@ -14,7 +15,7 @@ const ChatStackScreen = ({navigation, route}: any) => {
   React.useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
 
-    if (routeName === 'IndividualChat' || routeName === 'newChat') {
+    if (routeName === 'IndividualChat' || routeName === 'newChat' || routeName === 'ViewProfile') {
       navigation.setOptions({tabBarStyle: {display: 'none'}});
     } else {
       navigation.setOptions({
@@ -38,6 +39,7 @@ const ChatStackScreen = ({navigation, route}: any) => {
         component={IndividualChatScreen}
       />
       <ChatStack.Screen name="NewChat" component={NewChat} />
+      <ChatStack.Screen name="ViewProfile" component={ViewProfileScreen} />
     </ChatStack.Navigator>
   );
 };

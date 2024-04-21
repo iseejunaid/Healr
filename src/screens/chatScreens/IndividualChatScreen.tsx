@@ -113,7 +113,12 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           <View
             style={{flexDirection: 'row', marginLeft: 20}}
             onStartShouldSetResponder={() => {
-              console.log('open Profile');
+              navigation.navigate('ViewProfile', {
+                userId: receiverId,
+                userName: userName,
+                status: status,
+                profileImageSource: profileImageSource,
+              });
               return false;
             }}>
             <View style={styles.avatarContainer}>

@@ -74,6 +74,7 @@ const ChatScreen: React.FC = ({navigation}: any) => {
                   message={chatsData[key].text}
                   time={timeString}
                   status={chatsData[key].status}
+                  markDelete = {false}
                 />
               );
             })

@@ -356,7 +356,10 @@ const fetchLocalContacts = async () => {
     }
 };
 
-export const deleteChat = async (receiverId: string, userId: string) => {
+export const deleteChat = async (receiverId: string, userId?: string) => {
+    if(!userId){
+        userId = await fetchUserId();
+    }
     try {
         const chatsCollection = collection(db, 'chats');
 
@@ -385,9 +388,43 @@ export const deleteChat = async (receiverId: string, userId: string) => {
         });
 
         await Promise.all(deletePromises);
+        console.log('Chat deleted');
+        
     } catch (error) {
         console.error('Error deleting chat:', error);
         throw error; // re-throw the error to be caught by the onOptionClick function
     }
 };
+
+export const fetchReceiverData = async (receiverId: string) => {
+    const userQ = query(collection(db, 'users'), where('uid', '==', receiverId));
+    let expertise = '';
+    let expertiseInput = ''
+    let expertiseToDisplay = '';
+    let about = '';
+    let workplace = ''
+
+    try {
+        const userSnapshot = await getDocs(userQ);
+        userSnapshot.forEach(doc => {
+            let userData = doc.data();
+            expertise = userData.expertise;
+            expertiseInput = userData.expertiseInput;
+            about = userData.about;
+            workplace = userData.workplace;
+        });
+        if(expertiseInput){
+            expertiseToDisplay = expertiseInput;
+        }else{
+            expertiseToDisplay = expertise;
+        }
+        if(!workplace){
+            workplace = 'Not specified';
+        }
+        return { expertiseToDisplay, about, workplace};
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        return null;
+    }
+}
 
