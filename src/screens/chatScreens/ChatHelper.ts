@@ -56,7 +56,7 @@ export const sendMedia = async (data: any, receiver: string) => {
 };
 
 export const sendDocument = async (data: any, receiver: string) => {
-    try{
+    try {
         const file = data[0];
         const fileType = 'document';
         const name = file.name;
@@ -73,7 +73,7 @@ export const sendDocument = async (data: any, receiver: string) => {
             try {
                 await reference.put(blob);
                 const downloadURL = await reference.getDownloadURL();
-                const msg = composeMsg(downloadURL, receiver, fileType, name,extension);
+                const msg = composeMsg(downloadURL, receiver, fileType, name, extension);
                 db.collection('chats').doc(msg._id).set(msg);
 
             } catch (error) {
@@ -83,14 +83,14 @@ export const sendDocument = async (data: any, receiver: string) => {
         };
         await copyFile(uri, filePath);
         await uploadFileToStorage(filePath);
-        
 
-    }catch(error){
+
+    } catch (error) {
         console.log(error);
     }
 };
 
-export const composeMsg = (text: string, receiver: string, type: string, name?: string,extension?:string) => {
+export const composeMsg = (text: string, receiver: string, type: string, name?: string, extension?: string) => {
     const createdAt = new Date();
     switch (type) {
         case 'image':
@@ -261,7 +261,7 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
             }
             else if (video) {
                 chatData[senderId].text = "Video";
-            } 
+            }
             else if (audio) {
                 chatData[senderId].text = "Audio";
             }
@@ -357,7 +357,7 @@ const fetchLocalContacts = async () => {
 };
 
 export const deleteChat = async (receiverId: string, userId?: string) => {
-    if(!userId){
+    if (!userId) {
         userId = await fetchUserId();
     }
     try {
@@ -389,7 +389,7 @@ export const deleteChat = async (receiverId: string, userId?: string) => {
 
         await Promise.all(deletePromises);
         console.log('Chat deleted');
-        
+
     } catch (error) {
         console.error('Error deleting chat:', error);
         throw error; // re-throw the error to be caught by the onOptionClick function
@@ -413,15 +413,15 @@ export const fetchReceiverData = async (receiverId: string) => {
             about = userData.about;
             workplace = userData.workplace;
         });
-        if(expertiseInput){
+        if (expertiseInput) {
             expertiseToDisplay = expertiseInput;
-        }else{
+        } else {
             expertiseToDisplay = expertise;
         }
-        if(!workplace){
+        if (!workplace) {
             workplace = 'Not specified';
         }
-        return { expertiseToDisplay, about, workplace};
+        return { expertiseToDisplay, about, workplace };
     } catch (error) {
         console.error('Error fetching user:', error);
         return null;

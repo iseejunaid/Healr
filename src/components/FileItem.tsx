@@ -87,7 +87,7 @@ const FileItem = ({
   const onOptionClick = async (option: string) => {
     switch (option) {
       case 'Share':
-        navigation.navigate('Share', {url,fileType,fileName,ext});
+        navigation.navigate('Share', {healrContacts: true,url,fileType,fileName,ext});
         break;
       case 'Rename':
         toggleRenameModal();

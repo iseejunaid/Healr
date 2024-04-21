@@ -11,17 +11,19 @@ import Colors from '../../../assets/colors/colors';
 import InputField from '../../components/InputField';
 import Fonts from '../../../assets/fonts/fonts';
 import ContactItem from '../../components/ContactItem';
-import {composeMsg, fetchContacts} from './ChatHelper';
+import {composeMsg, fetchContacts, sendMedia} from './ChatHelper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../components/Loader';
 import {db} from '../../../configs/firebaseConfig';
 
 const NewChat = ({navigation, route}: any) => {
+  const invite = route.params?.invite;
+  const healrcontacts = route.params?.healrContacts;
   const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(false);
   const [searchText, setSearchText] = useState('');
-  const [healerContacts, setHealerContacts] = useState<
+  const [healrContacts, setHealrContacts] = useState<
     {
       photoURL: any;
       name: any;
@@ -41,7 +43,7 @@ const NewChat = ({navigation, route}: any) => {
   useEffect(() => {
     const fetchData = async () => {
       const {HealrContacts, invitableContacts} = await fetchContacts();
-      setHealerContacts(HealrContacts);
+      setHealrContacts(HealrContacts);
       setInvitableContacts(invitableContacts);
     };
     const fetchUserId = async () => {
@@ -50,54 +52,61 @@ const NewChat = ({navigation, route}: any) => {
     };
     fetchUserId();
     fetchData().then(() => setLoading(false));
-    setDefaultHealrContacts(healerContacts as any);
+    setDefaultHealrContacts(healrContacts as any);
     setDefaultInvitableContacts(invitableContacts as any);
   }, []);
 
   useEffect(() => {
     if (searchText) {
-      const filteredHealerContacts = healerContacts.filter(contact =>
+      const filteredHealrContacts = healrContacts.filter(contact =>
         contact.name.toLowerCase().includes(searchText.toLowerCase()),
       );
-      setHealerContacts(filteredHealerContacts);
+      setHealrContacts(filteredHealrContacts);
       const filteredInvitableContacts = invitableContacts.filter(contact =>
         contact.name.toLowerCase().includes(searchText.toLowerCase()),
       );
       setInvitableContacts(filteredInvitableContacts);
     } else {
-      setHealerContacts(defaultHealrContacts);
+      setHealrContacts(defaultHealrContacts);
       setInvitableContacts(defaultInvitableContacts);
     }
   }, [searchText]);
 
   const sendFile = (contact: any) => {
+    if (route.params?.data) {
+      sendMedia(route.params.data, contact.receiverId);
+      navigation.navigate('IndividualChat', {
+        userName: contact.name,
+        profileImageSource: contact.photoURL,
+        receiverId: contact.receiverId,
+        userId: userId,
+        status: contact.status,
+      });
+    } else {
+      const msg = composeMsg(
+        route.params.url,
+        contact.receiverId,
+        'document',
+        route.params.fileName,
+        route.params.ext,
+      );
+      db.collection('chats').doc(msg._id).set(msg);
 
-    const msg = composeMsg(
-      route.params.url,
-      contact.receiverId,
-      'document',
-      route.params.fileName,
-      route.params.ext,
-    );
-    db.collection('chats').doc(msg._id).set(msg);
+      navigation.navigate('IndividualChat', {
+        userName: contact.name,
+        profileImageSource: contact.photoURL,
+        receiverId: contact.receiverId,
+        userId: userId,
+        status: contact.status,
+      });
 
-    navigation.navigate('IndividualChat', {
-      userName: contact.name,
-      profileImageSource: contact.photoURL,
-      receiverId: contact.receiverId,
-      userId: userId,
-      status: contact.status,
-    });
-
-    navigation.goBack();
+      navigation.goBack();
+    }
   };
+
   return (
     <View style={styles.container}>
-      <View
-        style={[
-          styles.header,
-          {marginBottom: route.params && !search ? 10 : 0},
-        ]}>
+      <View style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image source={require('../../../assets/images/back.png')} />
@@ -105,7 +114,7 @@ const NewChat = ({navigation, route}: any) => {
           <View style={styles.headerText}>
             <Text style={styles.headerTitle}>Select Contact</Text>
             <Text style={styles.headerSubtitle}>
-              {healerContacts.length} Contacts
+              {healrContacts.length} Contacts
             </Text>
           </View>
         </View>
@@ -130,14 +139,12 @@ const NewChat = ({navigation, route}: any) => {
         </View>
       ) : (
         <ScrollView style={styles.contactListContainer}>
-          {healerContacts.length > 0 && (
+          {healrcontacts === true && healrContacts.length > 0 && (
             <>
-              {!route.params && (
-                <View style={styles.heading}>
-                  <Text style={styles.headingText}>Contacts on Healr</Text>
-                </View>
-              )}
-              {healerContacts.map((contact, index) => {
+              <View style={styles.heading}>
+                <Text style={styles.headingText}>Contacts on Healr</Text>
+              </View>
+              {healrContacts.map((contact, index) => {
                 var name = contact?.name || 'Unknown';
                 if (userId == contact?.receiverId) {
                   name = name + ' (You)';
@@ -146,7 +153,9 @@ const NewChat = ({navigation, route}: any) => {
                   <ContactItem
                     key={index}
                     navigation={navigation}
-                    handlePress={route.params ? () => sendFile(contact) : undefined}
+                    handlePress={
+                      route.params ? () => sendFile(contact) : undefined
+                    }
                     profileImageSource={contact.photoURL}
                     userName={name}
                     expertise={contact?.expertise || 'N/A'}
@@ -158,7 +167,7 @@ const NewChat = ({navigation, route}: any) => {
               })}
             </>
           )}
-          {!route.params && invitableContacts.length > 0 && (
+          {invite === true && invitableContacts.length > 0 && (
             <>
               <View style={styles.heading}>
                 <Text style={styles.headingText}>Invite to Healr</Text>

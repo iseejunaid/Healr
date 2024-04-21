@@ -15,10 +15,12 @@ const customtInputToolbar = ({
   text,
   setText,
   onSend,
+  navigation,
 }: {
   text: string;
   setText: (val: string) => void;
   onSend: (mes: any, type: string) => void;
+  navigation: any;
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [placeholder, setPlaceholder] = useState('Message');
@@ -134,7 +136,8 @@ const customtInputToolbar = ({
         break;
 
       case 'Healr files':
-        console.log('Healr files clicked');
+        navigation.navigate('Healrfiles');
+        navigation.pop();
         break;
       case 'Create dossier':
         console.log('Create dossier clicked');

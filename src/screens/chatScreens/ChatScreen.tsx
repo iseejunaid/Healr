@@ -15,11 +15,13 @@ import {ChatData} from './ChatHelper';
 import {auth} from '../../../configs/firebaseConfig';
 import Loader from '../../components/Loader';
 import Fonts from '../../../assets/fonts/fonts';
+import OptionsModal from '../../components/OptionsModal';
 
 const ChatScreen: React.FC = ({navigation}: any) => {
   const [searchValue, setSearchValue] = useState('');
   const [chatsData, setChatsData] = useState<ChatData>({});
   const [loading, setLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   const userId = auth?.currentUser?.uid;
 
   const fetchChatsData = useCallback(async () => {
@@ -39,9 +41,27 @@ const ChatScreen: React.FC = ({navigation}: any) => {
     return unsubscribe;
   }, [fetchChatsData, navigation]);
 
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  }
+  const options = [
+    {text: 'Invite'},
+    {text: 'Flagged messages'},
+  ];
+  const handleOptionClick = async (option: string) => {
+    switch (option) {
+      case 'Invite':
+        navigation.navigate('NewChat',{invite:true});
+        break;
+      case 'Flagged messages':
+        console.log('Flagged messages clicked');
+        break;
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Header text="Chats" RighticonName="dotsIcon" />
+      <Header text="Chats" LefticonName='cameraIcon' navigation={navigation} onrightIconPress={()=> toggleModal()} RighticonName="dotsIcon" />
       {loading ? (
         <View style={styles.chatsContainer}>
           <Loader backgroundColor={Colors.secondaryColor} />
@@ -89,12 +109,24 @@ const ChatScreen: React.FC = ({navigation}: any) => {
       <TouchableOpacity
         style={styles.newChatButton}
         activeOpacity={0.7}
-        onPress={() => {navigation.navigate('NewChat')}}>
+        onPress={() => {navigation.navigate('NewChat',{invite:true,healrContacts:true})}}>
         <Image
           source={require('../../../assets/images/newChat.png')}
           style={styles.newChatIcon}
         />
       </TouchableOpacity>
+      <OptionsModal
+        visible={modalVisible}
+        onClose={toggleModal}
+        options={options}
+        onOptionClick={handleOptionClick}
+        foregroundColor={Colors.tertiaryColor}
+        modalStyle={{
+          backgroundColor:Colors.secondaryColor,
+          top: 45,
+          right: 20,
+        }}
+      />
     </View>
   );
 };

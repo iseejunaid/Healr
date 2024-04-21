@@ -82,7 +82,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
   }, [userId, receiverId]);
 
   const customtInputToolbar = () => {
-    return <CustomInputToobar text={text} setText={setText} onSend={onSend} />;
+    return <CustomInputToobar text={text} setText={setText} onSend={onSend} navigation={navigation} />;
   };
 
   const renderVideo = (props: any) => {    

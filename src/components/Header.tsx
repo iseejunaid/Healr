@@ -3,21 +3,25 @@ import {View, Image, Text, StyleSheet} from 'react-native';
 import Fonts from '../../assets/fonts/fonts';
 import Colors from '../../assets/colors/colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import { requestCameraPermission } from '../../helpers/permissions';
 
 interface HeaderProps {
   text: string;
   LefticonName?: string;
   RighticonName?: string;
   onrightIconPress?: () => void;
+  onleftIconPress?: () => void;
+  navigation?: any;
 }
 
 const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName,
-  onrightIconPress
+  onrightIconPress,onleftIconPress,navigation
 }) => {
   const renderImage = (ImageName: string | undefined) => {
     switch (ImageName) {
       case 'cameraIcon':
-        // return require('../../assets/images/cameraIcon.png');
+         return require('../../assets/images/cameraIcon.png');
       case 'dotsIcon':
         return require('../../assets/images/dotsIcon.png');
       case 'settingsIcon':
@@ -33,24 +37,43 @@ const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName,
     return styles.dotsimg;
   };
 
-  const imgPressHandler = (name:any) =>{
-    switch(name){
+  const imgPressHandler = async (name: any) => {
+    switch (name) {
       case 'cameraIcon':
-        console.log('cameraicon pressed');
+        const permission = await requestCameraPermission();
+        if (permission) {
+          ImageCropPicker.openCamera({
+            mediaType: 'any',
+          })
+            .then(data => {
+              const formattedData = {
+                path: data.path,
+                mime: data.mime,
+                size: data.size,
+                width: data.width,
+                height: data.height,
+              };
+              navigation.navigate('NewChat', { healrContacts: true, data: [formattedData] });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
         break;
       case 'dotsIcon':
         console.log('dotsIcon pressed');
-        console.log(text)
+        console.log(text);
         break;
       case 'settingsIcon':
         console.log('settingsIcon pressed');
         break;
     }
   }
+  
 
   return (
     <View style={styles.header}>
-      <TouchableOpacity style={styles.camerabtn} onPress={() => imgPressHandler(LefticonName)}>
+      <TouchableOpacity style={styles.camerabtn} onPress={onleftIconPress? onleftIconPress:() => imgPressHandler(LefticonName)}>
 
         <Image source={renderImage(LefticonName)} style={styles.cameraimg} />
       </TouchableOpacity>
