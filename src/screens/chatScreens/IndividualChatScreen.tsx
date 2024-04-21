@@ -70,6 +70,8 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           document: doc.data().document,
           documentName: doc.data().documentName,
           documentType: doc.data().documentExtension,
+          documentmrn: doc.data().documentmrn,
+          documentDescription: doc.data().documentdescription,
           createdAt: doc.data().createdAt.toDate(),
           user: {
             _id: doc.data().user._id,
@@ -82,7 +84,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
   }, [userId, receiverId]);
 
   const customtInputToolbar = () => {
-    return <CustomInputToobar text={text} setText={setText} onSend={onSend} navigation={navigation} />;
+    return <CustomInputToobar text={text} setText={setText} onSend={onSend} receiverId={receiverId} navigation={navigation} />;
   };
 
   const renderVideo = (props: any) => {    

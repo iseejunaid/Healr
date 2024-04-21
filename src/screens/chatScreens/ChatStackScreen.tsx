@@ -6,6 +6,7 @@ import ChatScreen from './ChatScreen';
 import IndividualChatScreen from './IndividualChatScreen';
 import NewChat from './NewChat';
 import ViewProfileScreen from './ViewProfile';
+import CreateDossier from './CreateDossier';
 
 
 const ChatStack = createStackNavigator();
@@ -15,7 +16,7 @@ const ChatStackScreen = ({navigation, route}: any) => {
   React.useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
 
-    if (routeName === 'IndividualChat' || routeName === 'newChat' || routeName === 'ViewProfile') {
+    if (routeName === 'IndividualChat' || routeName === 'newChat' || routeName === 'ViewProfile' || routeName === 'CreateDossier') {
       navigation.setOptions({tabBarStyle: {display: 'none'}});
     } else {
       navigation.setOptions({
@@ -40,6 +41,7 @@ const ChatStackScreen = ({navigation, route}: any) => {
       />
       <ChatStack.Screen name="NewChat" component={NewChat} />
       <ChatStack.Screen name="ViewProfile" component={ViewProfileScreen} />
+      <ChatStack.Screen name="CreateDossier" component={CreateDossier} />
     </ChatStack.Navigator>
   );
 };

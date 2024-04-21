@@ -8,6 +8,7 @@ import { requestContactsPermission } from '../../../helpers/permissions';
 import Contacts from 'react-native-contacts';
 import RNFS from 'react-native-fs';
 import { copyFile } from '../HealrFilesScreens/HealrFilesHelper';
+import RNImageToPdf from 'react-native-image-to-pdf';
 
 export const sendMedia = async (data: any, receiver: string) => {
     try {
@@ -90,7 +91,7 @@ export const sendDocument = async (data: any, receiver: string) => {
     }
 };
 
-export const composeMsg = (text: string, receiver: string, type: string, name?: string, extension?: string) => {
+export const composeMsg = (text: string, receiver: string, type: string, name?: string, extension?: string, mrn?: string, description?: string) => {
     const createdAt = new Date();
     switch (type) {
         case 'image':
@@ -131,6 +132,19 @@ export const composeMsg = (text: string, receiver: string, type: string, name?: 
                 user: { _id: auth?.currentUser?.uid },
             };
             return audioMsg;
+        case 'dossier':
+            const dossierMsg = {
+                _id: uuidv4(),
+                receiver_id: receiver,
+                createdAt,
+                document: text,
+                documentName: name,
+                documentExtension: extension,
+                documentmrn: mrn,
+                documentdescription: description,
+                user: { _id: auth?.currentUser?.uid },
+            };
+            return dossierMsg;
         default: {
             const msg = {
                 _id: uuidv4(),
@@ -377,7 +391,7 @@ export const deleteChat = async (receiverId: string, userId?: string) => {
         const querySnapshot = await getDocs(q);
         const querySnapshot2 = await getDocs(q2);
 
-        const deletePromises = [];
+        const deletePromises: any[] = [];
 
         querySnapshot.forEach((doc) => {
             deletePromises.push(deleteDoc(doc.ref));
@@ -428,3 +442,39 @@ export const fetchReceiverData = async (receiverId: string) => {
     }
 }
 
+export const sendDossier = async (receiver_id: string, imagespaths: any, title: string, mrn?: string, description?: string) => {
+    const uri = await makePdf(imagespaths, title);
+    const fileType = 'dossier';
+    const name = title;
+    const extension = 'pdf';
+    const timestamp = Date.now();
+        const uploadedFileName = timestamp + '.' + extension;
+        const reference = storage.ref(`dossiers/${uploadedFileName}`);
+        const response = await fetch(`file://${uri}`);
+        const blob = await response.blob();
+        try {
+            await reference.put(blob);
+            const downloadURL = await reference.getDownloadURL();
+            const msg = composeMsg(downloadURL, receiver_id, fileType, name, extension, mrn, description);
+            db.collection('chats').doc(msg._id).set(msg);
+
+        } catch (error) {
+            console.log('Error uploading file:', error);
+            throw error;
+        }
+}
+
+const makePdf = async (imagespaths: any, title: string) => {
+    try {
+        const options = {
+            imagePaths: imagespaths,
+            name: title + '.pdf',
+            quality: 0.1,
+        };
+
+        const pdf = await RNImageToPdf.createPDFbyImages(options);
+        return pdf.filePath;
+    } catch (err) {
+        console.log(err);
+    }
+}

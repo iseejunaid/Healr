@@ -62,13 +62,13 @@ const ChatItem: React.FC<ChatItemProps> = ({
     };
 
     fetchMarkAsUnreadStatus();
-
+    
     if (message.includes('Image') && message.length < 11) {
       setIcon('image');
     } else if (message.includes('Video') && message.length < 11) {
       setIcon('video');
-    } else if (message.includes('Document') && message.length < 13) {
-      setIcon('document');
+    } else if (message.includes('Document') && message.length < 14) {
+      setIcon('document');      
     } else {
       setIcon('null');
     }

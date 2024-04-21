@@ -316,6 +316,7 @@ const styles = StyleSheet.create({
     width: '83%',
     minHeight: 100,
     margin: '3%',
+    fontFamily: Fonts.regular,
     backgroundColor: Colors.secondaryWhite,
     color: 'black',
   },

@@ -82,7 +82,7 @@ const ViewProfileScreen = ({navigation, route}: any) => {
             </TouchableOpacity>
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={styles.usernameText}>View Profile</Text>
+              <Text style={styles.headerText}>View Profile</Text>
             </View>
             <TouchableOpacity
               style={{height: '100%', justifyContent: 'center'}}
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.regular,
     marginBottom: 10,
   },
-  usernameText: {
+  headerText: {
     fontSize: 18,
     fontFamily: Fonts.semiBold,
     color: Colors.tertiaryColor,

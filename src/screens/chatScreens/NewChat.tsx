@@ -104,6 +104,24 @@ const NewChat = ({navigation, route}: any) => {
     }
   };
 
+  const handlePress = (contact: any) => {    
+    if (healrcontacts === true && invite === true) {
+      initChat(contact);
+    } else {
+      sendFile(contact);
+    }
+  }
+  
+  const initChat = (contact: any) => {    
+    navigation.navigate('IndividualChat', {
+      userName: contact.name,
+      profileImageSource: contact.photoURL,
+      receiverId: contact.receiverId,
+      userId: userId,
+      status: contact.status,
+    });
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -153,9 +171,7 @@ const NewChat = ({navigation, route}: any) => {
                   <ContactItem
                     key={index}
                     navigation={navigation}
-                    handlePress={
-                      route.params ? () => sendFile(contact) : undefined
-                    }
+                    handlePress={() => handlePress(contact)}
                     profileImageSource={contact.photoURL}
                     userName={name}
                     expertise={contact?.expertise || 'N/A'}

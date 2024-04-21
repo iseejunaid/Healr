@@ -15,11 +15,13 @@ const customtInputToolbar = ({
   text,
   setText,
   onSend,
+  receiverId,
   navigation,
 }: {
   text: string;
   setText: (val: string) => void;
   onSend: (mes: any, type: string) => void;
+  receiverId: string;
   navigation: any;
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -140,7 +142,7 @@ const customtInputToolbar = ({
         navigation.pop();
         break;
       case 'Create dossier':
-        console.log('Create dossier clicked');
+        navigation.navigate('CreateDossier',{receiverId:receiverId});
         break;
       default:
         console.log('Invalid option');
