@@ -45,6 +45,8 @@ import com.swmansion.rnscreens.RNScreensPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 // react-native-sound-recorder
 import com.kevinresol.react_native_sound_recorder.RNSoundRecorderPackage;
+// react-native-svg
+import com.horcrux.svg.SvgPackage;
 // react-native-video
 import com.brentvatne.react.ReactVideoPackage;
 // rn-fetch-blob
@@ -111,6 +113,7 @@ public class PackageList {
       new RNScreensPackage(),
       new RNSoundPackage(),
       new RNSoundRecorderPackage(),
+      new SvgPackage(),
       new ReactVideoPackage(),
       new RNFetchBlobPackage()
     ));
