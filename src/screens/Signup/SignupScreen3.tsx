@@ -15,7 +15,7 @@ import { isValidEmail } from './signupConstantData';
 import {signupConfig} from './signupVariables';
 
 const SignupScreen3 = ({navigation}: {navigation: any}) => {
-  const [email, setEmail] = useState('123@123.com');
+  const [email, setEmail] = useState('');
   const [isValidEmailInput, setValidEmailInput] = useState(true);
 
   const handleEmailChange = (newEmail:string) => {

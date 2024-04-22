@@ -14,7 +14,7 @@ import Fonts from '../../../assets/fonts/fonts';
 import { signupConfig } from './signupVariables';
 
 const SignupScreen5 = ({navigation}: {navigation: any}) => {
-  const [phoneNumber, setPhoneNumber] = useState('03212322321');
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   const handleEmailChange = (text: string) => {
     setPhoneNumber(text);

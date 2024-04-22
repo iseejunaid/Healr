@@ -56,6 +56,7 @@ const CreateDossier = ({navigation, route}: any) => {
       .map(item => item.path.replace('file://', ''));
 
     Alert.alert('Making Dossier','Generating PDF takes time, You can continue using the app in the meantime. It will be send once ready.')
+    navigation.pop();
     sendDossier(route.params.receiverId, imagespaths, title, mrn, description);
   };
 

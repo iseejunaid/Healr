@@ -14,8 +14,8 @@ import Fonts from '../../../assets/fonts/fonts';
 import { signupConfig } from './signupVariables';
 
 const SignupScreen1 = ({navigation}: {navigation: any}) => {
-  const [fName, setFName] = useState('test');
-  const [lName, setLName] = useState('test');
+  const [fName, setFName] = useState('');
+  const [lName, setLName] = useState('');
 
   const handlefNameChange = (text: string) => {
     setFName(text);

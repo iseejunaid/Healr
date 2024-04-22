@@ -6,13 +6,14 @@ import {
   Text,
   Image,
   StatusBar,
+  Modal,
 } from 'react-native';
 import Header from '../../components/Header';
 import Colors from '../../../assets/colors/colors';
 import PressableBtn from '../../components/PressableBtn';
 import Fonts from '../../../assets/fonts/fonts';
 import LinearGradient from 'react-native-linear-gradient';
-import {auth} from '../../../configs/firebaseConfig';
+import {auth, db} from '../../../configs/firebaseConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../components/Loader';
 
@@ -21,7 +22,8 @@ const ProfileScreen = ({navigation}: any) => {
   const [profileImage, setProfileImage] = useState('');
   const [expertise, setExpertise] = useState('');
   const [status, setStatus] = useState('');
-  const [loading, setLoading] = useState(false);  
+  const [loading, setLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const capitalizeFirstLetter = (str: string) => {
     return str.replace(/\b\w/g, char => char.toUpperCase());
@@ -34,19 +36,20 @@ const ProfileScreen = ({navigation}: any) => {
       setProfileImage((await AsyncStorage.getItem('photoURL')) ?? '');
       const statusValue = await AsyncStorage.getItem('status');
       const expertiseValue = (await AsyncStorage.getItem('expertise')) ?? '';
-      const expertiseInput = (await AsyncStorage.getItem('expertiseInput')) ?? '';
+      const expertiseInput =
+        (await AsyncStorage.getItem('expertiseInput')) ?? '';
 
       if (name) {
         setName(name);
       }
 
       setStatus(statusValue ? capitalizeFirstLetter(statusValue) : '');
-      
+
       if (expertiseValue === 'unlisted') {
         setExpertise(capitalizeFirstLetter(expertiseInput));
       } else {
         setExpertise(capitalizeFirstLetter(expertiseValue));
-      }      
+      }
     } catch (error: any) {
       console.error('Error fetching data from AsyncStorage:', error.message);
     }
@@ -56,12 +59,11 @@ const ProfileScreen = ({navigation}: any) => {
   useEffect(() => {
     fetchData();
 
-    // Use useFocusEffect to fetch data whenever the screen gains focus
     const unsubscribe = navigation.addListener('focus', () => {
-      fetchData(); // Fetch data whenever the screen gains focus
+      fetchData();
     });
 
-    return unsubscribe; // Clean up the subscription when component unmounts
+    return unsubscribe;
   }, []);
 
   const items = [
@@ -71,26 +73,24 @@ const ProfileScreen = ({navigation}: any) => {
     {label: 'Change Password'},
   ];
 
-  const optionsHandler = (label: string) => {    
+  const optionsHandler = (label: string) => {
     switch (label) {
       case 'Status':
-        console.log('Status');
+        setIsModalVisible(true);
         break;
       case 'My QR Code':
-        console.log('My QR Code');
+        navigation.navigate('ProfileQR');
         break;
       case 'Notifications':
         console.log('Notifications');
         break;
       case 'Change Password':
-        console.log('Change Password');
-        
         navigation.navigate('CreateNewPassScreen');
         break;
       default:
         break;
     }
-  }
+  };
 
   const onLogout = async () => {
     try {
@@ -99,6 +99,34 @@ const ProfileScreen = ({navigation}: any) => {
       navigation.popToTop();
     } catch (error: any) {
       console.error('Error logging out:', error.message);
+    }
+  };
+
+  const updateStatus = async (newStatus: string) => {
+    if (capitalizeFirstLetter(newStatus) === status) {
+      setIsModalVisible(false);
+      return;
+    }
+    try {
+      setStatus(capitalizeFirstLetter(newStatus));
+      setIsModalVisible(false);
+      await AsyncStorage.setItem('status', newStatus);
+      const userId = auth.currentUser?.uid;
+      db.collection('users')
+        .where('uid', '==', userId)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            doc.ref.update({
+              status: newStatus,
+            });
+          });
+        })
+        .catch(error => {
+          console.error('Error updating status:', error);
+        });
+    } catch (error: any) {
+      console.error('Error updating status:', error.message);
     }
   };
 
@@ -114,17 +142,12 @@ const ProfileScreen = ({navigation}: any) => {
           ]}
           style={styles.gradientBackground}>
           <Header text="Profile" />
-          <View
-            style={{
-              height: 110,
-              width: '100%',
-            }}></View>
+          <View style={{height: 110, width: '100%'}}></View>
         </LinearGradient>
-          {loading ? (
-            <Loader/>
-          ) : (
-        <View style={styles.imgView}>
-          
+        {loading ? (
+          <Loader />
+        ) : (
+          <View style={styles.imgView}>
             <View style={styles.circle}>
               {profileImage ? (
                 <Image source={{uri: profileImage}} style={styles.image} />
@@ -135,17 +158,16 @@ const ProfileScreen = ({navigation}: any) => {
                 />
               )}
             </View>
-
-          <Text style={styles.nametxt}>{name}</Text>
-          <Text style={styles.professiontxt}>{expertise}</Text>
-          <Text style={styles.statustxt}>{status}</Text>
-          <TouchableOpacity
-            style={styles.editBtn}
-            onPress={() => navigation.navigate('EditProfile')}>
-            <Text style={{color: Colors.secondaryColor}}>Edit Profile</Text>
-          </TouchableOpacity>
-        </View>
-          )}
+            <Text style={styles.nametxt}>{name}</Text>
+            <Text style={styles.professiontxt}>{expertise}</Text>
+            <Text style={styles.statustxt}>{status}</Text>
+            <TouchableOpacity
+              style={styles.editBtn}
+              onPress={() => navigation.navigate('EditProfile')}>
+              <Text style={{color: Colors.secondaryColor}}>Edit Profile</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <View
@@ -156,8 +178,10 @@ const ProfileScreen = ({navigation}: any) => {
           marginBottom: '4%',
         }}>
         {items.map(({label}, index) => (
-          <TouchableOpacity key={index} style={styles.middle}
-          onPress={() => optionsHandler(label)}>
+          <TouchableOpacity
+            key={index}
+            style={styles.middle}
+            onPress={() => optionsHandler(label)}>
             <Text style={styles.middletxt}>{label}</Text>
             <Image
               source={require('../../../assets/images/rightArrow.png')}
@@ -174,10 +198,45 @@ const ProfileScreen = ({navigation}: any) => {
           text="Logout"
         />
       </View>
+
+      <Modal
+        visible={isModalVisible}
+        transparent
+        onRequestClose={() => setIsModalVisible(false)}
+        animationType="slide">
+        <View
+          style={styles.modalBackground}
+          onStartShouldSetResponder={() => {
+            setIsModalVisible(false);
+            return false;
+          }}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.modalOption}
+              onPress={() => updateStatus('available')}>
+              <Text style={styles.modalOptionTxt}>Available</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalOption}
+              onPress={() => updateStatus('unavailable')}>
+              <Text style={styles.modalOptionTxt}>Unavailable</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeModalBtn}
+              onPress={() => setIsModalVisible(false)}>
+              <Text
+                style={[styles.modalOptionTxt, {fontFamily: Fonts.semiBold}]}>
+                Cancel
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
 export default ProfileScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -241,7 +300,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   middle: {
     flexDirection: 'row',
     width: '80%',
@@ -263,5 +321,34 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginBottom: 20,
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderTopStartRadius: 15,
+    borderTopEndRadius: 15,
+    width: '100%',
+    elevation: 10,
+  },
+  modalOption: {
+    padding: 15,
+    borderBottomWidth: 0.7,
+    borderBottomColor: Colors.quadraryColor,
+  },
+  modalOptionTxt: {
+    fontSize: 14,
+    color: Colors.tertiaryColor,
+    fontFamily: Fonts.regular,
+  },
+  closeModalBtn: {
+    padding: 15,
+    borderTopColor: Colors.quadraryColor,
+    alignItems: 'center',
   },
 });

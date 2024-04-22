@@ -4,7 +4,6 @@ import {downloadFile} from '../../HealrFilesScreens/HealrFilesHelper';
 
 const RenderCustomView = (props: any) => {
   const {currentMessage} = props;
-  console.log('currentMessage', currentMessage);
 
   const openDocument = () => {
     if (currentMessage?.document) {
