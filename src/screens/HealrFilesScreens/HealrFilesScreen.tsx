@@ -107,7 +107,7 @@ const HealrFilesScreen: React.FC = ({ navigation }: any) => {
             </Text>
           </View>
         ) : null}
-        {filteredFiles.map((file, index) => {          
+        {filteredFiles.map((file, index) => {
           return (
             <FileItem
               key={index}

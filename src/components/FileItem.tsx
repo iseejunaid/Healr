@@ -30,7 +30,7 @@ const FileItem = ({
   deleteValue,
   uploadedFileName,
   setModified,
-}: any) => {
+}: any) => {  
   const [imgSource, setImgSource] = useState('');
   const [deleted, setDeleted] = useState(deleteValue);
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,6 +40,10 @@ const FileItem = ({
   const [ext, setExt] = useState('');
   const [position, setPosition] = useState({x: 0, y: 0, width: 0, height: 0});
   const imageRef = useRef(null);
+  
+  useEffect(() => {
+    setInitialFileName(fileName);
+  }, [fileName]);
 
   date = formatDate(date);
 
