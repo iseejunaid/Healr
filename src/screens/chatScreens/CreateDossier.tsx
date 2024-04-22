@@ -21,6 +21,7 @@ const CreateDossier = ({navigation, route}: any) => {
   ]);
   const [title, setTitle] = useState('');
   const [mrn, setMrn] = useState('');
+  const [patient, setPatient] = useState('');
   const [description, setDescription] = useState('');
 
   const openImagePicker = async () => {
@@ -30,17 +31,17 @@ const CreateDossier = ({navigation, route}: any) => {
     })
       .then(data => {
         const newImages = data.map((image, index) => ({
-            id: `image-${Date.now()}-${index}`,
-            path: image.path,
-          }));
-    
-          setSliderData([...newImages, ...sliderData]);
+          id: `image-${Date.now()}-${index}`,
+          path: image.path,
+        }));
+
+        setSliderData([...newImages, ...sliderData]);
       })
       .catch(err => {
         console.log(err);
       });
 
-    ImageCropPicker.clean()
+    ImageCropPicker.clean();
   };
   const handleSend = async () => {
     if (sliderData.length <= 1) {
@@ -53,11 +54,9 @@ const CreateDossier = ({navigation, route}: any) => {
     }
     const imagespaths = sliderData
       .filter(item => item.id !== 'addImage')
-      .map(item => item.path.replace('file://', ''));
-
-    Alert.alert('Making Dossier','Generating PDF takes time, You can continue using the app in the meantime. It will be send once ready.')
-    navigation.pop();
-    sendDossier(route.params.receiverId, imagespaths, title, mrn, description);
+      .map(item => item.path);
+      
+      sendDossier(route.params.receiverId, imagespaths, title, mrn,patient, description);
   };
 
   const renderItem = ({item, index}: any) => {
@@ -132,6 +131,13 @@ const CreateDossier = ({navigation, route}: any) => {
           width={95}
           value={mrn}
           handleChange={setMrn}
+        />
+        <InputField
+          style={{elevation: 5}}
+          placeholder="Patient"
+          width={95}
+          value={patient}
+          handleChange={setPatient}
         />
         <TextInput
           style={styles.input}

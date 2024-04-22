@@ -1,21 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, ScrollView, Text, Image} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, ScrollView, Text, Image } from 'react-native';
 import Header from '../../components/Header';
 import Colors from '../../../assets/colors/colors';
 import OptionsModal from '../../components/OptionsModal';
 import DocumentPicker from 'react-native-document-picker';
 import InputField from '../../components/InputField';
 import FileItem from '../../components/FileItem';
-import {fetchFiles, uploadFile} from './HealrFilesHelper';
+import { fetchFiles, uploadFile } from './HealrFilesHelper';
 import Fonts from '../../../assets/fonts/fonts';
 
-const HealrFilesScreen: React.FC = ({navigation}:any) => {
+const HealrFilesScreen: React.FC = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [modified, setModified] = useState(true);
   const [files, setFiles] = useState<any[]>([]);
 
-  const modalOptions = [{text: 'Import Files'}, {text: 'Sort'}];
+  const modalOptions = [{ text: 'Import Files' }, { text: 'Sort' }];
 
   useEffect(() => {
     if (modified) {
@@ -36,8 +36,8 @@ const HealrFilesScreen: React.FC = ({navigation}:any) => {
             allowMultiSelection: true,
             type: [DocumentPicker.types.allFiles],
           })
-            .then(data => {
-              const formattedDataArray = data.map(document => ({
+            .then((data) => {
+              const formattedDataArray = data.map((document) => ({
                 uri: document.uri,
                 type: document.type,
                 name: document.name,
@@ -47,7 +47,7 @@ const HealrFilesScreen: React.FC = ({navigation}:any) => {
                 setModified(true);
               });
             })
-            .catch(err => {
+            .catch((err) => {
               if (DocumentPicker.isCancel(err)) {
                 console.log('User cancelled the picker');
               } else {
@@ -68,6 +68,11 @@ const HealrFilesScreen: React.FC = ({navigation}:any) => {
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
+
+  const filteredFiles = files.filter((file) =>
+    file.name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <View style={styles.container}>
       <Header
@@ -83,7 +88,7 @@ const HealrFilesScreen: React.FC = ({navigation}:any) => {
           placeholder="Search"
           width={95}
         />
-        {files.length === 0 ? (
+        {filteredFiles.length === 0 ? (
           <View
             style={{
               height: 450,
@@ -102,7 +107,7 @@ const HealrFilesScreen: React.FC = ({navigation}:any) => {
             </Text>
           </View>
         ) : null}
-        {files.map((file, index) => {
+        {filteredFiles.map((file, index) => {          
           return (
             <FileItem
               key={index}
@@ -136,6 +141,7 @@ const HealrFilesScreen: React.FC = ({navigation}:any) => {
   );
 };
 export default HealrFilesScreen;
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.secondaryColor,
@@ -145,7 +151,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   searchInput: {
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 4,
     elevation: 4,

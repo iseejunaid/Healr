@@ -8,6 +8,7 @@ import { requestContactsPermission } from '../../../helpers/permissions';
 import Contacts from 'react-native-contacts';
 import RNFS from 'react-native-fs';
 import { copyFile } from '../HealrFilesScreens/HealrFilesHelper';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNImageToPdf from 'react-native-image-to-pdf';
 
 export const sendMedia = async (data: any, receiver: string) => {
@@ -315,6 +316,10 @@ export const fetchUserId = async () => {
     return await AsyncStorage.getItem('uid') ?? '';
 };
 
+const fetchUsername = async () => {
+    return await AsyncStorage.getItem('name') ?? '';
+};
+
 export const fetchContacts = async () => {
     const dbContacts = await fetchDbContacts();
     const localContacts = await fetchLocalContacts();
@@ -442,8 +447,8 @@ export const fetchReceiverData = async (receiverId: string) => {
     }
 }
 
-export const sendDossier = async (receiver_id: string, imagespaths: any, title: string, mrn?: string, description?: string) => {
-    const uri = await makePdf(imagespaths, title);
+export const sendDossier = async (receiver_id: string, imagespaths: any, title: string, mrn?: string, patient?: string, description?: string) => {
+    const uri = await makePdf(imagespaths, title, mrn, patient, description);
     const fileType = 'dossier';
     const name = title;
     const extension = 'pdf';
@@ -464,17 +469,95 @@ export const sendDossier = async (receiver_id: string, imagespaths: any, title: 
         }
 }
 
-const makePdf = async (imagespaths: any, title: string) => {
-    try {
-        const options = {
-            imagePaths: imagespaths,
-            name: title + '.pdf',
-            quality: 0.1,
-        };
-
-        const pdf = await RNImageToPdf.createPDFbyImages(options);
-        return pdf.filePath;
-    } catch (err) {
-        console.log(err);
+const makePdf = async (imagespaths: any, title: string, mrn?: string, patient?: string, description?: string) => {
+    if (!mrn) {
+        mrn = 'Not Specified';
     }
+    if (!patient) {
+        patient = 'Not Specified';
+    }
+    if (!description) {
+        description = 'Not Specified';
+    }
+
+    let imagesHtml = '';
+
+    for (let i = 0; i < imagespaths.length; i += 2) {
+        if (i % 2 === 0) {
+            imagesHtml += `
+      <div style="padding: 8px; margin: 8px; display: flex; justify-content: space-evenly;">
+        <img src="${imagespaths[i]}" style="width: 200px; height: 200px;" />
+    `;
+
+            if (i + 1 < imagespaths.length) {
+                imagesHtml += `
+        <img src="${imagespaths[i + 1]}" style="width: 200px; height: 200px;" />
+      `;
+            }
+
+            imagesHtml += `
+      </div>
+    `;
+        }
+    }
+
+    const date = new Date().toLocaleDateString();
+    
+    const username = await fetchUsername();
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+          <body>
+          <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+  
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+  
+        th {
+            width: 30%;
+        }
+  
+        h2, p {
+            padding-left: 8px;
+        }
+    </style>
+          <table>
+            <tr>
+                <th>Title:</th>
+                <td>${title}</td>
+            </tr>
+            <tr>
+                <th>MRN:</th>
+                <td>${mrn}</td>
+            </tr>
+            <tr>
+                <th>Patient Name:</th>
+                <td>${patient}</td>
+            </tr>
+          </table>
+          <p style="color: #818181; font-size: 12px;">Created on ${date} by ${username}</p>
+          <div>
+            ${imagesHtml}
+          </div>
+          <h1>Description:</h1>
+          <p>${description}</p>
+          </body>
+      </html>
+    `;
+
+    const options = {
+        html: htmlContent,
+        fileName: title,
+        directory: 'Documents',
+    };
+
+    let file = await RNHTMLtoPDF.convert(options);
+    return file.filePath;
 }

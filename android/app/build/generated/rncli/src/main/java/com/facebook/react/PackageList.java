@@ -31,10 +31,10 @@ import com.rnfs.RNFSPackage;
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 // react-native-get-random-values
 import org.linusu.RNGetRandomValuesPackage;
+// react-native-html-to-pdf
+import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 // react-native-image-crop-picker
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
-// react-native-image-to-pdf
-import com.anyline.RNImageToPDF.RNImageToPdfPackage;
 // react-native-linear-gradient
 import com.BV.LinearGradient.LinearGradientPackage;
 // react-native-safe-area-context
@@ -106,8 +106,8 @@ public class PackageList {
       new RNFSPackage(),
       new RNGestureHandlerPackage(),
       new RNGetRandomValuesPackage(),
+      new RNHTMLtoPDFPackage(),
       new PickerPackage(),
-      new RNImageToPdfPackage(),
       new LinearGradientPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),

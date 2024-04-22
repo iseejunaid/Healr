@@ -79,7 +79,11 @@ const ProfileScreen = ({navigation}: any) => {
         setIsModalVisible(true);
         break;
       case 'My QR Code':
-        navigation.navigate('ProfileQR');
+        navigation.navigate('ProfileQR',{
+          profileImageSource:profileImage,
+          name:name,
+          expertise:expertise,
+        });
         break;
       case 'Notifications':
         console.log('Notifications');
