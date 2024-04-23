@@ -57,6 +57,8 @@ const CreateDossier = ({navigation, route}: any) => {
       .map(item => item.path);
       
       sendDossier(route.params.receiverId, imagespaths, title, mrn,patient, description);
+      Alert.alert('Making Dossier', 'PDF generation takes time, It will be sent when Finished.');
+      navigation.pop();
   };
 
   const renderItem = ({item, index}: any) => {

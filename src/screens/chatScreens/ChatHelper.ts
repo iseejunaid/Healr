@@ -471,13 +471,13 @@ export const sendDossier = async (receiver_id: string, imagespaths: any, title: 
 
 const makePdf = async (imagespaths: any, title: string, mrn?: string, patient?: string, description?: string) => {
     if (!mrn) {
-        mrn = 'Not Specified';
+        mrn = '-';
     }
     if (!patient) {
-        patient = 'Not Specified';
+        patient = '-';
     }
     if (!description) {
-        description = 'Not Specified';
+        description = '-';
     }
 
     let imagesHtml = '';

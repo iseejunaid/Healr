@@ -40,14 +40,11 @@ const FileItem = ({
   const [ext, setExt] = useState('');
   const [position, setPosition] = useState({x: 0, y: 0, width: 0, height: 0});
   const imageRef = useRef(null);
+
+  date = formatDate(date);
   
   useEffect(() => {
     setInitialFileName(fileName);
-  }, [fileName]);
-
-  date = formatDate(date);
-
-  useEffect(() => {
     const {renameAbleFilename, ext} = splitFileNameAndExt(fileName);
     setNewFileName(renameAbleFilename);
     setExt(ext);
