@@ -37,8 +37,6 @@ const NewChat = ({navigation, route}: any) => {
   const [invitableContacts, setInvitableContacts] = useState<
     {name: string; phoneNumber: string}[]
   >([]);
-  const [defaultHealrContacts, setDefaultHealrContacts] = useState([]);
-  const [defaultInvitableContacts, setDefaultInvitableContacts] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,25 +50,7 @@ const NewChat = ({navigation, route}: any) => {
     };
     fetchUserId();
     fetchData().then(() => setLoading(false));
-    setDefaultHealrContacts(healrContacts as any);
-    setDefaultInvitableContacts(invitableContacts as any);
   }, []);
-
-  useEffect(() => {
-    if (searchText) {
-      const filteredHealrContacts = healrContacts.filter(contact =>
-        contact.name.toLowerCase().includes(searchText.toLowerCase()),
-      );
-      setHealrContacts(filteredHealrContacts);
-      const filteredInvitableContacts = invitableContacts.filter(contact =>
-        contact.name.toLowerCase().includes(searchText.toLowerCase()),
-      );
-      setInvitableContacts(filteredInvitableContacts);
-    } else {
-      setHealrContacts(defaultHealrContacts);
-      setInvitableContacts(defaultInvitableContacts);
-    }
-  }, [searchText]);
 
   const sendFile = (contact: any) => {
     if (route.params?.data) {
@@ -104,15 +84,23 @@ const NewChat = ({navigation, route}: any) => {
     }
   };
 
-  const handlePress = (contact: any) => {    
+  const handlePress = (contact: any) => {
     if (healrcontacts === true && invite === true) {
       initChat(contact);
     } else {
       sendFile(contact);
     }
-  }
-  
-  const initChat = (contact: any) => {    
+  };
+
+  const filteredHealrContacts = healrContacts.filter(contact => {
+    return contact.name.toLowerCase().includes(searchText.toLowerCase());
+  });
+
+  const filteredInvitableContacts = invitableContacts.filter(contact => {
+    return contact.name.toLowerCase().includes(searchText.toLowerCase());
+  });
+
+  const initChat = (contact: any) => {
     navigation.navigate('IndividualChat', {
       userName: contact.name,
       profileImageSource: contact.photoURL,
@@ -120,7 +108,7 @@ const NewChat = ({navigation, route}: any) => {
       userId: userId,
       status: contact.status,
     });
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -132,7 +120,13 @@ const NewChat = ({navigation, route}: any) => {
           <View style={styles.headerText}>
             <Text style={styles.headerTitle}>Select Contact</Text>
             <Text style={styles.headerSubtitle}>
-              {healrContacts.length} Contacts
+              {healrcontacts && invite
+                ? healrContacts.length + invitableContacts.length + ' Contacts'
+                : healrcontacts
+                ? healrContacts.length + ' Contacts'
+                : invite
+                ? invitableContacts.length + ' Contacts'
+                : '0 Contacts'}
             </Text>
           </View>
         </View>
@@ -157,12 +151,12 @@ const NewChat = ({navigation, route}: any) => {
         </View>
       ) : (
         <ScrollView style={styles.contactListContainer}>
-          {healrcontacts === true && healrContacts.length > 0 && (
+          {healrcontacts === true && filteredHealrContacts.length > 0 && (
             <>
               <View style={styles.heading}>
                 <Text style={styles.headingText}>Contacts on Healr</Text>
               </View>
-              {healrContacts.map((contact, index) => {
+              {filteredHealrContacts.map((contact, index) => {
                 var name = contact?.name || 'Unknown';
                 if (userId == contact?.receiverId) {
                   name = name + ' (You)';
@@ -183,12 +177,12 @@ const NewChat = ({navigation, route}: any) => {
               })}
             </>
           )}
-          {invite === true && invitableContacts.length > 0 && (
+          {invite === true && filteredInvitableContacts.length > 0 && (
             <>
               <View style={styles.heading}>
                 <Text style={styles.headingText}>Invite to Healr</Text>
               </View>
-              {invitableContacts.map((contact, index) => (
+              {filteredInvitableContacts.map((contact, index) => (
                 <ContactItem
                   key={index}
                   navigation={navigation}

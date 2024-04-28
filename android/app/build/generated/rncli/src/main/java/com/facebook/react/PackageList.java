@@ -19,6 +19,8 @@ import com.reactnativecommunity.checkbox.ReactCheckBoxPackage;
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 // @react-native-firebase/auth
 import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
+// react-native-camera
+import org.reactnative.camera.RNCameraPackage;
 // react-native-compressor
 import com.reactnativecompressor.CompressorPackage;
 // react-native-contacts
@@ -100,6 +102,7 @@ public class PackageList {
       new ReactCheckBoxPackage(),
       new ReactNativeFirebaseAppPackage(),
       new ReactNativeFirebaseAuthPackage(),
+      new RNCameraPackage(),
       new CompressorPackage(),
       new ReactNativeContacts(),
       new RNDocumentPickerPackage(),

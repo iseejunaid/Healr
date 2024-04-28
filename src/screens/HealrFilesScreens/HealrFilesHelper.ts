@@ -119,7 +119,7 @@ export const deleteFile = async (fileId: string, uploadedFileName: string) => {
         await storageRef.delete();
 
         console.log(`File ${fileId} deleted successfully`);
-        
+
 
     } catch (error) {
         console.log(`Error deleting file ${fileId}:`, error);
@@ -140,8 +140,22 @@ export const downloadFile = async (fileName: string, url: string, fileExtension:
         const name = fileName;
 
         const filePath = `${dirToSave}/${name}`;
-        if (inform) {
-            Alert.alert('Download Started', 'Your file is being downloaded to your phone. You will be notified once the download is complete.');
+        const fileExists = await RNFetchBlob.fs.exists(filePath);
+
+        if (fileExists) {
+            if (inform) {
+                Alert.alert('File Already Exists', 'This File is already downloaded to storage.')
+            }else{
+                openFile(filePath,fileExtension)
+            }
+            console.log(`File '${fileName}' is already downloaded.`);
+            return;
+        } else {
+            if (inform) {
+                Alert.alert('Download Started', 'Your file is being downloaded to your phone. You will be notified once the download is complete.');
+            }
+            console.log(`File '${fileName}' is not downloaded.`);
+            
         }
         const res = await RNFetchBlob.config({
             fileCache: true,
@@ -187,7 +201,6 @@ const getMIMEType = (fileExtension: string) => {
 const openFile = (filePath: string, fileExtension: string) => {
     console.log('Opening file:', filePath);
 
-
     const mime = getMIMEType(fileExtension);
 
     if (Platform.OS === 'ios') {
@@ -203,11 +216,11 @@ const openFile = (filePath: string, fileExtension: string) => {
     }
 };
 
-export const splitFileNameAndExt = (fileName: string) => {    
-    const lastIndex = fileName.lastIndexOf('.');    
-    const renameAbleFilename = lastIndex !== -1 ? fileName.slice(0, lastIndex) : fileName;    
+export const splitFileNameAndExt = (fileName: string) => {
+    const lastIndex = fileName.lastIndexOf('.');
+    const renameAbleFilename = lastIndex !== -1 ? fileName.slice(0, lastIndex) : fileName;
     const ext = lastIndex !== -1 ? fileName.slice(lastIndex + 1) : '';
-    
+
     return { renameAbleFilename, ext };
 };
 

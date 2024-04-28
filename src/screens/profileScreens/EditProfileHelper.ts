@@ -141,3 +141,21 @@ export const uploadImage = async (uri: any, user: any) => {
     throw error;
   }
 };
+
+export const fetchUser = async (userId: string) => {
+  try {
+    const userRef = db.collection('users').where('uid', '==', userId);
+    const userQuery = await userRef.get();
+    
+    if (!userQuery.empty) {      
+      return userQuery.docs[0].data();
+    } else {
+      console.error('No such document');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error.message);
+    throw error;
+  }
+}
+

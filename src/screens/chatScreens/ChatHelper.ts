@@ -9,7 +9,6 @@ import Contacts from 'react-native-contacts';
 import RNFS from 'react-native-fs';
 import { copyFile } from '../HealrFilesScreens/HealrFilesHelper';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import RNImageToPdf from 'react-native-image-to-pdf';
 
 export const sendMedia = async (data: any, receiver: string) => {
     try {

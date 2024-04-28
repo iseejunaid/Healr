@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import QRCode from 'react-native-qrcode-svg';
-import { fetchUserId } from '../chatScreens/ChatHelper';
+import {fetchUserId} from '../chatScreens/ChatHelper';
+import Loader from '../../components/Loader';
 
 const ProfileQRScreen: React.FC = ({navigation, route}: any) => {
   const {profileImageSource, name, expertise} = route.params;
-  const [userId, setUserId] = useState(''); 
-  
+  const [userId, setUserId] = useState('');
+
   useEffect(() => {
-    fetchUserId().then((id) => {
+    fetchUserId().then(id => {
       setUserId(id);
     });
   }, []);
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -53,17 +54,25 @@ const ProfileQRScreen: React.FC = ({navigation, route}: any) => {
             <Text style={styles.userName}>{name}</Text>
             <Text style={styles.userExpertise}>{expertise}</Text>
           </View>
-          <View style={{height:150,justifyContent:'center'}}>
-            <QRCode
-              // value={[userId, name, expertise]}
-              value={userId}
-              size={130}
-              color={Colors.secondaryWhite}
-              backgroundColor={Colors.tertiaryColor}
-              logo={require('../../../assets/images/logo.png')}
-              logoBackgroundColor={Colors.secondaryWhite}
-            />
+          <View style={{height: 150, justifyContent: 'center'}}>
+            {!userId ? (
+              <Loader />
+            ) : (
+              <QRCode
+                value={userId}
+                logo={require('../../../assets/images/logo.png')}
+                logoBackgroundColor={Colors.secondaryWhite}
+              />
+            )}
           </View>
+        </View>
+      </View>
+      <View style={styles.footer}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text style={styles.bottomtxt}>Scan </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('ScanQR')}>
+            <Text style={styles.bottombtntxt}>Code</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -93,7 +102,7 @@ const styles = StyleSheet.create({
     color: Colors.secondaryWhite,
   },
   body: {
-    flex: 0.9,
+    flex: 0.8,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -133,6 +142,20 @@ const styles = StyleSheet.create({
     marginTop: -5,
     fontFamily: Fonts.regular,
     color: Colors.tertiaryColor,
+  },
+  footer: {
+    flex: 0.13,
+  },
+  bottomtxt: {
+    fontSize: 12,
+    fontFamily: Fonts.regular,
+    color: Colors.secondaryColor,
+  },
+  bottombtntxt: {
+    color: Colors.primaryColor,
+    fontSize: 12,
+    fontFamily: Fonts.semiBold,
+    marginTop: '2%',
   },
 });
 
