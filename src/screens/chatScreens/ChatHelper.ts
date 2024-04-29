@@ -416,6 +416,9 @@ export const deleteChat = async (receiverId: string, userId?: string) => {
 
 export const fetchReceiverData = async (receiverId: string) => {
     const userQ = query(collection(db, 'users'), where('uid', '==', receiverId));
+    let name = '';
+    let profilepic = '';
+    let status = '';
     let expertise = '';
     let expertiseInput = ''
     let expertiseToDisplay = '';
@@ -426,6 +429,9 @@ export const fetchReceiverData = async (receiverId: string) => {
         const userSnapshot = await getDocs(userQ);
         userSnapshot.forEach(doc => {
             let userData = doc.data();
+            name = userData.name;
+            profilepic = userData.photoURL;
+            status = userData.status;            
             expertise = userData.expertise;
             expertiseInput = userData.expertiseInput;
             about = userData.about;
@@ -439,7 +445,7 @@ export const fetchReceiverData = async (receiverId: string) => {
         if (!workplace) {
             workplace = 'Not specified';
         }
-        return { expertiseToDisplay, about, workplace };
+        return { name,profilepic,status,expertiseToDisplay, about, workplace };
     } catch (error) {
         console.error('Error fetching user:', error);
         return null;

@@ -117,9 +117,6 @@ const IndividualChatScreen = ({navigation, route}: any) => {
             onStartShouldSetResponder={() => {
               navigation.navigate('ViewProfile', {
                 userId: receiverId,
-                userName: userName,
-                status: status,
-                profileImageSource: profileImageSource,
               });
               return false;
             }}>

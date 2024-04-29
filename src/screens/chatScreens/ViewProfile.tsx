@@ -4,12 +4,14 @@ import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import Loader from '../../components/Loader';
-import {deleteChat, fetchReceiverData} from './ChatHelper';
+import {deleteChat, fetchReceiverData, fetchUserId} from './ChatHelper';
 import OptionsModal from '../../components/OptionsModal';
 
 const ViewProfileScreen = ({navigation, route}: any) => {
-  const name = route.params.userName;
-  const profileImage = route.params.profileImageSource;
+  const [userId, setUserId] = useState('');
+  const [name, setName] = useState('');
+  const [profileImage, setProfileImage] = useState('');
+  const [status, setStatus] = useState('');
   const [expertise, setExpertise] = useState('');
   const [about, setAbout] = useState('');
   const [workplace, setWorkplace] = useState('');
@@ -19,13 +21,15 @@ const ViewProfileScreen = ({navigation, route}: any) => {
   const capitalizeFirstLetter = (str: string) => {
     return str.replace(/\b\w/g, char => char.toUpperCase());
   };
-
-  const status = capitalizeFirstLetter(route.params.status);
   
   useEffect(() => {
     const fetchUserData = async () => {
+      setUserId(await fetchUserId());
       const data = await fetchReceiverData(route.params.userId);
       if (data) {
+        setName(data.name);
+        setProfileImage(data.profilepic);
+        setStatus(capitalizeFirstLetter(data.status));
         setExpertise(capitalizeFirstLetter(data.expertiseToDisplay));
         setAbout(data.about);
         setWorkplace(data.workplace);
@@ -122,7 +126,15 @@ const ViewProfileScreen = ({navigation, route}: any) => {
           }}>
           <TouchableOpacity
             style={styles.iconCircle}
-            onPress={() => navigation.pop()}>
+            onPress={() => {
+              navigation.navigate('IndividualChat', {
+                userName: name,
+                profileImageSource: profileImage,
+                receiverId: route.params.userId,
+                userId: userId,
+                status: status,
+              });
+            }}>
             <Image
               tintColor={Colors.tertiaryColor}
               source={require('../../../assets/images/messageIcon.png')}
