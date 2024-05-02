@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StatusBar, View } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {StatusBar, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from './assets/colors/colors';
-
 import OnBoardingScreens from './src/screens/onBoarding/onBoardingScreenSwiper';
 import LoginScreen from './src/screens/LoginScreen';
 import ForgotPassScreen from './src/screens/forgotPassword/index';
@@ -18,9 +17,10 @@ import SignupScreen5 from './src/screens/Signup/SignupScreen5';
 import SignupScreen6 from './src/screens/Signup/SignupScreen6';
 import SignupScreen7 from './src/screens/Signup/SignupScreen7';
 import HomeScreen from './src/screens/Home/HomeScreen';
+import {ZegoCallInvitationDialog} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import {ZegoUIKitPrebuiltCallWaitingScreen,ZegoUIKitPrebuiltCallInCallScreen} from '@zegocloud/zego-uikit-prebuilt-call-rn';
 import Loader from './src/components/Loader';
-import { auth } from './configs/firebaseConfig';
-
+import {auth} from './configs/firebaseConfig';
 
 const Stack = createStackNavigator();
 
@@ -32,7 +32,7 @@ export default function App() {
   //     try {
   //       const userToken = await AsyncStorage.getItem('token');
   //       console.log('userToken', userToken);
-        
+
   //       if (userToken) {
   //         await auth.signInWithCustomToken(userToken);
   //         setIsLoggedIn(true);
@@ -71,22 +71,38 @@ export default function App() {
     <SafeAreaProvider>
       <StatusBar backgroundColor={Colors.tertiaryColor} />
       <NavigationContainer>
+        <ZegoCallInvitationDialog />
         <Stack.Navigator
           // initialRouteName={isLoggedIn ? 'HomeScreen' : 'LoginScreen'}
           initialRouteName={'LoginScreen'}
-          screenOptions={{ headerShown: false }}>
-              {/* <Stack.Screen name="OnBoardingScreens" component={OnBoardingScreens} /> */}
-              <Stack.Screen name="LoginScreen" component={LoginScreen} />
-              <Stack.Screen name="ForgotPassScreen" component={ForgotPassScreen} />
-              <Stack.Screen name="CreateNewPassScreen" component={CreateNewPassScreen} />
-              <Stack.Screen name="SignupScreen1" component={SignupScreen1} />
-              <Stack.Screen name="SignupScreen2" component={SignupScreen2} />
-              <Stack.Screen name="SignupScreen3" component={SignupScreen3} />
-              <Stack.Screen name="SignupScreen4" component={SignupScreen4} />
-              <Stack.Screen name="SignupScreen5" component={SignupScreen5} />
-              <Stack.Screen name="SignupScreen6" component={SignupScreen6} />
-              <Stack.Screen name="SignupScreen7" component={SignupScreen7} />
-              <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          screenOptions={{headerShown: false}}>
+          {/* <Stack.Screen name="OnBoardingScreens" component={OnBoardingScreens} /> */}
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="ForgotPassScreen" component={ForgotPassScreen} />
+          <Stack.Screen
+            name="CreateNewPassScreen"
+            component={CreateNewPassScreen}
+          />
+          <Stack.Screen name="SignupScreen1" component={SignupScreen1} />
+          <Stack.Screen name="SignupScreen2" component={SignupScreen2} />
+          <Stack.Screen name="SignupScreen3" component={SignupScreen3} />
+          <Stack.Screen name="SignupScreen4" component={SignupScreen4} />
+          <Stack.Screen name="SignupScreen5" component={SignupScreen5} />
+          <Stack.Screen name="SignupScreen6" component={SignupScreen6} />
+          <Stack.Screen name="SignupScreen7" component={SignupScreen7} />
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen
+            options={{headerShown: false}}
+            // DO NOT change the name
+            name="ZegoUIKitPrebuiltCallWaitingScreen"
+            component={ZegoUIKitPrebuiltCallWaitingScreen}
+          />
+          <Stack.Screen
+            options={{headerShown: false}}
+            // DO NOT change the name
+            name="ZegoUIKitPrebuiltCallInCallScreen"
+            component={ZegoUIKitPrebuiltCallInCallScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

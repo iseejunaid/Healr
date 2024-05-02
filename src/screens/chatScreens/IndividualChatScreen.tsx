@@ -18,6 +18,7 @@ import {composeMsg, sendDocument, sendMedia} from './ChatHelper';
 import RenderVideo from './chatComponents/RenderVideo';
 import RenderCustomView from './chatComponents/RenderCustomView';
 import RenderAudio from './chatComponents/RenderAudio';
+import {ZegoSendCallInvitationButton} from '@zegocloud/zego-uikit-prebuilt-call-rn';
 
 interface Message {
   _id: string;
@@ -42,9 +43,9 @@ const IndividualChatScreen = ({navigation, route}: any) => {
       const msg = composeMsg(messageText, receiverId, 'text');
       setText('');
       db.collection('chats').doc(msg._id).set(msg);
-    } else if (type === 'media') {      
+    } else if (type === 'media') {
       sendMedia(messages, receiverId);
-    }else if (type === 'document') {
+    } else if (type === 'document') {
       sendDocument(messages, receiverId);
     }
   };
@@ -57,7 +58,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
       where('user._id', 'in', [userId, receiverId]),
       where('receiver_id', 'in', [userId, receiverId]),
     );
-    
+
     const unsubscribe = onSnapshot(q, querySnapshot => {
       setMessages(
         querySnapshot.docs.map(doc => ({
@@ -84,12 +85,20 @@ const IndividualChatScreen = ({navigation, route}: any) => {
   }, [userId, receiverId]);
 
   const customtInputToolbar = () => {
-    return <CustomInputToobar text={text} setText={setText} onSend={onSend} receiverId={receiverId} navigation={navigation} />;
+    return (
+      <CustomInputToobar
+        text={text}
+        setText={setText}
+        onSend={onSend}
+        receiverId={receiverId}
+        navigation={navigation}
+      />
+    );
   };
 
-  const renderVideo = (props: any) => {    
+  const renderVideo = (props: any) => {
     return <RenderVideo {...props} />;
-  }
+  };
 
   const renderCustomView = (props: any) => {
     return <RenderCustomView {...props} />;
@@ -97,7 +106,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
 
   const renderAudio = (props: any) => {
     return <RenderAudio {...props} />;
-  }
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -106,7 +115,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           style={{flexDirection: 'row', height: '100%', alignItems: 'center'}}>
           <TouchableOpacity
             style={{height: '100%', justifyContent: 'center'}}
-            onPress={() => navigation.popToTop({ screen: 'ChatHome' })}>
+            onPress={() => navigation.popToTop({screen: 'ChatHome'})}>
             <Image
               source={require('../../../assets/images/back.png')}
               style={styles.backImg}
@@ -140,12 +149,16 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           </View>
         </View>
         <View style={styles.callIconsContainer}>
-          <TouchableOpacity style={styles.callIcon}>
-            {/* <Image source={require('../../../assets/images/call.png')} /> */}
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.callIcon}>
-            <Image source={require('../../../assets/images/call.png')} />
-          </TouchableOpacity>
+          <ZegoSendCallInvitationButton
+            invitees={[{userID: receiverId, userName: userName}]}
+            isVideoCall={false}
+            resourceID={'zego_data'}
+          />
+          <ZegoSendCallInvitationButton
+            invitees={[{userID: receiverId, userName: userName}]}
+            isVideoCall={true}
+            resourceID={'zego_video_call'}
+          />
         </View>
       </View>
       <GiftedChat
@@ -205,7 +218,7 @@ const styles = StyleSheet.create({
   },
   callIconsContainer: {
     flexDirection: 'row',
-    width: 60,
+    width: 90,
     height: '100%',
     alignItems: 'center',
     justifyContent: 'space-between',

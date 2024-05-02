@@ -11,6 +11,8 @@ import com.facebook.react.shell.MainReactPackage;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+// @notifee/react-native
+import io.invertase.notifee.NotifeePackage;
 // @react-native-async-storage/async-storage
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-community/checkbox
@@ -19,6 +21,12 @@ import com.reactnativecommunity.checkbox.ReactCheckBoxPackage;
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 // @react-native-firebase/auth
 import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
+// @zegocloud/react-native-callkeep
+import io.wazo.callkeep.RNCallKeepPackage;
+// @zegocloud/zego-uikit-prebuilt-call-rn
+import com.zegouikitprebuiltcallrn.ZegoUIKitPrebuiltCallRNPackage;
+// @zegocloud/zego-uikit-rn
+import com.zegouikitrn.ZegoUIKitRNPackage;
 // react-native-camera
 import org.reactnative.camera.RNCameraPackage;
 // react-native-compressor
@@ -27,6 +35,8 @@ import com.reactnativecompressor.CompressorPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 // react-native-document-picker
 import com.reactnativedocumentpicker.RNDocumentPickerPackage;
+// react-native-encrypted-storage
+import com.emeraldsanto.encryptedstorage.RNEncryptedStoragePackage;
 // react-native-fs
 import com.rnfs.RNFSPackage;
 // react-native-gesture-handler
@@ -37,6 +47,8 @@ import org.linusu.RNGetRandomValuesPackage;
 import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 // react-native-image-crop-picker
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
+// react-native-keep-awake
+import com.corbt.keepawake.KCKeepAwakePackage;
 // react-native-linear-gradient
 import com.BV.LinearGradient.LinearGradientPackage;
 // react-native-safe-area-context
@@ -53,6 +65,12 @@ import com.horcrux.svg.SvgPackage;
 import com.brentvatne.react.ReactVideoPackage;
 // rn-fetch-blob
 import com.RNFetchBlob.RNFetchBlobPackage;
+// zego-express-engine-reactnative
+import im.zego.reactnative.RCTZegoExpressEnginePackage;
+// zego-zim-react-native
+import im.zego.RNZimReactnativeSdkPackage;
+// zego-zpns-react-native
+import im.zego.zpns_reactnative_sdk.RCTZegoZPNsPackage;
 
 public class PackageList {
   private Application application;
@@ -98,19 +116,25 @@ public class PackageList {
   public ArrayList<ReactPackage> getPackages() {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
+      new NotifeePackage(),
       new AsyncStoragePackage(),
       new ReactCheckBoxPackage(),
       new ReactNativeFirebaseAppPackage(),
       new ReactNativeFirebaseAuthPackage(),
+      new RNCallKeepPackage(),
+      new ZegoUIKitPrebuiltCallRNPackage(),
+      new ZegoUIKitRNPackage(),
       new RNCameraPackage(),
       new CompressorPackage(),
       new ReactNativeContacts(),
       new RNDocumentPickerPackage(),
+      new RNEncryptedStoragePackage(),
       new RNFSPackage(),
       new RNGestureHandlerPackage(),
       new RNGetRandomValuesPackage(),
       new RNHTMLtoPDFPackage(),
       new PickerPackage(),
+      new KCKeepAwakePackage(),
       new LinearGradientPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
@@ -118,7 +142,10 @@ public class PackageList {
       new RNSoundRecorderPackage(),
       new SvgPackage(),
       new ReactVideoPackage(),
-      new RNFetchBlobPackage()
+      new RNFetchBlobPackage(),
+      new RCTZegoExpressEnginePackage(),
+      new RNZimReactnativeSdkPackage(),
+      new RCTZegoZPNsPackage()
     ));
   }
 }

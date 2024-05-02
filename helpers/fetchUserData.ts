@@ -1,8 +1,11 @@
 import {db} from '../configs/firebaseConfig'; // Import your Firebase Firestore instance
 import {getDocs, collection, query, where} from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+import ZegoUIKitPrebuiltCallService from '@zegocloud/zego-uikit-prebuilt-call-rn';
 
-export const fetchUserData = async (user: object,token:string) => {
+export const fetchUserData = async (user: object,token:string,navigation:any) => {
 
   const uid = user.uid;
   const photoURL = user.photoURL;
@@ -65,6 +68,7 @@ export const fetchUserData = async (user: object,token:string) => {
         dataToStore.push(['workplace', workplace.toString()]);
       }
       await AsyncStorage.multiSet(dataToStore as [string, string][]);
+      initZego(uid,name,navigation);
       
     } catch (error) {
       console.error('Error storing data in AsyncStorage:', error.message);
@@ -73,3 +77,32 @@ export const fetchUserData = async (user: object,token:string) => {
     console.error('Error fetching Firestore data:', error.message);
   }
 };
+
+const initZego = (userId:string,userName:string,navigation:any) =>{
+  ZegoUIKitPrebuiltCallService.init(
+    2131693858,
+    "075acc45930a5ebd2cd11d0a4a8011d8f04be9433b3e702171ef716d51eb73a5",
+    userId,
+    userName,
+    [ZIM, ZPNs],
+    {
+      ringtoneConfig: {
+        incomingCallFileName: 'zego_incoming.mp3',
+        outgoingCallFileName: 'zego_outgoing.mp3',
+      },
+      notifyWhenAppRunningInBackgroundOrQuit: true,
+      androidNotificationConfig: {
+        channelID: "zego_video_call",
+        channelName: "zego_video_call",
+      },
+      requireConfig: (data:any)=>{
+        return{
+          onHangUp:(duration:any)=>{
+            console.log("Hangup Called", duration);
+            navigation.navigate('ChatHome');
+          }
+        }
+      }
+    }
+  )
+}

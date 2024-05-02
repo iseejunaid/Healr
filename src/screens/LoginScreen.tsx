@@ -42,7 +42,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
       const token = await user.getIdToken(true)      
       
       if (user.emailVerified) {
-        fetchUserData(user,token).then(() => {
+        fetchUserData(user,token,navigation).then(() => {
           setLoading(false);
           navigation.navigate('HomeScreen');
         });
