@@ -13,9 +13,13 @@ import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import InputField from '../../components/InputField';
-import {sendDossier} from './ChatHelper';
+import {saveDossier, sendDossier} from './ChatHelper';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const CreateDossier = ({navigation, route}: any) => {
+  var messages = route.params.messages;
+  if (messages) messages = JSON.parse(messages);
+
   const [sliderData, setSliderData] = useState([
     {id: 'addImage', path: 'Add Image'},
   ]);
@@ -55,11 +59,49 @@ const CreateDossier = ({navigation, route}: any) => {
     const imagespaths = sliderData
       .filter(item => item.id !== 'addImage')
       .map(item => item.path);
-      
-      sendDossier(route.params.receiverId, imagespaths, title, mrn,patient, description);
-      Alert.alert('Making Dossier', 'PDF generation takes time, It will be sent when Finished.');
-      navigation.pop();
+
+    sendDossier(
+      route.params.receiverId,
+      imagespaths,
+      title,
+      mrn,
+      patient,
+      description,
+    );
+    Alert.alert(
+      'Making Dossier',
+      'PDF generation takes time, It will be sent when Finished.',
+    );
+    navigation.pop();
   };
+
+  const handleSave = ()=>{
+    if (sliderData.length <= 1) {
+      Alert.alert('Missing Images', 'Please add at least One image');
+      return;
+    }
+    if (!title) {
+      Alert.alert('Title Missing', 'Please Enter Title');
+      return;
+    }
+    const imagespaths = sliderData
+      .filter(item => item.id !== 'addImage')
+      .map(item => item.path);
+
+    saveDossier(
+      imagespaths,
+      messages,
+      title,
+      mrn,
+      patient,
+      description,
+    );
+    Alert.alert(
+      'Making Dossier',
+      'PDF generation takes time, It will be saved to Healr Files when Finished.',
+    );
+    navigation.pop();
+  }
 
   const renderItem = ({item, index}: any) => {
     return (
@@ -99,57 +141,81 @@ const CreateDossier = ({navigation, route}: any) => {
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <Text style={styles.headerText}>New dossier</Text>
         </View>
-        <TouchableOpacity
-          style={{height: '100%', justifyContent: 'center'}}
-          onPress={handleSend}>
-          <Text style={styles.sendbtn}>Send</Text>
-        </TouchableOpacity>
+        {messages ? (
+          <TouchableOpacity onPress={handleSave}>
+            <Text style={styles.sendbtn}>Save</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={handleSend}>
+            <Text style={styles.sendbtn}>Send</Text>
+          </TouchableOpacity>
+        )}
       </View>
-      <View style={styles.sliderContainer}>
-        <FlatList
-          contentContainerStyle={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          data={sliderData}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          decelerationRate={'fast'}
-        />
-      </View>
-      <View style={styles.body}>
-        <InputField
-          style={{elevation: 5}}
-          placeholder="Title"
-          width={95}
-          value={title}
-          handleChange={setTitle}
-        />
-        <InputField
-          style={{elevation: 5}}
-          placeholder="MRN"
-          width={95}
-          value={mrn}
-          handleChange={setMrn}
-        />
-        <InputField
-          style={{elevation: 5}}
-          placeholder="Patient"
-          width={95}
-          value={patient}
-          handleChange={setPatient}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Description"
-          value={description}
-          onChangeText={setDescription}
-          multiline={true}
-          textAlignVertical="top"
-        />
-      </View>
+      <ScrollView>
+        <View style={styles.sliderContainer}>
+          <FlatList
+            contentContainerStyle={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            data={sliderData}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={'fast'}
+          />
+        </View>
+          {messages && (
+            <>
+              <Text style={styles.messagesHeading}>Included Messages:</Text>
+              <View style={{paddingHorizontal:40}}>
+                {messages.map((message: any, index: number) => (
+                  <Text
+                    style={{
+                      fontFamily: Fonts.regular,
+                      color: Colors.tertiaryColor,
+                      lineHeight: 20,
+                    }}
+                    key={index}>
+                    {message.message}
+                  </Text>
+                ))}
+              </View>
+            </>
+          )}
+        <View style={styles.body}>
+          <InputField
+            style={{elevation: 5}}
+            placeholder="Title"
+            width={95}
+            value={title}
+            handleChange={setTitle}
+          />
+          <InputField
+            style={{elevation: 5}}
+            placeholder="MRN"
+            width={95}
+            value={mrn}
+            handleChange={setMrn}
+          />
+          <InputField
+            style={{elevation: 5}}
+            placeholder="Patient"
+            width={95}
+            value={patient}
+            handleChange={setPatient}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Description"
+            value={description}
+            onChangeText={setDescription}
+            multiline={true}
+            textAlignVertical="top"
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -158,7 +224,6 @@ export default CreateDossier;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: Colors.secondaryColor,
   },
   headerContainer: {
@@ -184,7 +249,7 @@ const styles = StyleSheet.create({
     color: Colors.primaryColor,
   },
   sliderContainer: {
-    flex: 0.3,
+    height: 200,
     alignItems: 'center',
   },
   cardContainer: {
@@ -206,8 +271,13 @@ const styles = StyleSheet.create({
     width: 50,
   },
   body: {
-    flex: 0.7,
+    height: 550,
     alignItems: 'center',
+  },
+  messagesHeading: {
+    fontFamily: Fonts.semiBold,
+    color: Colors.tertiaryColor,
+    paddingLeft: 35,
   },
   input: {
     fontFamily: Fonts.regular,

@@ -1,12 +1,22 @@
 import React from 'react';
-import { Bubble, MessageImage } from 'react-native-gifted-chat';
+import { Bubble} from 'react-native-gifted-chat';
 import Colors from '../../../../assets/colors/colors';
 import Fonts from '../../../../assets/fonts/fonts';
 
 export const renderCustomBubble = (props: any) => {
+  const selected = props.currentMessage.isSelected  
+    
     return (
       <Bubble
         {...props}
+        containerStyle={{
+          left:{
+            backgroundColor:selected ? 'blue' : Colors.secondaryWhite
+          },
+          right:{
+            backgroundColor:selected ? 'blue' : Colors.secondaryWhite
+          }
+        }}
         timeTextStyle={{
           right: {color: Colors.quadraryColor, fontFamily: Fonts.regular},
           left: {color: Colors.quadraryColor, fontFamily: Fonts.regular},

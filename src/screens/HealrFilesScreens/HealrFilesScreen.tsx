@@ -15,7 +15,7 @@ const HealrFilesScreen: React.FC = ({ navigation }: any) => {
   const [modified, setModified] = useState(true);
   const [files, setFiles] = useState<any[]>([]);
 
-  const modalOptions = [{ text: 'Import Files' }, { text: 'Sort' }];
+  const modalOptions = [{text: 'Refresh'},{ text: 'Import Files' }, { text: 'Sort' },];
 
   useEffect(() => {
     if (modified) {
@@ -25,11 +25,14 @@ const HealrFilesScreen: React.FC = ({ navigation }: any) => {
       };
       fetchData();
       setModified(false);
-    }
+    }    
   }, [modified]);
 
   const onOptionClick = async (option: string) => {
     switch (option) {
+      case 'Refresh':
+        setModified(true);
+        break;
       case 'Import Files':
         try {
           DocumentPicker.pick({

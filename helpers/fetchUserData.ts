@@ -99,7 +99,7 @@ const initZego = (userId:string,userName:string,navigation:any) =>{
         return{
           onHangUp:(duration:any)=>{
             console.log("Hangup Called", duration);
-            navigation.navigate('ChatHome');
+            navigation.navigate('HomeScreen');
           }
         }
       }

@@ -431,7 +431,7 @@ export const fetchReceiverData = async (receiverId: string) => {
             let userData = doc.data();
             name = userData.name;
             profilepic = userData.photoURL;
-            status = userData.status;            
+            status = userData.status;
             expertise = userData.expertise;
             expertiseInput = userData.expertiseInput;
             about = userData.about;
@@ -445,7 +445,7 @@ export const fetchReceiverData = async (receiverId: string) => {
         if (!workplace) {
             workplace = 'Not specified';
         }
-        return { name,profilepic,status,expertiseToDisplay, about, workplace };
+        return { name, profilepic, status, expertiseToDisplay, about, workplace };
     } catch (error) {
         console.error('Error fetching user:', error);
         return null;
@@ -458,35 +458,59 @@ export const sendDossier = async (receiver_id: string, imagespaths: any, title: 
     const name = title;
     const extension = 'pdf';
     const timestamp = Date.now();
-        const uploadedFileName = timestamp + '.' + extension;
-        const reference = storage.ref(`dossiers/${uploadedFileName}`);
-        const response = await fetch(`file://${uri}`);
-        const blob = await response.blob();
-        try {
-            await reference.put(blob);
-            const downloadURL = await reference.getDownloadURL();
-            const msg = composeMsg(downloadURL, receiver_id, fileType, name, extension, mrn, description);
-            db.collection('chats').doc(msg._id).set(msg);
+    const uploadedFileName = timestamp + '.' + extension;
+    const reference = storage.ref(`dossiers/${uploadedFileName}`);
+    const response = await fetch(`file://${uri}`);
+    const blob = await response.blob();
+    try {
+        await reference.put(blob);
+        const downloadURL = await reference.getDownloadURL();
+        const msg = composeMsg(downloadURL, receiver_id, fileType, name, extension, mrn, description);
+        db.collection('chats').doc(msg._id).set(msg);
 
-        } catch (error) {
-            console.log('Error uploading file:', error);
-            throw error;
-        }
+    } catch (error) {
+        console.log('Error uploading file:', error);
+        throw error;
+    }
 }
 
-const makePdf = async (imagespaths: any, title: string, mrn?: string, patient?: string, description?: string) => {
+export const saveDossier = async (imagespaths: any, messages: any, title: string, mrn?: string, patient?: string, description?: string) => {
+    const uri = await makePdf(imagespaths, title, messages, mrn, patient, description);
+    const uid = await fetchUserId();
+    const name = title;
+    const timestamp = Date.now();
+    const date = new Date().toISOString();
+    const extension = 'pdf';
+    const uploadedFileName = timestamp + '.' + extension;
+    const reference = storage.ref(`HealrFiles/${uploadedFileName}`);
+    const response = await fetch(`file://${uri}`);
+    const blob = await response.blob();
+    try {
+        await reference.put(blob);
+        const downloadURL = await reference.getDownloadURL();
+
+        const fileData = {
+            name: name,
+            type: extension,
+            date: date,
+            url: downloadURL,
+            uploadedFileName: uploadedFileName,
+        };
+        await db.collection('fileReferences').doc(uid).collection('files').doc(timestamp.toString()).set(fileData);        
+    } catch (error) {
+        console.log('Error uploading file:', error);
+        throw error;
+    }
+}
+const makePdf = async (imagespaths: any, title: string, messages?: any, mrn?: string, patient?: string, description?: string) => {
     if (!mrn) {
         mrn = '-';
     }
     if (!patient) {
         patient = '-';
     }
-    if (!description) {
-        description = '-';
-    }
 
     let imagesHtml = '';
-
     for (let i = 0; i < imagespaths.length; i += 2) {
         if (i % 2 === 0) {
             imagesHtml += `
@@ -506,8 +530,25 @@ const makePdf = async (imagespaths: any, title: string, mrn?: string, patient?: 
         }
     }
 
+    let messageshtml = '';
+
+    if (messages) {
+        messageshtml = `
+        <h1>Messages:</h1>
+        ${messages.map((msg: any) => {
+            if (msg.message) {
+                const messageDate = new Date(msg.time);
+                const formattedDate = `${messageDate.getDate()}/${messageDate.getMonth() + 1}/${messageDate.getFullYear()}`;
+
+                return `<div> <p style="display:inline;">${msg.message}</p>
+                <p style="display:inline;">${formattedDate}</p> </div>`;
+            }
+        }).join('')}
+        `;
+    }
+
     const date = new Date().toLocaleDateString();
-    
+
     const username = await fetchUsername();
 
     const htmlContent = `
@@ -551,8 +592,10 @@ const makePdf = async (imagespaths: any, title: string, mrn?: string, patient?: 
           <div>
             ${imagesHtml}
           </div>
-          <h1>Description:</h1>
-          <p>${description}</p>
+          ${messageshtml}
+
+          ${description ? `<h1>Description:</h1><p>${description}</p>` : ''}
+
           </body>
       </html>
     `;

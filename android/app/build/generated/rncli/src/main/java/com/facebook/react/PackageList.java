@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import io.invertase.notifee.NotifeePackage;
 // @react-native-async-storage/async-storage
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
+// @react-native-clipboard/clipboard
+import com.reactnativecommunity.clipboard.ClipboardPackage;
 // @react-native-community/checkbox
 import com.reactnativecommunity.checkbox.ReactCheckBoxPackage;
 // @react-native-firebase/app
@@ -118,6 +120,7 @@ public class PackageList {
       new MainReactPackage(mConfig),
       new NotifeePackage(),
       new AsyncStoragePackage(),
+      new ClipboardPackage(),
       new ReactCheckBoxPackage(),
       new ReactNativeFirebaseAppPackage(),
       new ReactNativeFirebaseAuthPackage(),

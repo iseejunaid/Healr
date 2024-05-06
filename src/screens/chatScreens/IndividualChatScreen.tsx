@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {GiftedChat} from 'react-native-gifted-chat';
+import {View} from 'react-native';
+import {GiftedChat, IMessage} from 'react-native-gifted-chat';
 import CustomInputToobar from './chatComponents/CustomInputToobar';
 import {renderCustomBubble} from './chatComponents/ChatBubble';
 import Colors from '../../../assets/colors/colors';
-import Fonts from '../../../assets/fonts/fonts';
 import 'react-native-get-random-values';
 import {
   collection,
@@ -18,7 +17,7 @@ import {composeMsg, sendDocument, sendMedia} from './ChatHelper';
 import RenderVideo from './chatComponents/RenderVideo';
 import RenderCustomView from './chatComponents/RenderCustomView';
 import RenderAudio from './chatComponents/RenderAudio';
-import {ZegoSendCallInvitationButton} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import ChatHeader from './chatComponents/ChatHeader';
 
 interface Message {
   _id: string;
@@ -32,9 +31,11 @@ interface Message {
 
 const IndividualChatScreen = ({navigation, route}: any) => {
   const {userId, userName, status, profileImageSource, receiverId} =
-    route.params;
+    route.params;    
 
   const [messages, setMessages] = useState<Message[]>([]);
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedMessages, setSelectedMessages] = useState<Message[]>([]);
   const [text, setText] = useState('');
 
   const onSend = (messages: any, type: string) => {
@@ -49,6 +50,12 @@ const IndividualChatScreen = ({navigation, route}: any) => {
       sendDocument(messages, receiverId);
     }
   };
+
+  useEffect(() => {
+    if (selectedMessages.length === 0) {
+      setSelectMode(false);
+    }    
+  }, [selectedMessages]);
 
   useEffect(() => {
     const collectionRef = collection(db, 'chats');
@@ -99,7 +106,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
   const renderVideo = (props: any) => {
     return <RenderVideo {...props} />;
   };
-
+  
   const renderCustomView = (props: any) => {
     return <RenderCustomView {...props} />;
   };
@@ -108,59 +115,57 @@ const IndividualChatScreen = ({navigation, route}: any) => {
     return <RenderAudio {...props} />;
   };
 
+  const LongPressed = (context: any, message: IMessage) => {
+    setSelectMode(true);
+    setMessages(
+      messages.map(msg => {
+        if (msg._id === message._id) {
+          if (!msg.isSelected) {
+            msg.isSelected = true;
+            setSelectedMessages([...selectedMessages, message]);
+          }
+        }
+        return msg;
+      }),
+    );
+  };
+  
+  const onPress = (context: any, message: IMessage) => {
+    if (selectMode) {
+      setMessages(
+        messages.map(msg => {
+          if (msg._id === message._id) {
+            if (!msg.isSelected) {
+              msg.isSelected = true;
+              setSelectedMessages([...selectedMessages, message]);
+            } else {
+              msg.isSelected = false;
+              setSelectedMessages(selectedMessages.filter(item => item._id !== message._id));
+            }
+          }
+          return msg;
+        }),
+      );
+    }
+  };
+      
+
   return (
     <View style={{flex: 1}}>
-      <View style={styles.headerContainer}>
-        <View
-          style={{flexDirection: 'row', height: '100%', alignItems: 'center'}}>
-          <TouchableOpacity
-            style={{height: '100%', justifyContent: 'center'}}
-            onPress={() => navigation.popToTop({screen: 'ChatHome'})}>
-            <Image
-              source={require('../../../assets/images/back.png')}
-              style={styles.backImg}
-            />
-          </TouchableOpacity>
-          <View
-            style={{flexDirection: 'row', marginLeft: 20}}
-            onStartShouldSetResponder={() => {
-              navigation.navigate('ViewProfile', {
-                userId: receiverId,
-              });
-              return false;
-            }}>
-            <View style={styles.avatarContainer}>
-              {profileImageSource ? (
-                <Image
-                  source={{uri: profileImageSource}}
-                  style={styles.avatarImage}
-                />
-              ) : (
-                <Image
-                  source={require('../../../assets/images/placeholder.jpg')}
-                  style={styles.avatarImage}
-                />
-              )}
-            </View>
-            <View style={{justifyContent: 'center', paddingLeft: 10}}>
-              <Text style={styles.nameText}>{userName}</Text>
-              <Text style={styles.statusText}>{status}</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.callIconsContainer}>
-          <ZegoSendCallInvitationButton
-            invitees={[{userID: receiverId, userName: userName}]}
-            isVideoCall={false}
-            resourceID={'zego_data'}
-          />
-          <ZegoSendCallInvitationButton
-            invitees={[{userID: receiverId, userName: userName}]}
-            isVideoCall={true}
-            resourceID={'zego_video_call'}
-          />
-        </View>
-      </View>
+      <ChatHeader
+        navigation={navigation}
+        userID={userId}
+        receiverId={receiverId}
+        profileImageSource={profileImageSource}
+        userName={userName}
+        status={status}
+        selectMode={selectMode}
+        setSelectMode={setSelectMode}
+        selectedMessages={selectedMessages}
+        setSelectedMessages={setSelectedMessages}
+        messages={messages}
+        setMessages={setMessages}
+      />
       <GiftedChat
         messagesContainerStyle={{
           backgroundColor: Colors.secondaryWhite,
@@ -176,55 +181,12 @@ const IndividualChatScreen = ({navigation, route}: any) => {
           _id: userId,
         }}
         renderInputToolbar={customtInputToolbar}
+        onLongPress={LongPressed}
+        onPress={onPress}
+        shouldUpdateMessage={ (props, nextProps) => messages }
       />
     </View>
   );
 };
 
 export default IndividualChatScreen;
-
-const styles = StyleSheet.create({
-  headerContainer: {
-    height: 55,
-    backgroundColor: Colors.secondaryColor,
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  backImg: {
-    height: 20,
-    width: 22,
-  },
-  avatarContainer: {
-    height: 45,
-    width: 45,
-    borderRadius: 22,
-    overflow: 'hidden',
-  },
-  avatarImage: {
-    height: '100%',
-    width: '100%',
-  },
-  nameText: {
-    fontFamily: Fonts.regular,
-    color: Colors.tertiaryColor,
-    marginBottom: -5,
-  },
-  statusText: {
-    fontFamily: Fonts.regular,
-    color: Colors.quadraryColor,
-    fontSize: 12,
-  },
-  callIconsContainer: {
-    flexDirection: 'row',
-    width: 90,
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  callIcon: {
-    height: '80%',
-    justifyContent: 'center',
-  },
-});
