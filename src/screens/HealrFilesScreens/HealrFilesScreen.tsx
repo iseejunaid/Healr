@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondaryColor,
   },
   filesContainer: {
-    height: '87%',
+    height: '88%',
     width: '100%',
   },
   searchInput: {

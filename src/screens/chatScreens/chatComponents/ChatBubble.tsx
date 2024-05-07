@@ -11,10 +11,10 @@ export const renderCustomBubble = (props: any) => {
         {...props}
         containerStyle={{
           left:{
-            backgroundColor:selected ? 'blue' : Colors.secondaryWhite
+            backgroundColor:selected ? 'lightblue' : Colors.secondaryWhite
           },
           right:{
-            backgroundColor:selected ? 'blue' : Colors.secondaryWhite
+            backgroundColor:selected ? 'lightblue' : Colors.secondaryWhite
           }
         }}
         timeTextStyle={{

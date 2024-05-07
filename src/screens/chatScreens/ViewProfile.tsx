@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, TouchableOpacity, Text, Image} from 'react-native';
+import {ZegoSendCallInvitationButton} from '@zegocloud/zego-uikit-prebuilt-call-rn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import LinearGradient from 'react-native-linear-gradient';
@@ -21,7 +22,7 @@ const ViewProfileScreen = ({navigation, route}: any) => {
   const capitalizeFirstLetter = (str: string) => {
     return str.replace(/\b\w/g, char => char.toUpperCase());
   };
-  
+
   useEffect(() => {
     const fetchUserData = async () => {
       setUserId(await fetchUserId());
@@ -43,10 +44,7 @@ const ViewProfileScreen = ({navigation, route}: any) => {
     setModalVisible(!modalVisible);
   };
 
-  const options = [
-    {text: 'Block'},
-    {text: 'Delete Chat'},
-  ];
+  const options = [{text: 'Block'}, {text: 'Delete Chat'}];
   const handleOptionClick = async (option: string) => {
     switch (option) {
       case 'Block':
@@ -142,10 +140,17 @@ const ViewProfileScreen = ({navigation, route}: any) => {
             />
           </TouchableOpacity>
           <View style={styles.iconCircle}>
-            <Image
-              tintColor={Colors.tertiaryColor}
-              source={require('../../../assets/images/call.png')}
-              style={{height: 20, width: 20}}
+            <ZegoSendCallInvitationButton
+              invitees={[{userID: route.params.userId, userName: name}]}
+              isVideoCall={false}
+              resourceID={'zego_data'}
+            />
+          </View>
+          <View style={styles.iconCircle}>
+            <ZegoSendCallInvitationButton
+              invitees={[{userID: route.params.userId, userName: name}]}
+              isVideoCall={true}
+              resourceID={'zego_video_call'}
             />
           </View>
         </View>
@@ -165,7 +170,7 @@ const ViewProfileScreen = ({navigation, route}: any) => {
         onOptionClick={handleOptionClick}
         foregroundColor={Colors.tertiaryColor}
         modalStyle={{
-          backgroundColor:Colors.secondaryColor,
+          backgroundColor: Colors.secondaryColor,
           top: 45,
           right: 20,
         }}
