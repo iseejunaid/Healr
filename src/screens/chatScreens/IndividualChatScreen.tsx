@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {View} from 'react-native';
 import {GiftedChat, IMessage} from 'react-native-gifted-chat';
 import CustomInputToobar from './chatComponents/CustomInputToobar';
@@ -7,17 +7,20 @@ import Colors from '../../../assets/colors/colors';
 import 'react-native-get-random-values';
 import {
   collection,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import {db} from '../../../configs/firebaseConfig';
-import {composeMsg, sendDocument, sendMedia} from './ChatHelper';
+import {composeMsg, retrieveBlockStatus, retrieveBlockStatusByOtherUser, sendDocument, sendMedia} from './ChatHelper';
 import RenderVideo from './chatComponents/RenderVideo';
 import RenderCustomView from './chatComponents/RenderCustomView';
 import RenderAudio from './chatComponents/RenderAudio';
 import ChatHeader from './chatComponents/ChatHeader';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface Message {
   _id: string;
@@ -31,11 +34,13 @@ interface Message {
 
 const IndividualChatScreen = ({navigation, route}: any) => {
   const {userId, userName, status, profileImageSource, receiverId} =
-    route.params;    
+    route.params;
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedMessages, setSelectedMessages] = useState<Message[]>([]);
+  const [blocked, setBlocked] = useState(false);
+  const [blockedByYou, setBlockedByYou] = useState(false);
   const [text, setText] = useState('');
 
   const onSend = (messages: any, type: string) => {
@@ -51,14 +56,48 @@ const IndividualChatScreen = ({navigation, route}: any) => {
     }
   };
 
-  useEffect(() => {
-    if (selectedMessages.length === 0) {
-      setSelectMode(false);
-    }    
-  }, [selectedMessages]);
+  useFocusEffect(
+    useCallback(() => {
+      const updateChats = async () => {
+        const collectionRef = collection(db, 'chats');
+        const q = query(
+          collectionRef,
+          where('user._id', '==', receiverId),
+          where('receiver_id', '==', userId),
+        );
+
+        try {
+          const querySnapshot = await getDocs(q);
+          querySnapshot.forEach(async doc => {
+            if (!doc.data().received) {
+              await updateDoc(doc.ref, {
+                received: true,
+              });
+            }
+          });
+        } catch (error) {
+          console.error('Error updating chats:', error);
+        }
+      };
+
+      const checkIfBlocked = async () => {
+        const isBlocked = await retrieveBlockStatus(receiverId);
+        setBlockedByYou(isBlocked);
+        setBlocked(isBlocked);
+        if(!isBlocked){
+          const isBlocked = await retrieveBlockStatusByOtherUser(receiverId);
+          setBlocked(isBlocked);
+          setBlockedByYou(false);
+        }
+      };
+      
+      updateChats();
+      checkIfBlocked();
+    }, []));
 
   useEffect(() => {
     const collectionRef = collection(db, 'chats');
+    const NeglectSelfMessage = userId === receiverId ? false : true;
     const q = query(
       collectionRef,
       orderBy('createdAt', 'desc'),
@@ -68,23 +107,33 @@ const IndividualChatScreen = ({navigation, route}: any) => {
 
     const unsubscribe = onSnapshot(q, querySnapshot => {
       setMessages(
-        querySnapshot.docs.map(doc => ({
-          _id: doc.id,
-          receiver_id: doc.data().receiver_id,
-          text: doc.data().text,
-          image: doc.data().image,
-          video: doc.data().video,
-          audio: doc.data().audio,
-          document: doc.data().document,
-          documentName: doc.data().documentName,
-          documentType: doc.data().documentExtension,
-          documentmrn: doc.data().documentmrn,
-          documentDescription: doc.data().documentdescription,
-          createdAt: doc.data().createdAt.toDate(),
-          user: {
-            _id: doc.data().user._id,
-          },
-        })),
+        querySnapshot.docs
+          .filter(
+            doc =>
+              !(
+                NeglectSelfMessage &&
+                doc.data().user._id === doc.data().receiver_id
+              ),
+          )
+          .map(doc => ({
+            _id: doc.id,
+            receiver_id: doc.data().receiver_id,
+            text: doc.data().text,
+            image: doc.data().image,
+            video: doc.data().video,
+            audio: doc.data().audio,
+            document: doc.data().document,
+            documentName: doc.data().documentName,
+            documentType: doc.data().documentExtension,
+            documentmrn: doc.data().documentmrn,
+            documentDescription: doc.data().documentdescription,
+            createdAt: doc.data().createdAt.toDate(),
+            sent: doc.data().sent,
+            received: doc.data().received,
+            user: {
+              _id: doc.data().user._id,
+            },
+          })),
       );
     });
 
@@ -99,6 +148,9 @@ const IndividualChatScreen = ({navigation, route}: any) => {
         onSend={onSend}
         receiverId={receiverId}
         navigation={navigation}
+        blocked={blocked}
+        setBlocked={setBlocked}
+        blockedByYou={blockedByYou}
       />
     );
   };
@@ -106,7 +158,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
   const renderVideo = (props: any) => {
     return <RenderVideo {...props} />;
   };
-  
+
   const renderCustomView = (props: any) => {
     return <RenderCustomView {...props} />;
   };
@@ -129,7 +181,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
       }),
     );
   };
-  
+
   const onPress = (context: any, message: IMessage) => {
     if (selectMode) {
       setMessages(
@@ -140,7 +192,9 @@ const IndividualChatScreen = ({navigation, route}: any) => {
               setSelectedMessages([...selectedMessages, message]);
             } else {
               msg.isSelected = false;
-              setSelectedMessages(selectedMessages.filter(item => item._id !== message._id));
+              setSelectedMessages(
+                selectedMessages.filter(item => item._id !== message._id),
+              );
             }
           }
           return msg;
@@ -148,7 +202,6 @@ const IndividualChatScreen = ({navigation, route}: any) => {
       );
     }
   };
-      
 
   return (
     <View style={{flex: 1}}>
@@ -183,7 +236,7 @@ const IndividualChatScreen = ({navigation, route}: any) => {
         renderInputToolbar={customtInputToolbar}
         onLongPress={LongPressed}
         onPress={onPress}
-        shouldUpdateMessage={ (props, nextProps) => messages }
+        shouldUpdateMessage={(props, nextProps) => messages}
       />
     </View>
   );

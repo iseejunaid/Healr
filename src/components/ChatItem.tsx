@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useCallback} from 'react';
 import {
   View,
   Image,
@@ -10,7 +10,10 @@ import Fonts from '../../assets/fonts/fonts';
 import Colors from '../../assets/colors/colors';
 import OptionsModal from './OptionsModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { deleteChat } from '../screens/chatScreens/ChatHelper';
+import { blockUser, deleteChat, retrieveBlockStatus, unblockUser } from '../screens/chatScreens/ChatHelper';
+import { collection, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { db } from '../../configs/firebaseConfig';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface ChatItemProps {
   navigation: any;
@@ -40,6 +43,8 @@ const ChatItem: React.FC<ChatItemProps> = ({
   const [icon, setIcon] = useState<'image' | 'video' | 'document' | 'null'>(
     'null',
   );
+  const [blocked, setBlocked] = useState(false);
+  const [localNotificationCount, setLocalNotificationCount] = useState(0);
   const [markAsUnread, setMarkAsUnread] = useState(false);
   const [deleted, setDeleted] = useState(markDelete);
   const [isOptionsModalVisible, setIsOptionsModalVisible] = useState(false);
@@ -54,7 +59,12 @@ const ChatItem: React.FC<ChatItemProps> = ({
 
   useEffect(() => {
     const fetchMarkAsUnreadStatus = async () => {
+      if(notificationCount){
+        setMarkAsUnread(true);
+        return;
+      }
       const markunread = await getMarkAsUnreadStatus(receiverId);
+      
       if (markunread !== null) {
         setMarkAsUnread(markunread);
       }
@@ -73,6 +83,22 @@ const ChatItem: React.FC<ChatItemProps> = ({
     }
   }, [message, userId]);
 
+  useEffect(() => {
+    if (notificationCount) {
+      setLocalNotificationCount(notificationCount);
+    }
+  }, [notificationCount]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const checkIfBlocked = async () => {
+        const isBlocked = await retrieveBlockStatus(receiverId);
+        setBlocked(isBlocked);
+      };
+      
+      checkIfBlocked();
+    }, []));
+
   const onPress = () => {
     navigation.navigate('IndividualChat', {
       userName: userName,
@@ -84,28 +110,37 @@ const ChatItem: React.FC<ChatItemProps> = ({
   };
 
   const toggleOptionsModal = () => {
-    setIsOptionsModalVisible(!isOptionsModalVisible);
+    setIsOptionsModalVisible(!isOptionsModalVisible);     
   };
 
   const onOptionClick = async (option: string) => {
     switch (option) {
       case 'Mark as unread':
         setMarkAsUnread(true);
+        setIsOptionsModalVisible(false);
         await saveMarkAsUnreadStatus(receiverId, true);
         break;
       case 'Mark as read':
         setMarkAsUnread(false);
+        setIsOptionsModalVisible(false);
         await saveMarkAsUnreadStatus(receiverId, false);
         break;
       case 'Delete':
         setDeleted(true);
+        setIsOptionsModalVisible(false);
         await deleteChat(receiverId, userId);
         break;
       case 'Block':
-        console.log('Block');
+        setIsOptionsModalVisible(false);
+        setBlocked(true);
+        blockUser(receiverId);
+        break;
+      case 'Unblock':
+        setIsOptionsModalVisible(false);
+        setBlocked(false);
+        unblockUser(receiverId);
         break;
     }
-    setIsOptionsModalVisible(false);
   };
 
   const handleLayout = () => {
@@ -113,13 +148,32 @@ const ChatItem: React.FC<ChatItemProps> = ({
       setChatItemLayout({x: pageX, y: pageY, width, height});
     });
   };
+
   const modalOptions = [
     { text: markAsUnread ? 'Mark as read' : 'Mark as unread' },
     { text: 'Delete' },
-    { text: 'Block' },
+    { text: blocked ? 'Unblock' : 'Block'},
   ];
   
   const saveMarkAsUnreadStatus = async (key: string, value: boolean) => {
+    if(localNotificationCount){
+      setLocalNotificationCount(0);
+
+      const collectionRef = collection(db, 'chats');
+      const q = query(
+        collectionRef,
+        where('user._id', '==', receiverId),
+        where('receiver_id', '==', userId),
+        where('received', '==', false)
+      );
+      const msgs = await getDocs(q);
+      msgs.forEach(async doc => {        
+          await updateDoc(doc.ref, {
+            received: true,
+          });
+      });      
+    }
+
     try {
       await AsyncStorage.setItem(key, JSON.stringify(value));      
     } catch (error) {
@@ -164,7 +218,7 @@ const ChatItem: React.FC<ChatItemProps> = ({
               style={[
                 styles.timeText,
                 {
-                  color: notificationCount || markAsUnread
+                  color: localNotificationCount || markAsUnread
                     ? Colors.primaryColor
                     : Colors.quadraryColor,
                 },
@@ -178,10 +232,10 @@ const ChatItem: React.FC<ChatItemProps> = ({
               style={[
                 styles.messageText,
                 {
-                  color: notificationCount || markAsUnread
+                  color: localNotificationCount || markAsUnread
                     ? Colors.tertiaryColor
                     : Colors.quadraryColor,
-                  width: notificationCount || markAsUnread ? '90%' : '100%',
+                  width: localNotificationCount || markAsUnread ? '90%' : '100%',
                 },
               ]}
               numberOfLines={1}
@@ -196,13 +250,13 @@ const ChatItem: React.FC<ChatItemProps> = ({
                 <Image source={require('../../assets/images/chatDocument.png')} />
               ) : null}
             </Text>
-            {notificationCount ? (
+            {localNotificationCount ? (
               <View style={styles.notificationBadge}>
-                <Text style={styles.notificationText}>{notificationCount}</Text>
+                <Text style={styles.notificationText}>{localNotificationCount}</Text>
               </View>
             ) : null}
   
-            {markAsUnread && (!notificationCount || notificationCount === 0) ? (
+            {markAsUnread && (!localNotificationCount || localNotificationCount === 0) ? (
               <View style={styles.notificationBadge}>
                 <Text style={styles.notificationText}></Text>
               </View>

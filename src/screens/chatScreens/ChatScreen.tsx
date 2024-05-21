@@ -25,7 +25,7 @@ const ChatScreen: React.FC = ({navigation}: any) => {
   const userId = auth?.currentUser?.uid;
 
   const fetchChatsData = useCallback(async () => {
-    const data = await fetchChats();
+    const data = await fetchChats();    
     setChatsData(data);
     setLoading(false);
   }, []);
@@ -76,7 +76,7 @@ const ChatScreen: React.FC = ({navigation}: any) => {
             width={95}
           />
           {Object.keys(chatsData).length > 0 ? (
-            Object.keys(chatsData).map((key: string) => {
+            Object.keys(chatsData).map((key: string) => {                            
               const createdAt = chatsData[key].createdAt.toDate();
               const imgSource = chatsData[key].profilepic ?? '';
               const timeString = createdAt.toLocaleTimeString([], {
@@ -93,6 +93,7 @@ const ChatScreen: React.FC = ({navigation}: any) => {
                   userName={chatsData[key].name}
                   message={chatsData[key].text}
                   time={timeString}
+                  notificationCount={chatsData[key].notificationCount}
                   status={chatsData[key].status}
                   markDelete = {false}
                 />

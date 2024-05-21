@@ -5,7 +5,7 @@ import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import Loader from '../../components/Loader';
-import {deleteChat, fetchReceiverData, fetchUserId} from './ChatHelper';
+import {blockUser, deleteChat, fetchReceiverData, fetchUserId, retrieveBlockStatus, unblockUser} from './ChatHelper';
 import OptionsModal from '../../components/OptionsModal';
 
 const ViewProfileScreen = ({navigation, route}: any) => {
@@ -16,6 +16,7 @@ const ViewProfileScreen = ({navigation, route}: any) => {
   const [expertise, setExpertise] = useState('');
   const [about, setAbout] = useState('');
   const [workplace, setWorkplace] = useState('');
+  const [blocked, setBlocked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -37,18 +38,32 @@ const ViewProfileScreen = ({navigation, route}: any) => {
       }
       setLoading(false);
     };
+
+    const checkIfBlocked = async () => {
+      const isBlocked = await retrieveBlockStatus(route.params.userId);
+      setBlocked(isBlocked);
+    };
+
     fetchUserData();
+    checkIfBlocked();
   }, []);
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
 
-  const options = [{text: 'Block'}, {text: 'Delete Chat'}];
+  const options = [{text: blocked ? 'Unblock':'Block'}, {text: 'Delete Chat'}];
   const handleOptionClick = async (option: string) => {
     switch (option) {
       case 'Block':
-        console.log('Block');
+        blockUser(route.params.userId);
+        setBlocked(true);
+        setModalVisible(false);
+        break;
+      case 'Unblock':
+        unblockUser(route.params.userId);
+        setBlocked(false);
+        setModalVisible(false);
         break;
       case 'Delete Chat':
         setLoading(true);

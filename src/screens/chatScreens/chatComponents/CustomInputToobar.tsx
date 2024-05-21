@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {Alert, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+} from 'react-native';
 import {Composer, Send} from 'react-native-gifted-chat';
 import Colors from '../../../../assets/colors/colors';
 import OptionsModal from '../../../components/OptionsModal';
@@ -10,6 +17,8 @@ import {
 } from '../../../../helpers/permissions';
 import DocumentPicker from 'react-native-document-picker';
 import SoundRecorder from 'react-native-sound-recorder';
+import Fonts from '../../../../assets/fonts/fonts';
+import {unblockUser} from '../ChatHelper';
 
 const customtInputToolbar = ({
   text,
@@ -17,16 +26,21 @@ const customtInputToolbar = ({
   onSend,
   receiverId,
   navigation,
+  blocked,
+  setBlocked,
+  blockedByYou,
 }: {
   text: string;
   setText: (val: string) => void;
   onSend: (mes: any, type: string) => void;
   receiverId: string;
   navigation: any;
+  blocked: boolean;
+  blockedByYou: boolean;
+  setBlocked: (val: boolean) => void;
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [placeholder, setPlaceholder] = useState('Message');
-
 
   const startRecording = async () => {
     requestaudioPermission();
@@ -142,7 +156,7 @@ const customtInputToolbar = ({
         navigation.pop();
         break;
       case 'Create dossier':
-        navigation.navigate('CreateDossier',{receiverId:receiverId});
+        navigation.navigate('CreateDossier', {receiverId: receiverId});
         break;
       default:
         console.log('Invalid option');
@@ -153,15 +167,42 @@ const customtInputToolbar = ({
   const options = [
     {text: 'Camera', image: require('../../../../assets/images/camera.png')},
     {text: 'Gallery', image: require('../../../../assets/images/gallery.png')},
-    {text: 'Documents', image: require('../../../../assets/images/documents.png')},
-    {text: 'Healr files', image: require('../../../../assets/images/files.png')},
+    {
+      text: 'Documents',
+      image: require('../../../../assets/images/documents.png'),
+    },
+    {
+      text: 'Healr files',
+      image: require('../../../../assets/images/files.png'),
+    },
     {
       text: 'Create dossier',
       image: require('../../../../assets/images/createDossier.png'),
     },
   ];
+  const onUnBlock = async () => {
+    await unblockUser(receiverId);
+    setBlocked(false);
+  };
 
-  return (
+  return blocked ? (
+    <View style={styles.blockedContainer}>
+      {blockedByYou ? (
+        <>
+          <Text style={styles.blockText}>You blocked this User.</Text>
+          <TouchableOpacity onPress={onUnBlock}>
+            <Text style={[styles.blockText, {color: Colors.primaryColor}]}>
+              Tap to Unblock
+            </Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <Text style={styles.blockText}>
+          You have been blocked by this User.
+        </Text>
+      )}
+    </View>
+  ) : (
     <View style={styles.customInputView}>
       <TouchableOpacity style={{paddingTop: 6}} onPress={toggleModal}>
         <Image source={require('../../../../assets/images/chatOptions.png')} />
@@ -181,7 +222,9 @@ const customtInputToolbar = ({
         text={text}
         label="Send">
         {text !== '' ? (
-          <Image source={require('../../../../assets/images/sendMessage.png')} />
+          <Image
+            source={require('../../../../assets/images/sendMessage.png')}
+          />
         ) : (
           <TouchableOpacity
             style={{paddingTop: 6}}
@@ -218,6 +261,12 @@ const styles = StyleSheet.create({
     paddingTop: 2,
     backgroundColor: Colors.secondaryColor,
   },
+  blockedContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
   composerTxt: {
     height: 45,
     backgroundColor: Colors.secondaryWhite,
@@ -232,5 +281,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.tertiaryColor,
     bottom: 50,
     left: 5,
+  },
+  blockText: {
+    color: Colors.tertiaryColor,
+    fontSize: 14,
+    fontFamily: Fonts.regular,
   },
 });

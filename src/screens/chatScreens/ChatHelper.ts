@@ -9,6 +9,7 @@ import Contacts from 'react-native-contacts';
 import RNFS from 'react-native-fs';
 import { copyFile } from '../HealrFilesScreens/HealrFilesHelper';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import firebase from 'firebase/compat';
 
 export const sendMedia = async (data: any, receiver: string) => {
     try {
@@ -93,6 +94,7 @@ export const sendDocument = async (data: any, receiver: string) => {
 
 export const composeMsg = (text: string, receiver: string, type: string, name?: string, extension?: string, mrn?: string, description?: string) => {
     const createdAt = new Date();
+    const userId = auth?.currentUser?.uid;
     switch (type) {
         case 'image':
             const msg = {
@@ -100,7 +102,9 @@ export const composeMsg = (text: string, receiver: string, type: string, name?: 
                 receiver_id: receiver,
                 createdAt,
                 image: text,
-                user: { _id: auth?.currentUser?.uid },
+                user: { _id: userId },
+                sent: true,
+                received: userId === receiver ? true : false,
             };
             return msg;
         case 'video':
@@ -109,7 +113,9 @@ export const composeMsg = (text: string, receiver: string, type: string, name?: 
                 receiver_id: receiver,
                 createdAt,
                 video: text,
-                user: { _id: auth?.currentUser?.uid },
+                user: { _id: userId },
+                sent: true,
+                received: false,
             };
             return videoMsg;
         case 'document':
@@ -120,7 +126,9 @@ export const composeMsg = (text: string, receiver: string, type: string, name?: 
                 document: text,
                 documentName: name,
                 documentExtension: extension,
-                user: { _id: auth?.currentUser?.uid },
+                user: { _id: userId },
+                sent: true,
+                received: userId === receiver ? true : false,
             };
             return docMsg;
         case 'audio':
@@ -129,7 +137,9 @@ export const composeMsg = (text: string, receiver: string, type: string, name?: 
                 receiver_id: receiver,
                 createdAt,
                 audio: text,
-                user: { _id: auth?.currentUser?.uid },
+                user: { _id: userId },
+                sent: true,
+                received: userId === receiver ? true : false,
             };
             return audioMsg;
         case 'dossier':
@@ -142,7 +152,9 @@ export const composeMsg = (text: string, receiver: string, type: string, name?: 
                 documentExtension: extension,
                 documentmrn: mrn,
                 documentdescription: description,
-                user: { _id: auth?.currentUser?.uid },
+                user: { _id: userId },
+                sent: true,
+                received: userId === receiver ? true : false,
             };
             return dossierMsg;
         default: {
@@ -151,7 +163,9 @@ export const composeMsg = (text: string, receiver: string, type: string, name?: 
                 receiver_id: receiver,
                 createdAt,
                 text,
-                user: { _id: auth?.currentUser?.uid },
+                user: { _id: userId },
+                sent: true,
+                received: userId === receiver ? true : false,
             };
             return msg;
         }
@@ -165,6 +179,7 @@ export interface ChatData {
         text: string;
         status: string;
         createdAt: any;
+        notificationCount: number;
     };
 }
 
@@ -192,18 +207,22 @@ export const fetchChats = async () => {
 
 
 const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
-    const { receiver_id, image, video, audio, document, text, createdAt, user: { _id: senderId } } = doc.data();
+    const { receiver_id, image, video, audio, document, text, createdAt, sent, received, user: { _id: senderId } } = doc.data();
 
     if (role === 'sender') {
+
         if (chatData[receiver_id]) {
             // receiverId already exists
+
         } else {
+
             chatData[receiver_id] = {
                 profilepic: "",
                 name: "",
                 text: "",
                 status: "",
                 createdAt: null,
+                notificationCount: 0,
             };
             const userData = await fetchUser(receiver_id);
 
@@ -252,14 +271,17 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
                 }
                 chatData[senderId].createdAt = createdAt;
             }
+            if (received === false && sent === true) {
+                chatData[senderId].notificationCount++;
+            }
         } else {
-
             chatData[senderId] = {
                 profilepic: "",
                 name: "",
                 text: "",
                 status: "",
                 createdAt: null,
+                notificationCount: 0,
             };
 
             const userData = await fetchUser(senderId);
@@ -284,6 +306,9 @@ const updateChatsData = async (doc: any, role: string, chatData: ChatData) => {
             }
             else {
                 chatData[senderId].text = text;
+            }
+            if (received === false && sent === true) {
+                chatData[senderId].notificationCount = 1;
             }
             chatData[senderId].createdAt = createdAt;
         }
@@ -496,7 +521,7 @@ export const saveDossier = async (imagespaths: any, messages: any, title: string
             url: downloadURL,
             uploadedFileName: uploadedFileName,
         };
-        await db.collection('fileReferences').doc(uid).collection('files').doc(timestamp.toString()).set(fileData);        
+        await db.collection('fileReferences').doc(uid).collection('files').doc(timestamp.toString()).set(fileData);
     } catch (error) {
         console.log('Error uploading file:', error);
         throw error;
@@ -608,4 +633,81 @@ const makePdf = async (imagespaths: any, title: string, messages?: any, mrn?: st
 
     let file = await RNHTMLtoPDF.convert(options);
     return file.filePath;
+}
+
+export const blockUser = async (receiverId: string) => {
+    const userId = await fetchUserId();
+    try {
+        const userRef = await db.collection('users').where('uid', '==', userId).get();
+        userRef.forEach(async (doc) => {
+            await doc.ref.update({
+                blockedUsers: firebase.firestore.FieldValue.arrayUnion(receiverId),
+            });
+        });
+        console.log('User blocked successfully');
+    } catch (error) {
+        console.error('Error blocking user:', error);
+        throw error;
+    }
+}
+export const unblockUser = async (receiverId: string) => {
+    const userId = await fetchUserId();
+    try {
+        const userRef = await db.collection('users').where('uid', '==', userId).get();
+        if (userRef.empty) {
+            console.log('No matching documents.');
+            return;
+        }
+        userRef.forEach(async (doc) => {
+            await doc.ref.update({
+                blockedUsers: firebase.firestore.FieldValue.arrayRemove(receiverId),
+            });
+        });
+        console.log('User unblocked successfully');
+    } catch (error) {
+        console.error('Error unblocking user:', error);
+        throw error;
+    }
+}
+export const retrieveBlockStatus = async (receiverId: string) => {
+    const userId = await fetchUserId();
+    try {
+        const userRef = await db.collection('users').where('uid', '==', userId).get();
+        if (userRef.empty) {
+            console.log('No matching documents.');
+            return false;
+        }
+        let isBlocked = false;
+        userRef.forEach((doc) => {
+            const userData = doc.data();
+            if (userData.blockedUsers && userData.blockedUsers.includes(receiverId)) {
+                isBlocked = true;
+            }
+        });
+        return isBlocked;
+    } catch (error) {
+        console.error('Error retrieving block status:', error);
+        throw error;
+    }
+}
+export const retrieveBlockStatusByOtherUser = async (receiverId: string) => {
+    const userId = await fetchUserId();
+    try {
+        const userRef = await db.collection('users').where('uid', '==', receiverId).get();
+        if (userRef.empty) {
+            console.log('No matching documents.');
+            return false;
+        }
+        let isBlocked = false;
+        userRef.forEach((doc) => {
+            const userData = doc.data();
+            if (userData.blockedUsers && userData.blockedUsers.includes(userId)) {
+                isBlocked = true;
+            }
+        });
+        return isBlocked;
+    } catch (error) {
+        console.error('Error retrieving block status:', error);
+        throw error;
+    }
 }
