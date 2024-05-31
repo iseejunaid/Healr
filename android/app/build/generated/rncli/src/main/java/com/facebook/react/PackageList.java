@@ -39,6 +39,8 @@ import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.reactnativedocumentpicker.RNDocumentPickerPackage;
 // react-native-encrypted-storage
 import com.emeraldsanto.encryptedstorage.RNEncryptedStoragePackage;
+// react-native-file-viewer
+import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
 // react-native-fs
 import com.rnfs.RNFSPackage;
 // react-native-gesture-handler
@@ -132,6 +134,7 @@ public class PackageList {
       new ReactNativeContacts(),
       new RNDocumentPickerPackage(),
       new RNEncryptedStoragePackage(),
+      new RNFileViewerPackage(),
       new RNFSPackage(),
       new RNGestureHandlerPackage(),
       new RNGetRandomValuesPackage(),

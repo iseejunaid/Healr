@@ -443,6 +443,7 @@ export const fetchReceiverData = async (receiverId: string) => {
     const userQ = query(collection(db, 'users'), where('uid', '==', receiverId));
     let name = '';
     let profilepic = '';
+    let isVerified = false;
     let status = '';
     let expertise = '';
     let expertiseInput = ''
@@ -456,6 +457,7 @@ export const fetchReceiverData = async (receiverId: string) => {
             let userData = doc.data();
             name = userData.name;
             profilepic = userData.photoURL;
+            isVerified = userData.isVerified;
             status = userData.status;
             expertise = userData.expertise;
             expertiseInput = userData.expertiseInput;
@@ -470,7 +472,7 @@ export const fetchReceiverData = async (receiverId: string) => {
         if (!workplace) {
             workplace = 'Not specified';
         }
-        return { name, profilepic, status, expertiseToDisplay, about, workplace };
+        return { name, profilepic, isVerified, status, expertiseToDisplay, about, workplace };
     } catch (error) {
         console.error('Error fetching user:', error);
         return null;

@@ -18,6 +18,7 @@ export const fetchUserData = async (user: object,token:string,navigation:any) =>
   var workplace = '';
   var status = '';
   var about = '';
+  var isVerified = false;
     
   try {    
     const q = query(collection(db, 'users'), where('uid', '==', uid));
@@ -38,6 +39,7 @@ export const fetchUserData = async (user: object,token:string,navigation:any) =>
       }
       status = userData.status;
       about = userData.about;
+      isVerified = userData.isVerified;
     });
 
     try {
@@ -52,6 +54,7 @@ export const fetchUserData = async (user: object,token:string,navigation:any) =>
         ['expertise', expertise.toString()],
         ['status', status.toString()],
         ['about', about.toString()],
+        ['isVerified', isVerified.toString()],
       ];
 
       if(photoURL){        
@@ -80,8 +83,8 @@ export const fetchUserData = async (user: object,token:string,navigation:any) =>
 
 const initZego = (userId:string,userName:string,navigation:any) =>{
   ZegoUIKitPrebuiltCallService.init(
-    2131693858,
-    "075acc45930a5ebd2cd11d0a4a8011d8f04be9433b3e702171ef716d51eb73a5",
+    610729301,
+    "0d499d4cb395f5474c0b4d07754f8100dbfcdd44c2f37227d8d87bcc3a26b3c5",
     userId,
     userName,
     [ZIM, ZPNs],

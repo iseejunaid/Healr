@@ -22,6 +22,7 @@ const ProfileScreen = ({navigation}: any) => {
   const [profileImage, setProfileImage] = useState('');
   const [expertise, setExpertise] = useState('');
   const [status, setStatus] = useState('');
+  const [verified, setVerified] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -34,6 +35,7 @@ const ProfileScreen = ({navigation}: any) => {
     try {
       const name = await AsyncStorage.getItem('name');
       setProfileImage((await AsyncStorage.getItem('photoURL')) ?? '');
+      setVerified((await AsyncStorage.getItem('isVerified')) === 'true');
       const statusValue = await AsyncStorage.getItem('status');
       const expertiseValue = (await AsyncStorage.getItem('expertise')) ?? '';
       const expertiseInput =
@@ -67,6 +69,7 @@ const ProfileScreen = ({navigation}: any) => {
   }, []);
 
   const items = [
+    ...(!verified ? [{label: 'Get Verified'}] : []),
     {label: 'Status'},
     {label: 'My QR Code'},
     {label: 'Notifications'},
@@ -79,10 +82,10 @@ const ProfileScreen = ({navigation}: any) => {
         setIsModalVisible(true);
         break;
       case 'My QR Code':
-        navigation.navigate('ProfileQR',{
-          profileImageSource:profileImage,
-          name:name,
-          expertise:expertise,
+        navigation.navigate('ProfileQR', {
+          profileImageSource: profileImage,
+          name: name,
+          expertise: expertise,
         });
         break;
       case 'Notifications':
@@ -137,7 +140,7 @@ const ProfileScreen = ({navigation}: any) => {
   return (
     <View style={styles.container}>
       <StatusBar />
-      <View style={{flex: 2}}>
+      <View style={{flex: verified ? 0.75 : 0.9}}>
         <LinearGradient
           colors={[
             'rgba(255, 255, 255, 0.35)',
@@ -173,12 +176,17 @@ const ProfileScreen = ({navigation}: any) => {
           </View>
         )}
       </View>
-
+      <Image
+        style={styles.verificationBadge}
+        source={
+          verified
+            ? require('../../../assets/images/verified.png')
+            : require('../../../assets/images/unVerified.png')
+        }
+      />
       <View
         style={{
-          flex: 1.5,
           alignItems: 'center',
-          marginTop: '6%',
           marginBottom: '4%',
         }}>
         {items.map(({label}, index) => (
@@ -270,7 +278,6 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   imgView: {
-    flex: 1,
     alignItems: 'center',
     position: 'absolute',
     top: 100,
@@ -322,7 +329,6 @@ const styles = StyleSheet.create({
     width: 9,
   },
   bottom: {
-    flex: 1,
     alignItems: 'center',
     marginBottom: 20,
   },
@@ -354,5 +360,10 @@ const styles = StyleSheet.create({
     padding: 15,
     borderTopColor: Colors.quadraryColor,
     alignItems: 'center',
+  },
+  verificationBadge: {
+    position: 'absolute',
+    top: 175,
+    right: 155,
   },
 });

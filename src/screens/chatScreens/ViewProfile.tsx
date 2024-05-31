@@ -5,13 +5,21 @@ import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import Loader from '../../components/Loader';
-import {blockUser, deleteChat, fetchReceiverData, fetchUserId, retrieveBlockStatus, unblockUser} from './ChatHelper';
+import {
+  blockUser,
+  deleteChat,
+  fetchReceiverData,
+  fetchUserId,
+  retrieveBlockStatus,
+  unblockUser,
+} from './ChatHelper';
 import OptionsModal from '../../components/OptionsModal';
 
 const ViewProfileScreen = ({navigation, route}: any) => {
   const [userId, setUserId] = useState('');
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState('');
+  const [verified, setVerified] = useState(false);
   const [status, setStatus] = useState('');
   const [expertise, setExpertise] = useState('');
   const [about, setAbout] = useState('');
@@ -31,6 +39,7 @@ const ViewProfileScreen = ({navigation, route}: any) => {
       if (data) {
         setName(data.name);
         setProfileImage(data.profilepic);
+        setVerified(data.isVerified);
         setStatus(capitalizeFirstLetter(data.status));
         setExpertise(capitalizeFirstLetter(data.expertiseToDisplay));
         setAbout(data.about);
@@ -52,7 +61,10 @@ const ViewProfileScreen = ({navigation, route}: any) => {
     setModalVisible(!modalVisible);
   };
 
-  const options = [{text: blocked ? 'Unblock':'Block'}, {text: 'Delete Chat'}];
+  const options = [
+    {text: blocked ? 'Unblock' : 'Block'},
+    {text: 'Delete Chat'},
+  ];
   const handleOptionClick = async (option: string) => {
     switch (option) {
       case 'Block':
@@ -74,7 +86,7 @@ const ViewProfileScreen = ({navigation, route}: any) => {
       default:
         break;
     }
-  };
+  };  
 
   return loading ? (
     <Loader />
@@ -130,6 +142,14 @@ const ViewProfileScreen = ({navigation, route}: any) => {
           <Text style={styles.statustxt}>{status}</Text>
         </View>
       </View>
+      <Image
+        style={styles.verificationBadge}
+        source={
+          verified
+            ? require('../../../assets/images/verified.png')
+            : require('../../../assets/images/unVerified.png')
+        }
+      />
       <View style={{flex: 1.5, marginTop: '6%', paddingHorizontal: 20}}>
         <View
           style={{
@@ -154,20 +174,22 @@ const ViewProfileScreen = ({navigation, route}: any) => {
               style={{height: 25, width: 25}}
             />
           </TouchableOpacity>
-          <View style={styles.iconCircle}>
+          {!blocked && <View style={styles.iconCircle}>
             <ZegoSendCallInvitationButton
               invitees={[{userID: route.params.userId, userName: name}]}
               isVideoCall={false}
               resourceID={'zego_data'}
             />
-          </View>
-          <View style={styles.iconCircle}>
-            <ZegoSendCallInvitationButton
-              invitees={[{userID: route.params.userId, userName: name}]}
-              isVideoCall={true}
-              resourceID={'zego_video_call'}
-            />
-          </View>
+          </View>}
+          {!blocked && (
+            <View style={styles.iconCircle}>
+              <ZegoSendCallInvitationButton
+                invitees={[{userID: route.params.userId, userName: name}]}
+                isVideoCall={true}
+                resourceID={'zego_video_call'}
+              />
+            </View>
+          )}
         </View>
         <View style={{marginTop: 15}}>
           <Text style={styles.heading}>About</Text>
@@ -287,5 +309,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.regular,
     color: Colors.quadraryColor,
+  },
+  verificationBadge: {
+    position: 'absolute',
+    top: 175,
+    right: 155,
   },
 });

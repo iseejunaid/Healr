@@ -1,33 +1,35 @@
 import {Image, Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import Colors from '../../../../assets/colors/colors';
-import {downloadFile} from '../../HealrFilesScreens/HealrFilesHelper';
+import {openFile} from '../../HealrFilesScreens/HealrFilesHelper';
+import { useState } from 'react';
+import Loader from '../../../components/Loader';
 
 const RenderCustomView = (props: any) => {
+  const [loading, setLoading] = useState(false);
   const {currentMessage} = props;
 
   const openDocument = () => {
     if (currentMessage?.document) {
-      downloadFile(
-        currentMessage.documentName,
+      setLoading(true);
+      openFile(
         currentMessage.document,
+        currentMessage.documentName,
         currentMessage.documentType,
-        false,
-      );
+        setLoading
+      )
     }
   };
 
   if (currentMessage?.document) {
     return (
       <View
-        style={{
-          padding: 10,
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-        }}>
+        style={styles.container}>
         <TouchableOpacity onPress={openDocument}>
+          {loading ? <View style={{height:65,width:65}}><Loader/></View>
+          :
           <Image
             source={require('../../../../assets/images/individualChatDoc.png')}
-          />
+          />}
         </TouchableOpacity>
         <View style={{marginTop: 10, maxWidth: 250}}>
           <Text style={styles.msgText}>
@@ -50,6 +52,11 @@ const RenderCustomView = (props: any) => {
 export default RenderCustomView;
 
 const styles = StyleSheet.create({
+  container:{
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
   msgText: {
     color: Colors.secondaryColor,
   },

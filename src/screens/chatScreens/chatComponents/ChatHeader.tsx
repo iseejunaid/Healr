@@ -5,6 +5,8 @@ import Fonts from '../../../../assets/fonts/fonts';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {deleteDoc, doc} from 'firebase/firestore';
 import {db} from '../../../../configs/firebaseConfig';
+import { useEffect, useState } from 'react';
+import { retrieveBlockStatus } from '../ChatHelper';
 
 const ChatHeader = ({
   navigation,
@@ -21,6 +23,7 @@ const ChatHeader = ({
   setMessages,
 }: any) => {
   const count = selectedMessages.length;
+  const [blocked,setblocked] = useState(false);
 
   const onClose = () => {
     const msgsid = selectedMessages.map((msg: any) => {
@@ -69,6 +72,13 @@ const ChatHeader = ({
     navigation.navigate('CreateDossier', {messages: exportableMessages})
     onClose();
   };
+  useEffect(() => {
+    const checkIfBlocked = async () => {
+      const isBlocked = await retrieveBlockStatus(receiverId);
+      setblocked(isBlocked);
+    };
+    checkIfBlocked();
+  }, []);
 
   return !selectMode ? (
     <View style={styles.headerContainer}>
@@ -109,7 +119,7 @@ const ChatHeader = ({
           </View>
         </View>
       </View>
-      <View style={styles.callIconsContainer}>
+      {!blocked && <View style={styles.callIconsContainer}>
         <ZegoSendCallInvitationButton
           invitees={[{userID: receiverId, userName: userName}]}
           isVideoCall={false}
@@ -120,7 +130,7 @@ const ChatHeader = ({
           isVideoCall={true}
           resourceID={'zego_video_call'}
         />
-      </View>
+      </View>}
     </View>
   ) : (
     <View style={styles.headerContainer}>

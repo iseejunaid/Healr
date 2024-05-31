@@ -3,6 +3,7 @@ import { db, storage } from '../../../configs/firebaseConfig';
 import { fetchUserId } from '../chatScreens/ChatHelper';
 import { Alert, Platform } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
+import FileViewer from 'react-native-file-viewer';
 
 export const uploadFile = async (data: any) => {
     const uid = await fetchUserId();
@@ -133,7 +134,7 @@ export const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString('en-GB', options);
 }
 
-export const downloadFile = async (fileName: string, url: string, fileExtension: string, inform?: boolean) => {
+export const downloadFile = async (fileName: string, url: string) => {
     try {
         const { dirs } = RNFetchBlob.fs;
         const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
@@ -143,19 +144,12 @@ export const downloadFile = async (fileName: string, url: string, fileExtension:
         const fileExists = await RNFetchBlob.fs.exists(filePath);
 
         if (fileExists) {
-            if (inform) {
-                Alert.alert('File Already Exists', 'This File is already downloaded to storage.')
-            }else{
-                openFile(filePath,fileExtension)
-            }
             console.log(`File '${fileName}' is already downloaded.`);
+            Alert.alert('File downloaded', 'File is already downloaded.')
             return;
         } else {
-            if (inform) {
-                Alert.alert('Download Started', 'Your file is being downloaded to your phone. You will be notified once the download is complete.');
-            }
             console.log(`File '${fileName}' is not downloaded.`);
-            
+            Alert.alert('Downloading file', 'File is being downloaded.')
         }
         const res = await RNFetchBlob.config({
             fileCache: true,
@@ -166,54 +160,38 @@ export const downloadFile = async (fileName: string, url: string, fileExtension:
                 description: 'File downloaded by user',
             },
         }).fetch('GET', url);
-        if (!inform) {
-            openFile(filePath, fileExtension);
-        }
     } catch (error) {
         console.error('An error occurred while downloading the file:', error);
     }
 };
 
-const getMIMEType = (fileExtension: string) => {
-    switch (fileExtension) {
-        case 'pdf':
-            return 'application/pdf';
-        case 'jpg':
-        case 'jpeg':
-            return 'image/jpeg';
-        case 'png':
-            return 'image/png';
-        case 'gif':
-            return 'image/gif';
-        case 'mp4':
-            return 'video/mp4';
-        case 'avi':
-            return 'video/x-msvideo';
-        case 'mov':
-            return 'video/quicktime';
-        case 'txt':
-            return 'text/plain';
-        default:
-            return `application/${fileExtension}`;
+export const openFile = async (filePath: string,fileName:string,ext:string,setLoading:Function) => {
+    const localFile = `${RNFS.DocumentDirectoryPath}/${fileName}`+`.${ext}`;
+
+    if(await RNFS.exists(localFile)){
+        console.log('File already exists');
+        setLoading(false);
+        FileViewer.open(localFile)
+        return;
     }
-};
 
-const openFile = (filePath: string, fileExtension: string) => {
-    console.log('Opening file:', filePath);
+    const options = {
+        fromUrl: filePath,
+        toFile: localFile,
+    };
+    console.log('Downloading file:', filePath);
+    
+    RNFS.downloadFile(options)
+        .promise
+        .then(() => {
+            console.log('File downloaded successfully');
+            FileViewer.open(localFile)
+            setLoading(false);
+        })
+        .catch((error) => {
+            console.error('Error downloading file:', error);
+        });
 
-    const mime = getMIMEType(fileExtension);
-
-    if (Platform.OS === 'ios') {
-        RNFetchBlob.ios.openDocument(filePath);
-    } else {
-        RNFetchBlob.android.actionViewIntent(filePath, mime)
-            .then(() => {
-                console.log('File opened successfully');
-            })
-            .catch((error) => {
-                console.error('Error opening file:', error);
-            });
-    }
 };
 
 export const splitFileNameAndExt = (fileName: string) => {

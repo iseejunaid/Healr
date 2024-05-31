@@ -13,12 +13,14 @@ import {
   deleteFile,
   downloadFile,
   formatDate,
+  openFile,
   renameFile,
   splitFileNameAndExt,
 } from '../screens/HealrFilesScreens/HealrFilesHelper';
 import OptionsModal from './OptionsModal';
 import InputField from './InputField';
 import PressableBtn from './PressableBtn';
+import Loader from './Loader';
 
 const FileItem = ({
   id,
@@ -30,7 +32,7 @@ const FileItem = ({
   deleteValue,
   uploadedFileName,
   setModified,
-}: any) => {  
+}: any) => {
   const [imgSource, setImgSource] = useState('');
   const [deleted, setDeleted] = useState(deleteValue);
   const [modalVisible, setModalVisible] = useState(false);
@@ -38,11 +40,12 @@ const FileItem = ({
   const [rename, setRename] = useState(false);
   const [newFileName, setNewFileName] = useState('');
   const [ext, setExt] = useState('');
+  const [loading, setLoading] = useState(false);
   const [position, setPosition] = useState({x: 0, y: 0, width: 0, height: 0});
   const imageRef = useRef(null);
 
   date = formatDate(date);
-  
+
   useEffect(() => {
     setInitialFileName(fileName);
     const {renameAbleFilename, ext} = splitFileNameAndExt(fileName);
@@ -63,7 +66,8 @@ const FileItem = ({
   }, [fileType]);
 
   const handlePress = () => {
-    downloadFile(fileName, url, fileType, false);
+    setLoading(true);
+    openFile(url,fileName,ext,setLoading);
   };
 
   const toggleModal = () => {
@@ -88,7 +92,13 @@ const FileItem = ({
   const onOptionClick = async (option: string) => {
     switch (option) {
       case 'Share':
-        navigation.navigate('Share', {healrContacts: true,url,fileType,fileName,ext});
+        navigation.navigate('Share', {
+          healrContacts: true,
+          url,
+          fileType,
+          fileName,
+          ext,
+        });
         break;
       case 'Rename':
         toggleRenameModal();
@@ -100,7 +110,7 @@ const FileItem = ({
         });
         break;
       case 'Save to phone':
-        downloadFile(fileName, url, '', true);
+        downloadFile(fileName, url);
         break;
     }
     setModalVisible(false);
@@ -123,7 +133,11 @@ const FileItem = ({
     }
   };
 
-  return deleted ? null : (
+  return deleted ? null : loading ? (
+    <View style={styles.container}>
+      <Loader />
+    </View>
+  ) : (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <TouchableOpacity
@@ -180,14 +194,14 @@ const FileItem = ({
                 text="Cancel"
                 onPress={toggleRenameModal}
                 fontColor="white"
-                backgound="red"
+                background="red"
                 width="40%"
               />
               <PressableBtn
                 text="Rename"
                 onPress={handleRename}
                 fontColor="white"
-                backgound={Colors.primaryColor}
+                background={Colors.primaryColor}
                 width="40%"
               />
             </View>

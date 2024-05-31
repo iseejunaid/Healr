@@ -62,6 +62,7 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
       const usersCollectionRef = collection(db, 'users');
       const userDocRef = await addDoc(usersCollectionRef, {
         uid: user.uid,
+        isVerified: false,
         category: signupConfig.category,
         expertise: signupConfig.expertise,
         expertiseInput: signupConfig.expertiseInput,
