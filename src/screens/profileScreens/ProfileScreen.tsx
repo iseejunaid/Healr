@@ -78,6 +78,13 @@ const ProfileScreen = ({navigation}: any) => {
 
   const optionsHandler = (label: string) => {
     switch (label) {
+      case 'Get Verified':
+        navigation.navigate('GetVerified',{
+          profileImageSource: profileImage,
+          name: name,
+          expertise: expertise,
+        });
+        break;
       case 'Status':
         setIsModalVisible(true);
         break;

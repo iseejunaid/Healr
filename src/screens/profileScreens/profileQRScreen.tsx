@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image, StatusBar} from 'react-native';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
 import QRCode from 'react-native-qrcode-svg';
@@ -18,6 +18,7 @@ const ProfileQRScreen: React.FC = ({navigation, route}: any) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor={Colors.tertiaryColor} barStyle="light-content" />
       <View style={styles.headerContainer}>
         <TouchableOpacity
           style={{height: '100%', justifyContent: 'center'}}

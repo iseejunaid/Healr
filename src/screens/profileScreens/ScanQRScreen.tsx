@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image, StatusBar} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
@@ -13,6 +13,7 @@ const ScanQRScreen: React.FC = ({navigation}:any) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor={Colors.secondaryColor} barStyle="dark-content" />
       <View style={styles.headerContainer}>
         <TouchableOpacity
           style={{height: '100%', justifyContent: 'center'}}
