@@ -42,7 +42,8 @@ npm-debug.log
 yarn-error.log
 
 #Firebase
-configs/firebaseConfig.js
+/configs/firebaseConfig.ts
+
 
 # fastlane
 #
