@@ -35,6 +35,8 @@ import org.reactnative.camera.RNCameraPackage;
 import com.reactnativecompressor.CompressorPackage;
 // react-native-contacts
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
+// react-native-date-picker
+import com.henninghall.date_picker.DatePickerPackage;
 // react-native-document-picker
 import com.reactnativedocumentpicker.RNDocumentPickerPackage;
 // react-native-encrypted-storage
@@ -132,6 +134,7 @@ public class PackageList {
       new RNCameraPackage(),
       new CompressorPackage(),
       new ReactNativeContacts(),
+      new DatePickerPackage(),
       new RNDocumentPickerPackage(),
       new RNEncryptedStoragePackage(),
       new RNFileViewerPackage(),

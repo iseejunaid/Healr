@@ -6,28 +6,32 @@ import Fonts from '../../../../assets/fonts/fonts';
 interface ScreensHeaderProps {
   navigation: any;
   text: string;
+  leftIcon?: boolean;
+  leftIconPress?: () => void;
   rightText?: string;
+  rightTextPress?: () => void;
 }
 
 const ScreensHeader: React.FC<ScreensHeaderProps> = ({
   navigation,
   text,
+  leftIcon,
+  leftIconPress,
   rightText,
+  rightTextPress,
 }) => {
   return (
     <View style={styles.headerContainer}>
       <TouchableOpacity
-        style={{height: '100%', justifyContent: 'center'}}
-        onPress={() => navigation.pop()}>
+        style={{height: '100%', justifyContent: 'center',width:55,alignItems:'flex-start'}}
+        onPress={leftIconPress? leftIconPress : () => navigation.pop()}>
         <Image
-          source={require('../../../../assets/images/back.png')}
+          source={ leftIcon ? leftIcon :require('../../../../assets/images/back.png')}
           tintColor={Colors.secondaryWhite}
-          style={styles.backImg}
         />
       </TouchableOpacity>
       <View
         style={{
-          flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
           marginRight: 22,
@@ -35,11 +39,13 @@ const ScreensHeader: React.FC<ScreensHeaderProps> = ({
         <Text style={styles.headerText}>{text}</Text>
       </View>
       <TouchableOpacity
-      style={{
-        justifyContent: 'center',
-        height: '100%',
-      }}
-      >
+        onPress={rightTextPress}
+        style={{
+          justifyContent: 'center',
+          width:55,
+          height: '100%',
+          alignItems: 'flex-end',
+        }}>
         <Text style={styles.rightText}>{rightText}</Text>
       </TouchableOpacity>
     </View>
@@ -55,10 +61,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  backImg: {
-    height: 20,
-    width: 22,
+    width: '100%',
   },
   headerText: {
     fontSize: 18,

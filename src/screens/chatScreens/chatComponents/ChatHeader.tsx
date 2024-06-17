@@ -5,8 +5,8 @@ import Fonts from '../../../../assets/fonts/fonts';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {deleteDoc, doc} from 'firebase/firestore';
 import {db} from '../../../../configs/firebaseConfig';
-import { useEffect, useState } from 'react';
-import { retrieveBlockStatus } from '../ChatHelper';
+import {useEffect, useState} from 'react';
+import {retrieveBlockStatus, saveFileToOnlineStorage} from '../ChatHelper';
 
 const ChatHeader = ({
   navigation,
@@ -23,7 +23,8 @@ const ChatHeader = ({
   setMessages,
 }: any) => {
   const count = selectedMessages.length;
-  const [blocked,setblocked] = useState(false);
+  const [blocked, setblocked] = useState(false);
+  const [saveFile, setSaveFile] = useState(false);
 
   const onClose = () => {
     const msgsid = selectedMessages.map((msg: any) => {
@@ -54,24 +55,29 @@ const ChatHeader = ({
     onClose();
   };
   const exportMessages = () => {
-    var exportableMessages: string | { message: string; time: any; }[] = [];
+    var exportableMessages: string | {message: string; time: any}[] = [];
     selectedMessages.forEach((msg: any) => {
-      if(msg.user._id === userID){
+      if (msg.user._id === userID) {
         exportableMessages.push({
           message: 'You: ' + msg.text,
           time: msg.createdAt,
         });
       } else {
         exportableMessages.push({
-          message: userName+': ' + msg.text,
+          message: userName + ': ' + msg.text,
           time: msg.createdAt,
         });
       }
     });
     exportableMessages = JSON.stringify(exportableMessages);
-    navigation.navigate('CreateDossier', {messages: exportableMessages})
+    navigation.navigate('CreateDossier', {messages: exportableMessages});
     onClose();
   };
+  const saveToHealrFiles = () => {
+    saveFileToOnlineStorage(selectedMessages[0])
+    onClose();
+  };
+
   useEffect(() => {
     const checkIfBlocked = async () => {
       const isBlocked = await retrieveBlockStatus(receiverId);
@@ -80,6 +86,23 @@ const ChatHeader = ({
     checkIfBlocked();
   }, []);
 
+  useEffect(() => {
+    if (count == 1) {
+      if (selectedMessages[0].user._id != userID) {
+        if (
+          selectedMessages[0].documentType == 'pdf' ||
+          selectedMessages[0].documentType == 'docx'
+        )
+          setSaveFile(true);
+      }
+    } else {
+      setSaveFile(false);
+    }
+    if (count == 0) {
+      setSelectMode(false);
+    }
+  }, [selectedMessages]);
+
   return !selectMode ? (
     <View style={styles.headerContainer}>
       <View
@@ -87,10 +110,7 @@ const ChatHeader = ({
         <TouchableOpacity
           style={{height: '100%', justifyContent: 'center'}}
           onPress={() => navigation.popToTop({screen: 'ChatHome'})}>
-          <Image
-            source={require('../../../../assets/images/back.png')}
-            style={styles.backImg}
-          />
+          <Image source={require('../../../../assets/images/back.png')} />
         </TouchableOpacity>
         <View
           style={{flexDirection: 'row', marginLeft: 20}}
@@ -119,18 +139,20 @@ const ChatHeader = ({
           </View>
         </View>
       </View>
-      {!blocked && <View style={styles.callIconsContainer}>
-        <ZegoSendCallInvitationButton
-          invitees={[{userID: receiverId, userName: userName}]}
-          isVideoCall={false}
-          resourceID={'zego_data'}
-        />
-        <ZegoSendCallInvitationButton
-          invitees={[{userID: receiverId, userName: userName}]}
-          isVideoCall={true}
-          resourceID={'zego_video_call'}
-        />
-      </View>}
+      {!blocked && (
+        <View style={styles.callIconsContainer}>
+          <ZegoSendCallInvitationButton
+            invitees={[{userID: receiverId, userName: userName}]}
+            isVideoCall={false}
+            resourceID={'zego_data'}
+          />
+          <ZegoSendCallInvitationButton
+            invitees={[{userID: receiverId, userName: userName}]}
+            isVideoCall={true}
+            resourceID={'zego_video_call'}
+          />
+        </View>
+      )}
     </View>
   ) : (
     <View style={styles.headerContainer}>
@@ -157,12 +179,18 @@ const ChatHeader = ({
         <TouchableOpacity onPress={deleteMessages}>
           <Image source={require('../../../../assets/images/delete.png')} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={exportMessages}>
-          <Image
-            tintColor={Colors.tertiaryColor}
-            source={require('../../../../assets/images/createDossier.png')}
-          />
-        </TouchableOpacity>
+        {saveFile ? (
+          <TouchableOpacity onPress={saveToHealrFiles}>
+            <Text>Save</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={exportMessages}>
+            <Image
+              tintColor={Colors.tertiaryColor}
+              source={require('../../../../assets/images/createDossier.png')}
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

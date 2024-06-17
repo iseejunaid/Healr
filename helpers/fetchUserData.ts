@@ -19,6 +19,7 @@ export const fetchUserData = async (user: object,token:string,navigation:any) =>
   var status = '';
   var about = '';
   var isVerified = false;
+  var verifiedStatus = '';
     
   try {    
     const q = query(collection(db, 'users'), where('uid', '==', uid));
@@ -40,6 +41,7 @@ export const fetchUserData = async (user: object,token:string,navigation:any) =>
       status = userData.status;
       about = userData.about;
       isVerified = userData.isVerified;
+      verifiedStatus = userData.verificationStatus;
     });
 
     try {
@@ -55,6 +57,7 @@ export const fetchUserData = async (user: object,token:string,navigation:any) =>
         ['status', status.toString()],
         ['about', about.toString()],
         ['isVerified', isVerified.toString()],
+        ['verifiedStatus', verifiedStatus.toString()]
       ];
 
       if(photoURL){        

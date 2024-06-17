@@ -420,6 +420,7 @@ attr helperTextTextColor
 attr hideMotionSpec
 attr hideOnContentScroll
 attr hideOnScroll
+attr hideWheelUntilFocused
 attr hide_during_ads
 attr hide_on_touch
 attr hintAnimationEnabled
@@ -444,6 +445,11 @@ attr imageButtonStyle
 attr indeterminateProgressStyle
 attr initialActivityCount
 attr insetForeground
+attr internalLayout
+attr internalMaxHeight
+attr internalMaxWidth
+attr internalMinHeight
+attr internalMinWidth
 attr isAutofillInlineSuggestionTheme
 attr isLightTheme
 attr isMaterialTheme
@@ -543,6 +549,7 @@ attr navigationMode
 attr navigationViewStyle
 attr nestedScrollViewStyle
 attr number
+attr numberPickerStyle
 attr numericModifiers
 attr overlapAnchor
 attr overlayImage
@@ -620,6 +627,9 @@ attr searchViewStyle
 attr seekBarStyle
 attr selectableItemBackground
 attr selectableItemBackgroundBorderless
+attr selectionDivider
+attr selectionDividerHeight
+attr selectionDividersDistance
 attr shapeAppearance
 attr shapeAppearanceLargeComponent
 attr shapeAppearanceMediumComponent
@@ -647,6 +657,7 @@ attr singleLine
 attr singleSelection
 attr snackbarButtonStyle
 attr snackbarStyle
+attr solidColor
 attr spanCount
 attr spinBars
 attr spinnerDropDownItemStyle
@@ -796,6 +807,7 @@ attr use_controller
 attr use_sensor_rotation
 attr viewAspectRatio
 attr viewInflaterClass
+attr virtualButtonPressedDrawable
 attr voiceIcon
 attr windowActionBar
 attr windowActionBarOverlay
@@ -1679,6 +1691,8 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable number_picker_divider_material
+drawable overlay
 drawable redbox_top_border_background
 drawable rn_edit_text_material
 drawable test_custom_background
@@ -1784,6 +1798,7 @@ id adjust_width
 id alertTitle
 id all
 id always
+id ampm
 id async
 id auto
 id autofill_inline_suggestion_end_icon
@@ -1828,7 +1843,9 @@ id custom
 id customPanel
 id cut
 id dark
+id date
 id date_picker_actions
+id day
 id decor_content_parent
 id default_activity_button
 id design_bottom_sheet
@@ -1926,6 +1943,7 @@ id group_divider
 id hideable
 id home
 id homeAsUp
+id hour
 id icon
 id icon_group
 id icon_only
@@ -1963,6 +1981,8 @@ id menu_loader
 id message
 id middle
 id mini
+id minutes
+id month
 id month_grid
 id month_navigation_bar
 id month_navigation_fragment_toggle
@@ -1998,15 +2018,18 @@ id normal
 id notification_background
 id notification_main_column
 id notification_main_column_container
+id numberpicker_input
 id off
 id on
 id one
 id outline
+id overlay_image
 id parallax
 id parentPanel
 id parent_matrix
 id password_toggle
 id peekHeight
+id pickerWrapper
 id pin
 id pointer_events
 id progress_circular
@@ -2150,6 +2173,7 @@ id wrapper_controls
 id wrapper_reset_rotate
 id wrapper_rotate_by_angle
 id wrapper_states
+id year
 id zoom
 integer abc_config_activityDefaultDur
 integer abc_config_activityShortDur
@@ -2277,6 +2301,7 @@ layout mtrl_picker_header_title_text
 layout mtrl_picker_header_toggle
 layout mtrl_picker_text_input_date
 layout mtrl_picker_text_input_date_range
+layout native_picker
 layout notification_action
 layout notification_action_tombstone
 layout notification_media_action
@@ -2292,6 +2317,7 @@ layout notification_template_media
 layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
+layout number_picker_material
 layout redbox_item_frame
 layout redbox_item_title
 layout redbox_view
@@ -2359,6 +2385,7 @@ string abc_shareactionprovider_share_with
 string abc_shareactionprovider_share_with_application
 string abc_toolbar_collapse_description
 string alert_description
+string ampm_description
 string androidx_startup
 string app_name
 string appbar_scrolling_view_behavior
@@ -2418,6 +2445,8 @@ string common_open_on_phone
 string common_signin_button_text
 string common_signin_button_text_long
 string copy_toast_msg
+string date_description
+string day_description
 string error_drm_not_supported
 string error_drm_unknown
 string error_drm_unsupported_scheme
@@ -2491,6 +2520,8 @@ string google_crash_reporting_api_key
 string google_storage_bucket
 string header_description
 string hide_bottom_view_on_scroll_behavior
+string hour_description
+string hour_tag
 string icon_content_description
 string image_description
 string imagebutton_description
@@ -2498,6 +2529,9 @@ string link_description
 string menu_description
 string menubar_description
 string menuitem_description
+string minutes_description
+string minutes_tag
+string month_description
 string mtrl_badge_numberless_content_description
 string mtrl_chip_close_icon_content_description
 string mtrl_exceed_max_badge_number_suffix
@@ -2532,6 +2566,7 @@ string mtrl_picker_toggle_to_calendar_input_mode
 string mtrl_picker_toggle_to_day_selection
 string mtrl_picker_toggle_to_text_input_mode
 string mtrl_picker_toggle_to_year_selection
+string overlay
 string password_toggle_content_description
 string path_password_eye
 string path_password_eye_mask_strike_through
@@ -2554,6 +2589,7 @@ string state_unselected_description
 string status_bar_notification_info_overflow
 string summary_description
 string tablist_description
+string time_tag
 string timer_description
 string toolbar_description
 string ucrop_crop
@@ -2565,6 +2601,7 @@ string ucrop_mutate_exception_hint
 string ucrop_rotate
 string ucrop_scale
 string unrecognized_media_format
+string year_description
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light
 style Animation_AppCompat_Dialog
@@ -2789,6 +2826,8 @@ style CalendarDatePickerStyle
 style CardView
 style CardView_Dark
 style CardView_Light
+style DatePickerBaseTheme
+style DatePickerTheme
 style DialogAnimationFade
 style DialogAnimationSlide
 style EmptyTheme
@@ -3300,6 +3339,8 @@ style Widget_MaterialComponents_Toolbar_Primary
 style Widget_MaterialComponents_Toolbar_PrimarySurface
 style Widget_MaterialComponents_Toolbar_Surface
 style Widget_Support_CoordinatorLayout
+style android_native
+style android_native_small
 style redboxButton
 style ucrop_ImageViewWidgetIcon
 style ucrop_TextViewCropAspectRatio
@@ -3380,6 +3421,7 @@ styleable MenuGroup android_enabled android_id android_visible android_menuCateg
 styleable MenuItem android_icon android_enabled android_id android_checked android_visible android_menuCategory android_orderInCategory android_title android_titleCondensed android_alphabeticShortcut android_numericShortcut android_checkable android_onClick actionLayout actionProviderClass actionViewClass alphabeticModifiers contentDescription iconTint iconTintMode numericModifiers showAsAction tooltipText
 styleable MenuView android_windowAnimationStyle android_itemTextAppearance android_horizontalDivider android_verticalDivider android_headerBackground android_itemBackground android_itemIconDisabledAlpha preserveIconSpacing subMenuArrow
 styleable NavigationView android_background android_fitsSystemWindows android_maxWidth elevation headerLayout itemBackground itemHorizontalPadding itemIconPadding itemIconSize itemIconTint itemMaxLines itemShapeAppearance itemShapeAppearanceOverlay itemShapeFillColor itemShapeInsetBottom itemShapeInsetEnd itemShapeInsetStart itemShapeInsetTop itemTextAppearance itemTextColor menu
+styleable NumberPicker hideWheelUntilFocused internalLayout internalMaxHeight internalMaxWidth internalMinHeight internalMinWidth selectionDivider selectionDividerHeight selectionDividersDistance solidColor virtualButtonPressedDrawable
 styleable PlayerControlView ad_marker_color ad_marker_width bar_gravity bar_height buffered_color controller_layout_id fastforward_increment played_ad_marker_color played_color repeat_toggle_modes rewind_increment scrubber_color scrubber_disabled_size scrubber_dragged_size scrubber_drawable scrubber_enabled_size show_fastforward_button show_next_button show_previous_button show_rewind_button show_shuffle_button show_timeout time_bar_min_update_interval touch_target_height unplayed_color
 styleable PlayerView ad_marker_color ad_marker_width auto_show bar_height buffered_color controller_layout_id default_artwork fastforward_increment hide_during_ads hide_on_touch keep_content_on_player_reset played_ad_marker_color played_color player_layout_id repeat_toggle_modes resize_mode rewind_increment scrubber_color scrubber_disabled_size scrubber_dragged_size scrubber_drawable scrubber_enabled_size show_buffering show_shuffle_button show_timeout shutter_background_color surface_type time_bar_min_update_interval touch_target_height unplayed_color use_artwork use_controller use_sensor_rotation
 styleable PopupWindow android_popupBackground android_popupAnimationStyle overlapAnchor
@@ -3406,6 +3448,7 @@ styleable TabItem android_icon android_layout android_text
 styleable TabLayout tabBackground tabContentStart tabGravity tabIconTint tabIconTintMode tabIndicator tabIndicatorAnimationDuration tabIndicatorColor tabIndicatorFullWidth tabIndicatorGravity tabIndicatorHeight tabInlineLabel tabMaxWidth tabMinWidth tabMode tabPadding tabPaddingBottom tabPaddingEnd tabPaddingStart tabPaddingTop tabRippleColor tabSelectedTextColor tabTextAppearance tabTextColor tabUnboundedRipple
 styleable TextAppearance android_textSize android_typeface android_textStyle android_textColor android_textColorHint android_textColorLink android_shadowColor android_shadowDx android_shadowDy android_shadowRadius android_fontFamily android_textFontWeight fontFamily fontVariationSettings textAllCaps textLocale
 styleable TextInputLayout android_textColorHint android_hint boxBackgroundColor boxBackgroundMode boxCollapsedPaddingTop boxCornerRadiusBottomEnd boxCornerRadiusBottomStart boxCornerRadiusTopEnd boxCornerRadiusTopStart boxStrokeColor boxStrokeWidth boxStrokeWidthFocused counterEnabled counterMaxLength counterOverflowTextAppearance counterOverflowTextColor counterTextAppearance counterTextColor endIconCheckable endIconContentDescription endIconDrawable endIconMode endIconTint endIconTintMode errorEnabled errorIconDrawable errorIconTint errorIconTintMode errorTextAppearance errorTextColor helperText helperTextEnabled helperTextTextAppearance helperTextTextColor hintAnimationEnabled hintEnabled hintTextAppearance hintTextColor passwordToggleContentDescription passwordToggleDrawable passwordToggleEnabled passwordToggleTint passwordToggleTintMode shapeAppearance shapeAppearanceOverlay startIconCheckable startIconContentDescription startIconDrawable startIconTint startIconTintMode
+styleable Theme numberPickerStyle
 styleable ThemeEnforcement android_textAppearance enforceMaterialTheme enforceTextAppearance
 styleable Toolbar android_gravity android_minHeight buttonGravity collapseContentDescription collapseIcon contentInsetEnd contentInsetEndWithActions contentInsetLeft contentInsetRight contentInsetStart contentInsetStartWithNavigation logo logoDescription maxButtonHeight menu navigationContentDescription navigationIcon popupTheme subtitle subtitleTextAppearance subtitleTextColor title titleMargin titleMarginBottom titleMarginEnd titleMarginStart titleMarginTop titleMargins titleTextAppearance titleTextColor
 styleable View android_theme android_focusable paddingEnd paddingStart theme

@@ -7,6 +7,7 @@ import {
   Image,
   StatusBar,
   Modal,
+  Alert,
 } from 'react-native';
 import Header from '../../components/Header';
 import Colors from '../../../assets/colors/colors';
@@ -23,6 +24,7 @@ const ProfileScreen = ({navigation}: any) => {
   const [expertise, setExpertise] = useState('');
   const [status, setStatus] = useState('');
   const [verified, setVerified] = useState(false);
+  const [verificationStatus, setVerificationStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -36,6 +38,7 @@ const ProfileScreen = ({navigation}: any) => {
       const name = await AsyncStorage.getItem('name');
       setProfileImage((await AsyncStorage.getItem('photoURL')) ?? '');
       setVerified((await AsyncStorage.getItem('isVerified')) === 'true');
+      setVerificationStatus((await AsyncStorage.getItem('verifiedStatus')) ?? '');
       const statusValue = await AsyncStorage.getItem('status');
       const expertiseValue = (await AsyncStorage.getItem('expertise')) ?? '';
       const expertiseInput =
@@ -69,16 +72,31 @@ const ProfileScreen = ({navigation}: any) => {
   }, []);
 
   const items = [
-    ...(!verified ? [{label: 'Get Verified'}] : []),
+    ...(verificationStatus == 'unverified' ? [{label: 'Get Verified'}] :
+    verificationStatus == 'pending' ? [{label: 'Verification Status'}] : 
+    verificationStatus == 'rejected' ? [{label: 'Request Again'}] : []),
     {label: 'Status'},
     {label: 'My QR Code'},
     {label: 'Notifications'},
     {label: 'Change Password'},
-  ];
+  ]; 
 
-  const optionsHandler = (label: string) => {
+  const optionsHandler = async (label: string) => {
     switch (label) {
       case 'Get Verified':
+        navigation.navigate('GetVerified',{
+          profileImageSource: profileImage,
+          name: name,
+          expertise: expertise,
+        });
+        break;
+      case 'Verification Status':
+        Alert.alert(
+          'Verification Status',
+          'Your verification is pending. Please wait for the admin to verify your documents.',
+        );
+        break;
+      case 'Request Again':
         navigation.navigate('GetVerified',{
           profileImageSource: profileImage,
           name: name,

@@ -1,78 +1,60 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import Colors from '../../../../assets/colors/colors';
 import Fonts from '../../../../assets/fonts/fonts';
 import ScreensHeader from './ScreensHeader';
+import CountryPicker, { DARK_THEME } from 'react-native-country-picker-modal';
+import { verificationData } from './VerificationData';
 
 const GetVerifiedStep1: React.FC = ({navigation}: any) => {
   const [country, setCountry] = useState('');
-  let countryPickerRef: any = null;
-  const onpress = () => {
-    countryPickerRef.open();
+  const [isPickerVisible, setPickerVisible] = useState(false);
+
+  const onPress = () => {
+    setPickerVisible(true);
   };
+
+  const onSelect = (selectedCountry: any) => {
+    setCountry(selectedCountry.name);
+    setPickerVisible(false);
+  };
+
+  const handleNext = () => {
+    if (country) {
+      verificationData.country = country.trim();
+      navigation.navigate('GetVerifiedStep2');
+    }else{
+      Alert.alert('Select Country', 'Please select your country to proceed');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScreensHeader
         navigation={navigation}
-        text="Get Verified"
+        text="Step 1"
         rightText="Next"
+        rightTextPress={handleNext}
       />
       <View style={styles.body}>
         <Text style={styles.countryText}>Select Your Country</Text>
-        <Text style={styles.countryInput} onPress={onpress}>
-          {country ? country : 'Select Country'}
-        </Text>
+        <TouchableOpacity onPress={onPress}>
+          <Text style={styles.countryInput}>
+            {country ? country : 'Select Country'}
+          </Text>
+        </TouchableOpacity>
       </View>
-      {/* <CountryPicker
-        countryPickerRef={(ref: any) => {
-          countryPickerRef = ref;
-        }}
-        enable={true}
-        countryCode={'US'}
-        containerConfig={{
-          showFlag: true,
-          showCountryName: true,
-          showCountryCode: true,
-        }}
-        modalConfig={{
-          showFlag: true,
-          showCallingCode: false,
-          showCountryName: true,
-          showCountryCode: false,
-        }}
-        onSelectCountry={(data: any) => {
-          console.log('DATA', data);
-          setCountry(data.name);
-        }}
-        onInit={(data: any) => {
-          console.log('DATA', data);
-        }}
-        containerStyle={{
-          container: {display: 'none'},
-        }}
-        modalStyle={{
-          container: {
-            backgroundColor:Colors.tertiaryColor
-          },
-          searchStyle: {
-            backgroundColor:Colors.secondaryColor,
-          },
-          tileStyle: {},
-          itemStyle: {
-            itemContainer: {
-                backgroundColor:Colors.tertiaryColor
-            },
-            flagStyle: {},
-            countryCodeStyle: {},
-            countryNameStyle: {},
-            callingNameStyle: {},
-          },
-        }}
-        title={'Country'}
-        searchPlaceholder={'Search'}
-        showCloseButton={true}
-        showModalTitle={true}
-      /> */}
+      <CountryPicker
+        withFilter
+        withFlag
+        withAlphaFilter
+        visible={isPickerVisible}
+        onSelect={onSelect}
+        theme={DARK_THEME}
+        onClose={() => setPickerVisible(false)}
+        containerButtonStyle={{display: 'none'}}
+        countryCode='PK'
+      />
     </View>
   );
 };

@@ -713,3 +713,16 @@ export const retrieveBlockStatusByOtherUser = async (receiverId: string) => {
         throw error;
     }
 }
+
+export const saveFileToOnlineStorage = async (data:any) => {
+    const uid = await fetchUserId();
+    const timestamp = Date.now();
+    const fileData = {
+        name: data.documentName,
+        type: data.documentType,
+        date: new Date().toISOString(),
+        url: data.document,
+        uploadedFileName: timestamp + '.' + data.documentType,
+    }
+    await db.collection('fileReferences').doc(uid).collection('files').doc(timestamp.toString()).set(fileData);
+}
