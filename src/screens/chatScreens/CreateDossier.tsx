@@ -25,7 +25,6 @@ const CreateDossier = ({navigation, route}: any) => {
   ]);
   const [title, setTitle] = useState('');
   const [mrn, setMrn] = useState('');
-  const [patient, setPatient] = useState('');
   const [description, setDescription] = useState('');
 
   const openImagePicker = async () => {
@@ -65,7 +64,6 @@ const CreateDossier = ({navigation, route}: any) => {
       imagespaths,
       title,
       mrn,
-      patient,
       description,
     );
     Alert.alert(
@@ -89,7 +87,6 @@ const CreateDossier = ({navigation, route}: any) => {
       messages,
       title,
       mrn,
-      patient,
       description,
     );
     Alert.alert(
@@ -195,13 +192,7 @@ const CreateDossier = ({navigation, route}: any) => {
             value={mrn}
             handleChange={setMrn}
           />
-          <InputField
-            style={{elevation: 5}}
-            placeholder="Patient"
-            width={95}
-            value={patient}
-            handleChange={setPatient}
-          />
+          
           <TextInput
             style={styles.input}
             placeholder="Description"

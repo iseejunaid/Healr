@@ -479,8 +479,8 @@ export const fetchReceiverData = async (receiverId: string) => {
     }
 }
 
-export const sendDossier = async (receiver_id: string, imagespaths: any, title: string, mrn?: string, patient?: string, description?: string) => {
-    const uri = await makePdfWithoutMessages(imagespaths, title, mrn, patient, description);
+export const sendDossier = async (receiver_id: string, imagespaths: any, title: string, mrn?: string, description?: string) => {
+    const uri = await makePdfWithoutMessages(imagespaths, title, mrn, description);
     const fileType = 'dossier';
     const name = title;
     const extension = 'pdf';
@@ -501,8 +501,8 @@ export const sendDossier = async (receiver_id: string, imagespaths: any, title: 
     }
 }
 
-export const saveDossier = async (imagespaths: any, messages: any, title: string, mrn?: string, patient?: string, description?: string) => {
-    const uri = await makePdf(imagespaths, title, messages, mrn, patient, description);
+export const saveDossier = async (imagespaths: any, messages: any, title: string, mrn?: string, description?: string) => {
+    const uri = await makePdf(imagespaths, title, messages, mrn,description);
     const uid = await fetchUserId();
     const name = title;
     const timestamp = Date.now();
@@ -529,14 +529,10 @@ export const saveDossier = async (imagespaths: any, messages: any, title: string
         throw error;
     }
 }
-const makePdf = async (imagespaths: any, title: string, messages?: any, mrn?: string, patient?: string, description?: string) => {
+const makePdf = async (imagespaths: any, title: string, messages?: any, mrn?: string, description?: string) => {
     if (!mrn) {
         mrn = '-';
     }
-    if (!patient) {
-        patient = '-';
-    }
-
     let imagesHtml = '';
     for (let i = 0; i < imagespaths.length; i += 2) {
         if (i % 2 === 0) {
@@ -610,10 +606,6 @@ const makePdf = async (imagespaths: any, title: string, messages?: any, mrn?: st
                 <th>MRN:</th>
                 <td>${mrn}</td>
             </tr>
-            <tr>
-                <th>Patient Name:</th>
-                <td>${patient}</td>
-            </tr>
           </table>
           <p style="color: #818181; font-size: 12px;">Created on ${date} by ${username}</p>
           <div>
@@ -636,14 +628,10 @@ const makePdf = async (imagespaths: any, title: string, messages?: any, mrn?: st
     let file = await RNHTMLtoPDF.convert(options);
     return file.filePath;
 }
-const makePdfWithoutMessages = async (imagespaths: any, title: string, mrn?: string, patient?: string, description?: string) => {
+const makePdfWithoutMessages = async (imagespaths: any, title: string, mrn?: string, description?: string) => {
     if (!mrn) {
         mrn = '-';
     }
-    if (!patient) {
-        patient = '-';
-    }
-
     let imagesHtml = '';
     for (let i = 0; i < imagespaths.length; i += 2) {
         if (i % 2 === 0) {
@@ -699,10 +687,6 @@ const makePdfWithoutMessages = async (imagespaths: any, title: string, mrn?: str
             <tr>
                 <th>MRN:</th>
                 <td>${mrn}</td>
-            </tr>
-            <tr>
-                <th>Patient Name:</th>
-                <td>${patient}</td>
             </tr>
           </table>
           <p style="color: #818181; font-size: 12px;">Created on ${date} by ${username}</p>
