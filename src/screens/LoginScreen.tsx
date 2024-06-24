@@ -17,7 +17,7 @@ import { fetchUserData } from '../../helpers/fetchUserData';
 import Loader from '../components/Loader';
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
-  const [email, setEmail] = useState('junaidnadeem266@gmail.com');
+  const [email, setEmail] = useState('fistakuknu@tozya.com');
   const [password, setPassword] = useState('123123123');
   const [showPassword, setShowPassword] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -35,8 +35,8 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
-        email,
-        password,
+        email.trim(),
+        password.trim(),
       );
       const user = userCredential.user;
       const token = await user.getIdToken(true)      

@@ -23,7 +23,7 @@ export const renderCustomBubble = (props: any) => {
         }}
         textStyle={{
           right: {color: Colors.secondaryWhite, fontFamily: Fonts.regular},
-          left: {color: 'black', fontFamily: Fonts.regular},
+          left: {color: Colors.tertiaryColor, fontFamily: Fonts.regular},
         }}
         wrapperStyle={{
           left: {

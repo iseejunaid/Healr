@@ -24,8 +24,6 @@ const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName,
          return require('../../assets/images/cameraIcon.png');
       case 'dotsIcon':
         return require('../../assets/images/dotsIcon.png');
-      case 'settingsIcon':
-        // return require('../../assets/images/settingsIcon.png');
       default:
         break;
     }
@@ -53,7 +51,7 @@ const Header: React.FC<HeaderProps> = ({text, LefticonName, RighticonName,
                 width: data.width,
                 height: data.height,
               };
-              navigation.navigate('NewChat', { healrContacts: true, data: [formattedData] });
+              navigation.navigate('Search', { data: [formattedData] });
             })
             .catch(err => {
               console.log(err);
@@ -122,7 +120,11 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   dotsbtn: {
-    width: '100%',
+    width: 30,
+    height: 30,
+    paddingRight:15,
+    alignItems:'center',
+    justifyContent:'center',
   },
   settingsimg: {
     width: 22,

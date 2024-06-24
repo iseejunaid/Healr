@@ -350,7 +350,7 @@ export const fetchContacts = async () => {
 
     const HealrContacts = dbContacts.filter(dbContact =>
         localContacts.some(localContact => localContact.phoneNumber === dbContact.phnNumber)
-    );
+    );    
     const invitableContacts = localContacts.filter((contact) =>
         !dbContacts.some(dbContact => dbContact.phnNumber === contact.phoneNumber))
 
@@ -480,7 +480,7 @@ export const fetchReceiverData = async (receiverId: string) => {
 }
 
 export const sendDossier = async (receiver_id: string, imagespaths: any, title: string, mrn?: string, patient?: string, description?: string) => {
-    const uri = await makePdf(imagespaths, title, mrn, patient, description);
+    const uri = await makePdfWithoutMessages(imagespaths, title, mrn, patient, description);
     const fileType = 'dossier';
     const name = title;
     const extension = 'pdf';
@@ -636,6 +636,94 @@ const makePdf = async (imagespaths: any, title: string, messages?: any, mrn?: st
     let file = await RNHTMLtoPDF.convert(options);
     return file.filePath;
 }
+const makePdfWithoutMessages = async (imagespaths: any, title: string, mrn?: string, patient?: string, description?: string) => {
+    if (!mrn) {
+        mrn = '-';
+    }
+    if (!patient) {
+        patient = '-';
+    }
+
+    let imagesHtml = '';
+    for (let i = 0; i < imagespaths.length; i += 2) {
+        if (i % 2 === 0) {
+            imagesHtml += `
+      <div style="padding: 8px; margin: 8px; display: flex; justify-content: space-evenly;">
+        <img src="${imagespaths[i]}" style="width: 200px; height: 200px;" />
+    `;
+
+            if (i + 1 < imagespaths.length) {
+                imagesHtml += `
+        <img src="${imagespaths[i + 1]}" style="width: 200px; height: 200px;" />
+      `;
+            }
+
+            imagesHtml += `
+      </div>
+    `;
+        }
+    }
+
+    const date = new Date().toLocaleDateString();
+
+    const username = await fetchUsername();
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+          <body>
+          <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+  
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+  
+        th {
+            width: 30%;
+        }
+  
+        h2, p {
+            padding-left: 8px;
+        }
+    </style>
+          <table>
+            <tr>
+                <th>Title:</th>
+                <td>${title}</td>
+            </tr>
+            <tr>
+                <th>MRN:</th>
+                <td>${mrn}</td>
+            </tr>
+            <tr>
+                <th>Patient Name:</th>
+                <td>${patient}</td>
+            </tr>
+          </table>
+          <p style="color: #818181; font-size: 12px;">Created on ${date} by ${username}</p>
+          <div>
+            ${imagesHtml}
+          </div>
+          ${description ? `<h1>Description:</h1><p>${description}</p>` : ''}
+
+          </body>
+      </html>
+    `;
+
+    const options = {
+        html: htmlContent,
+        fileName: title,
+        directory: 'Documents',
+    };
+
+    let file = await RNHTMLtoPDF.convert(options);
+    return file.filePath;
+}
 
 export const blockUser = async (receiverId: string) => {
     const userId = await fetchUserId();
@@ -717,6 +805,7 @@ export const retrieveBlockStatusByOtherUser = async (receiverId: string) => {
 export const saveFileToOnlineStorage = async (data:any) => {
     const uid = await fetchUserId();
     const timestamp = Date.now();
+    
     const fileData = {
         name: data.documentName,
         type: data.documentType,

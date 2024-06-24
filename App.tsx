@@ -19,6 +19,7 @@ import SignupScreen7 from './src/screens/Signup/SignupScreen7';
 import HomeScreen from './src/screens/Home/HomeScreen';
 import {ZegoCallInvitationDialog} from '@zegocloud/zego-uikit-prebuilt-call-rn';
 import {ZegoUIKitPrebuiltCallWaitingScreen,ZegoUIKitPrebuiltCallInCallScreen} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import SplashScreen from 'react-native-splash-screen';
 import Loader from './src/components/Loader';
 import {auth} from './configs/firebaseConfig';
 
@@ -26,6 +27,10 @@ const Stack = createStackNavigator();
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 
   // useEffect(() => {
   //   const checkLoggedIn = async () => {

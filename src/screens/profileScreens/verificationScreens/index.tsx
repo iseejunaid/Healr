@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   verifiedBadge: {
     position: 'absolute',
     top: 10,
-    right: 90,
+    right: 110,
   },
   verificationText: {
     fontSize: 12,

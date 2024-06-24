@@ -100,14 +100,14 @@ const EditProfileScreen = ({navigation}: any) => {
       if (value2) {
         if (value2 === 'unlisted' ? inputData !== '' : true) {
           updateData({
-            fullname: name,
-            phnNumber: phnNumber,
+            fullname: name.trim(),
+            phnNumber: phnNumber.trim(),
             photoURL: profileImage,
-            workplace: workplace,
+            workplace: workplace.trim(),
             category: value,
             expertiseValue: value2,
-            expertiseInput: inputData,
-            about: abouttxt,
+            expertiseInput: inputData.trim(),
+            about: abouttxt.trim(),
           }).then(() => {
             navigation.pop();
             setLoading(false);

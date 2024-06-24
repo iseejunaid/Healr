@@ -77,7 +77,6 @@ const ProfileScreen = ({navigation}: any) => {
     verificationStatus == 'rejected' ? [{label: 'Request Again'}] : []),
     {label: 'Status'},
     {label: 'My QR Code'},
-    {label: 'Notifications'},
     {label: 'Change Password'},
   ]; 
 
@@ -113,9 +112,6 @@ const ProfileScreen = ({navigation}: any) => {
           expertise: expertise,
         });
         break;
-      case 'Notifications':
-        console.log('Notifications');
-        break;
       case 'Change Password':
         navigation.navigate('CreateNewPassScreen');
         break;
@@ -128,7 +124,7 @@ const ProfileScreen = ({navigation}: any) => {
     try {
       await AsyncStorage.clear();
       await auth.signOut();
-      navigation.popToTop();
+      navigation.navigate('LoginScreen');
     } catch (error: any) {
       console.error('Error logging out:', error.message);
     }
@@ -164,7 +160,7 @@ const ProfileScreen = ({navigation}: any) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar />
+      <StatusBar backgroundColor={Colors.secondaryColor} barStyle={'dark-content'} />
       <View style={{flex: verified ? 0.75 : 0.9}}>
         <LinearGradient
           colors={[
@@ -196,7 +192,7 @@ const ProfileScreen = ({navigation}: any) => {
             <TouchableOpacity
               style={styles.editBtn}
               onPress={() => navigation.navigate('EditProfile')}>
-              <Text style={{color: Colors.secondaryColor}}>Edit Profile</Text>
+              <Text style={{color: Colors.secondaryColor,fontFamily:Fonts.regular,marginTop:3}}>Edit Profile</Text>
             </TouchableOpacity>
           </View>
         )}

@@ -65,6 +65,8 @@ import com.swmansion.rnscreens.RNScreensPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 // react-native-sound-recorder
 import com.kevinresol.react_native_sound_recorder.RNSoundRecorderPackage;
+// react-native-splash-screen
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 // react-native-svg
 import com.horcrux.svg.SvgPackage;
 // react-native-video
@@ -149,6 +151,7 @@ public class PackageList {
       new RNScreensPackage(),
       new RNSoundPackage(),
       new RNSoundRecorderPackage(),
+      new SplashScreenReactPackage(),
       new SvgPackage(),
       new ReactVideoPackage(),
       new RNFetchBlobPackage(),

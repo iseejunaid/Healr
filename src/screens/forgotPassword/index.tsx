@@ -11,7 +11,7 @@ import InputField from '../../components/InputField';
 import PressableBtn from '../../components/PressableBtn';
 import Colors from '../../../assets/colors/colors';
 import Fonts from '../../../assets/fonts/fonts';
-import { auth } from '../../../configs/firebaseConfig';
+import {auth} from '../../../configs/firebaseConfig';
 
 const ForgotPassScreen = ({navigation}: {navigation: any}) => {
   const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ const ForgotPassScreen = ({navigation}: {navigation: any}) => {
     setEmail(text);
   };
   const handleForgotPassword = async () => {
-    if(email === '') {
+    if (email === '') {
       Alert.alert('Error', 'Please enter your email address.');
       return;
     }
@@ -28,7 +28,7 @@ const ForgotPassScreen = ({navigation}: {navigation: any}) => {
       await auth.sendPasswordResetEmail(email);
       Alert.alert(
         'Password reset link sent',
-        'Please check your email to reset your password.'
+        'Please check your email to reset your password.',
       );
       setEmail('');
       navigation.pop();
@@ -36,7 +36,7 @@ const ForgotPassScreen = ({navigation}: {navigation: any}) => {
       Alert.alert('Error', error.message);
     }
   };
-  
+
   const backbtnHandler = () => {
     setEmail('');
     navigation.pop();
@@ -51,9 +51,7 @@ const ForgotPassScreen = ({navigation}: {navigation: any}) => {
       </View>
       <View style={styles.middle}>
         <View style={styles.middletxtView}>
-          <Text style={styles.middletxt}>
-            Please enter your
-          </Text>
+          <Text style={styles.middletxt}>Please enter your</Text>
           <Text style={styles.middletxt}>email address to receive the</Text>
           <Text style={[styles.middletxt, {color: Colors.primaryColor}]}>
             verification code.

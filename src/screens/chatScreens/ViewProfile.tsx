@@ -114,7 +114,7 @@ const ViewProfileScreen = ({navigation, route}: any) => {
               <Text style={styles.headerText}>View Profile</Text>
             </View>
             <TouchableOpacity
-              style={{height: '100%', justifyContent: 'center'}}
+              style={{height: '100%',paddingLeft:10, width:30,alignItems:'center', justifyContent: 'center'}}
               onPress={() => {
                 toggleModal();
               }}>

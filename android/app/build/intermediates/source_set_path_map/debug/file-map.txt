@@ -75,9 +75,10 @@ com.healr.app-packaged_res-73 E:\FYP LATEST\Healr\node_modules\react-native-safe
 com.healr.app-packaged_res-74 E:\FYP LATEST\Healr\node_modules\react-native-screens\android\build\intermediates\packaged_res\debug
 com.healr.app-packaged_res-75 E:\FYP LATEST\Healr\node_modules\react-native-sound-recorder\android\build\intermediates\packaged_res\debug
 com.healr.app-packaged_res-76 E:\FYP LATEST\Healr\node_modules\react-native-sound\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-77 E:\FYP LATEST\Healr\node_modules\react-native-svg\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-78 E:\FYP LATEST\Healr\node_modules\react-native-video\android-exoplayer\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-79 E:\FYP LATEST\Healr\node_modules\rn-fetch-blob\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-80 E:\FYP LATEST\Healr\node_modules\zego-express-engine-reactnative\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-81 E:\FYP LATEST\Healr\node_modules\zego-zim-react-native\android\build\intermediates\packaged_res\debug
-com.healr.app-packaged_res-82 E:\FYP LATEST\Healr\node_modules\zego-zpns-react-native\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-77 E:\FYP LATEST\Healr\node_modules\react-native-splash-screen\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-78 E:\FYP LATEST\Healr\node_modules\react-native-svg\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-79 E:\FYP LATEST\Healr\node_modules\react-native-video\android-exoplayer\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-80 E:\FYP LATEST\Healr\node_modules\rn-fetch-blob\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-81 E:\FYP LATEST\Healr\node_modules\zego-express-engine-reactnative\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-82 E:\FYP LATEST\Healr\node_modules\zego-zim-react-native\android\build\intermediates\packaged_res\debug
+com.healr.app-packaged_res-83 E:\FYP LATEST\Healr\node_modules\zego-zpns-react-native\android\build\intermediates\packaged_res\debug

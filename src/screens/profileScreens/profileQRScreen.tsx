@@ -22,7 +22,7 @@ const ProfileQRScreen: React.FC = ({navigation, route}: any) => {
       <View style={styles.headerContainer}>
         <TouchableOpacity
           style={{height: '100%', justifyContent: 'center'}}
-          onPress={() => navigation.pop()}>
+          onPress={() => navigation.navigate('ProfileScreen')}>
           <Image
             source={require('../../../assets/images/back.png')}
             tintColor={Colors.secondaryWhite}

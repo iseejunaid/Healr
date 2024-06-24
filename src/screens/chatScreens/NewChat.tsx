@@ -34,13 +34,14 @@ const NewChat = ({navigation, route}: any) => {
       status: any;
     }[]
   >([]);
+  
   const [invitableContacts, setInvitableContacts] = useState<
     {name: string; phoneNumber: string}[]
-  >([]);
+  >([]);  
 
   useEffect(() => {
     const fetchData = async () => {
-      const {HealrContacts, invitableContacts} = await fetchContacts();
+      const {HealrContacts, invitableContacts} = await fetchContacts();      
       setHealrContacts(HealrContacts);
       setInvitableContacts(invitableContacts);
     };

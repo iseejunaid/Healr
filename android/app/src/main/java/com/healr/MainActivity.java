@@ -1,6 +1,7 @@
 package com.healr;
 import android.os.Bundle;
 import android.os.Build;
+import org.devio.rn.splashscreen.SplashScreen;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
@@ -33,8 +34,8 @@ public class MainActivity extends ReactActivity {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
+    SplashScreen.show(this);
     super.onCreate(savedInstanceState);
-
     // /////////////////////////
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
       setShowWhenLocked(true);

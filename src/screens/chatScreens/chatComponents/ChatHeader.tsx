@@ -3,10 +3,11 @@ import {ZegoSendCallInvitationButton} from '@zegocloud/zego-uikit-prebuilt-call-
 import Colors from '../../../../assets/colors/colors';
 import Fonts from '../../../../assets/fonts/fonts';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {deleteDoc, doc} from 'firebase/firestore';
+import {Timestamp, deleteDoc, doc} from 'firebase/firestore';
 import {db} from '../../../../configs/firebaseConfig';
 import {useEffect, useState} from 'react';
 import {retrieveBlockStatus, saveFileToOnlineStorage} from '../ChatHelper';
+import {downloadFile} from '../../HealrFilesScreens/HealrFilesHelper';
 
 const ChatHeader = ({
   navigation,
@@ -74,7 +75,7 @@ const ChatHeader = ({
     onClose();
   };
   const saveToHealrFiles = () => {
-    saveFileToOnlineStorage(selectedMessages[0])
+    saveFileToOnlineStorage(selectedMessages[0]);
     onClose();
   };
 
@@ -91,7 +92,10 @@ const ChatHeader = ({
       if (selectedMessages[0].user._id != userID) {
         if (
           selectedMessages[0].documentType == 'pdf' ||
-          selectedMessages[0].documentType == 'docx'
+          selectedMessages[0].documentType == 'docx' ||
+          selectedMessages[0].documentType == 'jpg' ||
+          selectedMessages[0].documentType == 'jpeg' ||
+          selectedMessages[0].documentType == 'png'
         )
           setSaveFile(true);
       }
@@ -102,6 +106,19 @@ const ChatHeader = ({
       setSelectMode(false);
     }
   }, [selectedMessages]);
+
+  const download = () => {
+    selectedMessages.forEach((msg: any) => {
+      downloadFile('HealrFile' + getTimestamp(), msg.image);
+    });
+  };
+  const getTimestamp = () => {
+    const now = new Date();
+    return now
+      .toISOString()
+      .replace(/[:\-T.]/g, '')
+      .slice(0, 14);
+  };
 
   return !selectMode ? (
     <View style={styles.headerContainer}>
@@ -173,23 +190,34 @@ const ChatHeader = ({
         {count} Selected
       </Text>
       <View style={styles.headerOptions}>
-        <TouchableOpacity onPress={copyMessages}>
-          <Image source={require('../../../../assets/images/copy.png')} />
-        </TouchableOpacity>
+        {selectedMessages.every(message => message.image) ? (
+          <TouchableOpacity onPress={download}>
+            <Image source={require('../../../../assets/images/download.png')} />
+          </TouchableOpacity>
+        ):null}
+
         <TouchableOpacity onPress={deleteMessages}>
           <Image source={require('../../../../assets/images/delete.png')} />
         </TouchableOpacity>
-        {saveFile ? (
+        {saveFile && (
           <TouchableOpacity onPress={saveToHealrFiles}>
-            <Text>Save</Text>
+            <Image source={require('../../../../assets/images/save.png')} />
           </TouchableOpacity>
-        ) : (
+        )}
+        {selectedMessages.every(
+          message => typeof message.text === 'string',
+        ) && (
+          <View style={{flexDirection:'row',width:60,justifyContent:'space-between',alignItems:'center'}}>
+          <TouchableOpacity onPress={copyMessages}>
+            <Image source={require('../../../../assets/images/copy.png')} />
+          </TouchableOpacity>
           <TouchableOpacity onPress={exportMessages}>
             <Image
               tintColor={Colors.tertiaryColor}
               source={require('../../../../assets/images/createDossier.png')}
             />
           </TouchableOpacity>
+          </View>
         )}
       </View>
     </View>
@@ -245,7 +273,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: '100%',
     width: '40%',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
   },
 });

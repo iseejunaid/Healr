@@ -63,6 +63,7 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
       const userDocRef = await addDoc(usersCollectionRef, {
         uid: user.uid,
         isVerified: false,
+        verificationStatus: 'unverified',
         category: signupConfig.category,
         expertise: signupConfig.expertise,
         expertiseInput: signupConfig.expertiseInput,
@@ -87,8 +88,8 @@ const SignupScreen7 = ({navigation}: {navigation: any}) => {
       setPass('');
       setConfirmPass('');
     } catch (error: any) {
-      console.log(error);
       Alert.alert('Error!', `Signup failed: ${(error as Error).message}`);
+      setLoading(false);
     }
   };
 

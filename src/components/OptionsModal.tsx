@@ -74,11 +74,12 @@ const styles = StyleSheet.create({
   modalContent: {
     alignItems: 'flex-start',
     paddingHorizontal: 5,
+    width: 150,
   },
   optionButton: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
     padding: 8,
     marginBottom: 5,
   },

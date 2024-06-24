@@ -76,10 +76,6 @@ const CreateDossier = ({navigation, route}: any) => {
   };
 
   const handleSave = ()=>{
-    if (sliderData.length <= 1) {
-      Alert.alert('Missing Images', 'Please add at least One image');
-      return;
-    }
     if (!title) {
       Alert.alert('Title Missing', 'Please Enter Title');
       return;
@@ -209,6 +205,7 @@ const CreateDossier = ({navigation, route}: any) => {
           <TextInput
             style={styles.input}
             placeholder="Description"
+            placeholderTextColor={Colors.quadraryColor}
             value={description}
             onChangeText={setDescription}
             multiline={true}

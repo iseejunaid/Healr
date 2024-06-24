@@ -40,6 +40,7 @@ const InputField: React.FC<InputFieldProps> = ({
         onChangeText={handleChange}
         value={value}
         placeholder={placeholder}
+        placeholderTextColor={Colors.quadraryColor}
         secureTextEntry={secureTextEntry || false}
         keyboardType={keyboardType || 'default'}
       />
