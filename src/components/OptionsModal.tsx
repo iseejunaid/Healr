@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   img: {
+    marginTop:'4%',
     marginRight: 10,
   },
 });

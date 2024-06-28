@@ -17,8 +17,8 @@ import { fetchUserData } from '../../helpers/fetchUserData';
 import Loader from '../components/Loader';
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
-  const [email, setEmail] = useState('fistakuknu@tozya.com');
-  const [password, setPassword] = useState('123123123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
   const [loading, setLoading] = useState(false);
 

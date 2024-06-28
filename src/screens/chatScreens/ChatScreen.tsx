@@ -119,7 +119,7 @@ const ChatScreen: React.FC = ({navigation}: any) => {
           {Object.keys(chatsData).length > 0 ? (
             Object.keys(chatsData).map((key: string) => {
               const createdAt = chatsData[key].createdAt.toDate();
-              const imgSource = chatsData[key].profilepic ?? '';
+              const imgSource = chatsData[key].profilepic ?? '';              
               const timeString = createdAt.toLocaleTimeString([], {
                 hour: '2-digit',
                 minute: '2-digit',

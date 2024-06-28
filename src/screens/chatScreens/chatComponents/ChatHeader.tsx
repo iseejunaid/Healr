@@ -89,16 +89,14 @@ const ChatHeader = ({
 
   useEffect(() => {
     if (count == 1) {
-      if (selectedMessages[0].user._id != userID) {
-        if (
-          selectedMessages[0].documentType == 'pdf' ||
-          selectedMessages[0].documentType == 'docx' ||
-          selectedMessages[0].documentType == 'jpg' ||
-          selectedMessages[0].documentType == 'jpeg' ||
-          selectedMessages[0].documentType == 'png'
-        )
-          setSaveFile(true);
-      }
+      if (
+        selectedMessages[0].documentType == 'pdf' ||
+        selectedMessages[0].documentType == 'docx' ||
+        selectedMessages[0].documentType == 'jpg' ||
+        selectedMessages[0].documentType == 'jpeg' ||
+        selectedMessages[0].documentType == 'png'
+      )
+        setSaveFile(true);
     } else {
       setSaveFile(false);
     }
@@ -194,7 +192,7 @@ const ChatHeader = ({
           <TouchableOpacity onPress={download}>
             <Image source={require('../../../../assets/images/download.png')} />
           </TouchableOpacity>
-        ):null}
+        ) : null}
 
         <TouchableOpacity onPress={deleteMessages}>
           <Image source={require('../../../../assets/images/delete.png')} />
@@ -207,16 +205,22 @@ const ChatHeader = ({
         {selectedMessages.every(
           message => typeof message.text === 'string',
         ) && (
-          <View style={{flexDirection:'row',width:60,justifyContent:'space-between',alignItems:'center'}}>
-          <TouchableOpacity onPress={copyMessages}>
-            <Image source={require('../../../../assets/images/copy.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={exportMessages}>
-            <Image
-              tintColor={Colors.tertiaryColor}
-              source={require('../../../../assets/images/createDossier.png')}
-            />
-          </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: 60,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity onPress={copyMessages}>
+              <Image source={require('../../../../assets/images/copy.png')} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={exportMessages}>
+              <Image
+                tintColor={Colors.tertiaryColor}
+                source={require('../../../../assets/images/createDossier.png')}
+              />
+            </TouchableOpacity>
           </View>
         )}
       </View>

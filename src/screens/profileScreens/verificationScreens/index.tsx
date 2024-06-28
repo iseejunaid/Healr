@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   QRcontainer: {
     width: 290,
-    height: 290,
+    height: '55%',
     backgroundColor: Colors.secondaryWhite,
     borderRadius: 12,
     alignItems: 'center',

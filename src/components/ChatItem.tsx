@@ -99,6 +99,15 @@ const ChatItem: React.FC<ChatItemProps> = ({
       checkIfBlocked();
     }, []));
 
+    useEffect(() => {
+      if(notificationCount != localNotificationCount){
+        setLocalNotificationCount(notificationCount);
+      }
+      if(notificationCount === 0){
+        setMarkAsUnread(false);
+      }
+    }, [notificationCount]);
+
   const onPress = () => {
     navigation.navigate('IndividualChat', {
       userName: userName,

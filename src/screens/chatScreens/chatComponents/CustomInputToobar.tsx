@@ -217,7 +217,7 @@ const customtInputToolbar = ({
       />
       <Send
         containerStyle={styles.sendBtnContainer}
-        alwaysShowSend
+        // alwaysShowSend
         onSend={mes => onSend(mes, 'text')}
         text={text}
         label="Send">
@@ -225,19 +225,21 @@ const customtInputToolbar = ({
           <Image
             source={require('../../../../assets/images/sendMessage.png')}
           />
-        ) : (
-          <TouchableOpacity
-            style={{paddingTop: 6}}
-            // onPressIn={startRecording}
-            onPressOut={stopRecording}
-            onLongPress={startRecording}
-            /* onPress={cancelRecording} */
-          >
-            <Image
-              source={require('../../../../assets/images/recordMessage.png')}
-            />
-          </TouchableOpacity>
-        )}
+        ) : null
+        //  (
+        //   <TouchableOpacity
+        //     style={{paddingTop: 6}}
+        //     // onPressIn={startRecording}
+        //     onPressOut={stopRecording}
+        //     onLongPress={startRecording}
+        //     /* onPress={cancelRecording} */
+        //   >
+        //     <Image
+        //       source={require('../../../../assets/images/recordMessage.png')}
+        //     />
+        //   </TouchableOpacity>
+        // )
+        }
       </Send>
       <OptionsModal
         visible={modalVisible}
@@ -279,6 +281,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     backgroundColor: Colors.tertiaryColor,
+    width:'45%',
     bottom: 50,
     left: 5,
   },

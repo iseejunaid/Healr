@@ -42,7 +42,7 @@ const ScreensHeader: React.FC<ScreensHeaderProps> = ({
         onPress={rightTextPress}
         style={{
           justifyContent: 'center',
-          width:55,
+          width:'20%',
           height: '100%',
           alignItems: 'flex-end',
         }}>
